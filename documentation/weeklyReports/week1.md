@@ -1,6 +1,6 @@
 # Week 1 
 
-Time spent on the project: 15 hours. Only two of those went for the actual project, rest were background research and testing different thing.
+Time spent on the project: 15 hours. Only two of those went for the actual project, rest were used on background research and testing.
 
 ## Week 1 progress
 
