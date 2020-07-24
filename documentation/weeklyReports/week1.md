@@ -4,11 +4,10 @@ Time spent on the project: 15 hours. Only two of those went for the actual proje
 
 ## Week 1 progress
 
-Most of this week I spent on choosing what kind of project should I make. First I wanted to make a program that would let me sketch a map 
-(water, land, mountains and biggest cities) and would then simulate natural phenomena and generate biomes, lakes, rivers and roads accordingly. 
-But that would not have been a good project, since I would have to make a sketching tool for it which would take time from the actual algorithm. After that
-I tought of making a dungeon generator, but there were too many algorithms and approaches to choose from, so I settled into a simpler procedural map generator 
-without the sketching functionality (though I may implement it later if time allows).
+Most of this week I spent on choosing what kind of project I should make. First I wanted to make a program that would let me sketch a map 
+(water, land, mountains and biggest cities) and would then simulate natural phenomena and generate natural biomes, lakes, rivers and roads to match my sketch. 
+But that would not have been a good project, since I would have had to make a sketching tool for it which would have taken time from the actual algorithm. 
+After that I tought of making a dungeon generator, but there were too many algorithms and approaches to choose from, so I settled into a simpler procedural map generator without the sketching functionality (though I may implement it later if time allows).
 
 ### Course progress
 
@@ -24,8 +23,8 @@ without the sketching functionality (though I may implement it later if time all
 
 ## New things learned
 
-I have read tons of information about different kind of grids and algorithms common in indie game development. I learned to do a simple random walk and 
-a Diamond-square algorithm to test out how to create dungeons and maps, which was fun. I am also really interested in implementing a Voronoi diagram with 
+I have read tons of information about different kinds of grids and algorithms common in beginners game development. I learned to do a simple random walk and 
+a diamond-square algorithm to test out how to create dungeons and maps, which was fun. I am also really interested in implementing a Voronoi diagram with 
 Lloyd relaxation based "grid" for my maps, since I learned that this approach provides a more natural look than a basic grid, but I think that might take 
 too much time.
 
