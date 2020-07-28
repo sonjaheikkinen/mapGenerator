@@ -77,10 +77,10 @@ public class HeightmapGenerator {
     }
 
     public void squareStep(int x, int y, int rectHalf, int mapSize, int randomizerRange) {
-        double cornerAverage = (this.heights[(x - rectHalf + mapSize) % mapSize][y]
-                + this.heights[(x + rectHalf) % mapSize][y]
-                + this.heights[x][(y + rectHalf) % mapSize]
-                + this.heights[x][(y - rectHalf + mapSize) % mapSize]) / 4;
+        double cornerAverage = (this.heights[(x - rectHalf + mapSize - 1) % (mapSize - 1)][y]
+                + this.heights[(x + rectHalf) % (mapSize - 1)][y]
+                + this.heights[x][(y + rectHalf) % (mapSize - 1)]
+                + this.heights[x][(y - rectHalf + mapSize - 1) % (mapSize - 1)]) / 4;
         cornerAverage = cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange;
         this.heights[x][y] = cornerAverage;
         wrapEdgeValues(x, mapSize, y, cornerAverage);
