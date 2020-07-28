@@ -14,8 +14,10 @@ import java.util.Random;
  */
 public class HeightmapGenerator {
 
+    double[][] heights;
     int[][] heightMap;
     Random random;
+    int maxValue;
 
     public HeightmapGenerator(Random random) {
         this.random = random;
@@ -25,105 +27,72 @@ public class HeightmapGenerator {
 
         int n = 6;
         int mapSize = (int) Math.pow(2, n) + 1;
+        int seed = 50;
+        this.heights = new double[mapSize][mapSize];
         this.heightMap = new int[mapSize][mapSize];
 
-        assignCornerValues(mapSize);
+        assignCornerValues(mapSize, seed);
 
-        int rectSize = mapSize - 1;
-        int randomizerRange = 70;
-
-        while (rectSize > 1) {
-            for (int x = 0; x <= (mapSize - rectSize); x = x + rectSize) {
-                for (int y = 0; y <= (mapSize - rectSize); y = y + rectSize) {
-                    diamondStep(x, y, rectSize, randomizerRange);
+        int randomizerRange = 50;
+        for (int rectSize = mapSize - 1; rectSize >= 2; rectSize /= 2, randomizerRange /= 2.0) {
+            int rectHalf = rectSize / 2;
+            for (int x = 0; x < mapSize - 1; x += rectSize) {
+                for (int y = 0; y < mapSize - 1; y += rectSize) {
+                    diamondStep(x, y, rectSize, rectHalf, randomizerRange);
                 }
             }
-            int row = 1;
-            for (int x = 0; x < mapSize; x = x + rectSize / 2) {
-                if (row == 1) {
-                    for (int y = rectSize / 2; y < mapSize; y = y + rectSize) {
-                        squareStep(x, y, rectSize, randomizerRange);
-                    }
-                    row = 0;
-                } else {
-                    for (int y = 0; y <= mapSize; y = y + rectSize) {
-                        squareStep(x, y, rectSize, randomizerRange);
-                    }
-                    row = 1;
+            for (int x = 0; x < mapSize - 1; x += rectHalf) {
+                for (int y = (x + rectHalf) % rectSize; y < mapSize - 1; y += rectSize) {
+                    squareStep(x, y, rectHalf, mapSize, randomizerRange);
                 }
             }
-            if (randomizerRange > 1) {
-                randomizerRange--;
-            }
-            rectSize = rectSize / 2;
         }
 
-        /*
-        //while (rectSize >= 2) {
-        squareStep(rectSize, mapSize);
-        rectSize = rectSize / 2 + 1;
-        //}
-         */
+        for (int x = 0; x < mapSize; x++) {
+            for (int y = 0; y < mapSize; y++) {
+                this.heightMap[x][y] = (int) Math.round(this.heights[x][y]);
+                if (this.heightMap[x][y] < 0) {
+                    this.heightMap[x][y] = 0;
+                }
+            }
+        }
+
         return this.heightMap;
     }
 
-    public void assignCornerValues(int mapSize) {
-        heightMap[0][0] = random.nextInt(255);
-        heightMap[0][mapSize - 1] = random.nextInt(255);
-        heightMap[mapSize - 1][0] = random.nextInt(255);
-        heightMap[mapSize - 1][mapSize - 1] = random.nextInt(255);
+    public void assignCornerValues(int mapSize, int seed) {
+        this.heights[0][0] = seed;
+        this.heights[0][mapSize - 1] = seed;
+        this.heights[mapSize - 1][0] = seed;
+        this.heights[mapSize - 1][mapSize - 1] = seed;
     }
 
-    public void diamondStep(int x, int y, int rectSize, int randomizerRange) {
-        int cornerAverage = (heightMap[x][y] + heightMap[x + rectSize][y] + heightMap[x][y + rectSize]
-                + heightMap[x + rectSize][y + rectSize]) / 4;
-        heightMap[x + rectSize / 2][y + rectSize / 2] = Math.min(cornerAverage + random.nextInt(randomizerRange), 255);
+    public void diamondStep(int x, int y, int rectSize, int rectHalf, int randomizerRange) {
+        double cornerAverage = (this.heights[x][y]
+                + this.heights[x + rectSize][y]
+                + this.heights[x][y + rectSize]
+                + this.heights[x + rectSize][y + rectSize]) / 4;
+        this.heights[x + rectHalf][y + rectHalf] = cornerAverage
+                + (random.nextDouble() * 2 * randomizerRange) - randomizerRange;
     }
 
-    public void squareStep(int x, int y, int rectSize, int randomizerRange) {
-        int cornerCount = 0;
-        int cornerSum = 0;
-        int distanceToCorner = rectSize / 2;
-        if (x - distanceToCorner >= 0) {
-            cornerCount++;
-            cornerSum = heightMap[x - distanceToCorner][y];
-        }
-        if (x + distanceToCorner <= rectSize) {
-            cornerCount++;
-            cornerSum = heightMap[x + distanceToCorner][y];
-        }
-        if (y - distanceToCorner >= 0) {
-            cornerCount++;
-            cornerSum = heightMap[x][y - distanceToCorner];
-        }
-        if (y + distanceToCorner <= rectSize) {
-            cornerCount++;
-            cornerSum = heightMap[x][y + distanceToCorner];
-        }
-        this.heightMap[x][y] = Math.min(cornerSum / cornerCount + random.nextInt(randomizerRange), 255);
+    public void squareStep(int x, int y, int rectHalf, int mapSize, int randomizerRange) {
+        double cornerAverage = (this.heights[(x - rectHalf + mapSize) % mapSize][y]
+                + this.heights[(x + rectHalf) % mapSize][y]
+                + this.heights[x][(y + rectHalf) % mapSize]
+                + this.heights[x][(y - rectHalf + mapSize) % mapSize]) / 4;
+        cornerAverage = cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange;
+        this.heights[x][y] = cornerAverage;
+        wrapEdgeValues(x, mapSize, y, cornerAverage);
     }
 
-    /*
-    public void squareStep(int rectSize, int mapSize) {
-        int rectMapRatio = (int) Math.floor(mapSize / rectSize);
-        for (int leftUpperCornerX = 0; leftUpperCornerX < rectMapRatio; leftUpperCornerX++) {
-            for (int leftUpperCornerY = 0; leftUpperCornerY < rectMapRatio; leftUpperCornerY++) {
-                int rectCenterValue = rectSize / 2;
-                int cornerAverage = (heightMap[leftUpperCornerX][leftUpperCornerY]
-                        + heightMap[leftUpperCornerX + rectSize - 1][leftUpperCornerY]
-                        + heightMap[leftUpperCornerX][leftUpperCornerY + rectSize - 1]
-                        + heightMap[leftUpperCornerX + rectSize - 1][leftUpperCornerY + rectSize - 1]) / 4;
-                heightMap[leftUpperCornerX + (rectCenterValue)][leftUpperCornerY + (rectCenterValue)] = cornerAverage;
-                diamondStep(rectCenterValue, leftUpperCornerX + rectCenterValue, leftUpperCornerY + rectCenterValue);
-            }
+    public void wrapEdgeValues(int x, int mapSize, int y, double cornerAverage) {
+        if (x == 0) {
+            heights[mapSize - 1][y] = cornerAverage;
+        }
+        if (y == 0) {
+            heights[x][mapSize - 1] = cornerAverage;
         }
     }
-    
-    public void diamondStep(int rectHalf, int centerX, int centerY) {
-        calculateDiamondValue(rectHalf, centerX, centerY, "left");
-        calculateDiamondValue(rectHalf, centerX, centerY, "upper");
-        calculateDiamondValue(rectHalf, centerX, centerY, "right");
-        calculateDiamondValue(rectHalf, centerX, centerY, "lower");
-    }
-     */
+
 }

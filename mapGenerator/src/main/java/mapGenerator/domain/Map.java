@@ -20,5 +20,4 @@ public class Map {
     public int[][] getHeightMap() {
         return this.heightMap;
     }
-    
 }
