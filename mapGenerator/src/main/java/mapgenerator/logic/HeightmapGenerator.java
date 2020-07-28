@@ -19,7 +19,7 @@ public class HeightmapGenerator {
         this.randomizerRange = range;
     }
 
-    public int[][] calculateHeights() {
+    public double[][] calculateHeights() {
 
         int mapSize = (int) Math.pow(2, this.sizeExponent) + 1;
         this.heights = new double[mapSize][mapSize];
@@ -43,14 +43,14 @@ public class HeightmapGenerator {
 
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
-                this.heightMap[x][y] = (int) Math.round(this.heights[x][y]);
-                if (this.heightMap[x][y] < 0) {
-                    this.heightMap[x][y] = 0;
+                this.heights[x][y] = (int) Math.round(this.heights[x][y]);
+                if (this.heights[x][y] < 0) {
+                    this.heights[x][y] = 0;
                 }
             }
         }
 
-        return this.heightMap;
+        return this.heights;
     }
 
     public void assignCornerValues(int mapSize, int seed) {
@@ -86,6 +86,10 @@ public class HeightmapGenerator {
         if (y == 0) {
             this.heights[x][mapSize - 1] = cornerAverage;
         }
+    }
+    
+    public double[][] getHeights() {
+        return this.heights;
     }
 
 }

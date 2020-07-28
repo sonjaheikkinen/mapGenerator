@@ -11,7 +11,7 @@ import mapgenerator.domain.Map;
 
 public class GraphicUI {
 
-    int[][] heightMap;
+    double[][] heightMap;
 
     public GraphicUI(Stage stage, Map map) {
 

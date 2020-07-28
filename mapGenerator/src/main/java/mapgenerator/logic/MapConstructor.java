@@ -7,7 +7,7 @@ public final class MapConstructor {
 
     Map map;
     HeightmapGenerator heightmapGenerator;
-    int[][] heightMap;
+    double[][] heightMap;
 
     public MapConstructor(Map map, HeightmapGenerator hmGenerator) {
         this.map = map;

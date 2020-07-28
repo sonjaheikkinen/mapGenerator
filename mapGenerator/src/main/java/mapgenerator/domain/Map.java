@@ -3,13 +3,13 @@ package mapgenerator.domain;
 
 public class Map {
     
-    int[][] heightMap;
+    double[][] heightMap;
     
-    public void setHeightMap(int[][] heightMap) {
+    public void setHeightMap(double[][] heightMap) {
         this.heightMap = heightMap;
     }
     
-    public int[][] getHeightMap() {
+    public double[][] getHeightMap() {
         return this.heightMap;
     }
 }
