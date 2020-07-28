@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package mapgenerator.gui;
 
 import javafx.scene.Scene;
@@ -13,10 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import mapgenerator.domain.Map;
 
-/**
- *
- * @author heisonja
- */
 public class GraphicUI {
 
     int[][] heightMap;
