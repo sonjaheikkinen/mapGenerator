@@ -63,8 +63,9 @@ public class HeightmapGenerator {
                 + this.heightMap[x + rectSize][y]
                 + this.heightMap[x][y + rectSize]
                 + this.heightMap[x + rectSize][y + rectSize]) / 4;
-        this.heightMap[x + rectHalf][y + rectHalf] = cornerAverage
-                + (random.nextDouble() * 2 * randomizerRange) - randomizerRange;
+        double newValue = Math.max(1, cornerAverage
+                + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
+        this.heightMap[x + rectHalf][y + rectHalf] = newValue;
     }
 
     public void squareStep(int x, int y, int rectHalf, int mapSize, int randomizerRange) {
@@ -72,17 +73,17 @@ public class HeightmapGenerator {
                 + this.heightMap[(x + rectHalf) % (mapSize - 1)][y]
                 + this.heightMap[x][(y + rectHalf) % (mapSize - 1)]
                 + this.heightMap[x][(y - rectHalf + mapSize - 1) % (mapSize - 1)]) / 4;
-        cornerAverage = cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange;
-        this.heightMap[x][y] = cornerAverage;
-        wrapEdgeValues(x, mapSize, y, cornerAverage);
+        double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
+        this.heightMap[x][y] = newValue;
+        wrapEdgeValues(x, mapSize, y, newValue);
     }
 
-    public void wrapEdgeValues(int x, int mapSize, int y, double cornerAverage) {
+    public void wrapEdgeValues(int x, int mapSize, int y, double newValue) {
         if (x == 0) {
-            this.heightMap[mapSize - 1][y] = cornerAverage;
+            this.heightMap[mapSize - 1][y] = newValue;
         }
         if (y == 0) {
-            this.heightMap[x][mapSize - 1] = cornerAverage;
+            this.heightMap[x][mapSize - 1] = newValue;
         }
     }
     
