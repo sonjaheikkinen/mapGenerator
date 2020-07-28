@@ -5,8 +5,7 @@ import java.util.Random;
 
 public class HeightmapGenerator {
 
-    double[][] heights;
-    int[][] heightMap;
+    double[][] heightMap;
     Random random;
     int sizeExponent;
     int seed;
@@ -22,8 +21,7 @@ public class HeightmapGenerator {
     public double[][] calculateHeights() {
 
         int mapSize = (int) Math.pow(2, this.sizeExponent) + 1;
-        this.heights = new double[mapSize][mapSize];
-        this.heightMap = new int[mapSize][mapSize];
+        this.heightMap = new double[mapSize][mapSize];
 
         assignCornerValues(mapSize, this.seed);
 
@@ -43,53 +41,53 @@ public class HeightmapGenerator {
 
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
-                this.heights[x][y] = (int) Math.round(this.heights[x][y]);
-                if (this.heights[x][y] < 0) {
-                    this.heights[x][y] = 0;
+                this.heightMap[x][y] = (int) Math.round(this.heightMap[x][y]);
+                if (this.heightMap[x][y] < 0) {
+                    this.heightMap[x][y] = 0;
                 }
             }
         }
 
-        return this.heights;
+        return this.heightMap;
     }
 
     public void assignCornerValues(int mapSize, int seed) {
-        this.heights[0][0] = seed;
-        this.heights[0][mapSize - 1] = seed;
-        this.heights[mapSize - 1][0] = seed;
-        this.heights[mapSize - 1][mapSize - 1] = seed;
+        this.heightMap[0][0] = seed;
+        this.heightMap[0][mapSize - 1] = seed;
+        this.heightMap[mapSize - 1][0] = seed;
+        this.heightMap[mapSize - 1][mapSize - 1] = seed;
     }
 
     public void diamondStep(int x, int y, int rectSize, int rectHalf, int randomizerRange) {
-        double cornerAverage = (this.heights[x][y]
-                + this.heights[x + rectSize][y]
-                + this.heights[x][y + rectSize]
-                + this.heights[x + rectSize][y + rectSize]) / 4;
-        this.heights[x + rectHalf][y + rectHalf] = cornerAverage
+        double cornerAverage = (this.heightMap[x][y]
+                + this.heightMap[x + rectSize][y]
+                + this.heightMap[x][y + rectSize]
+                + this.heightMap[x + rectSize][y + rectSize]) / 4;
+        this.heightMap[x + rectHalf][y + rectHalf] = cornerAverage
                 + (random.nextDouble() * 2 * randomizerRange) - randomizerRange;
     }
 
     public void squareStep(int x, int y, int rectHalf, int mapSize, int randomizerRange) {
-        double cornerAverage = (this.heights[(x - rectHalf + mapSize - 1) % (mapSize - 1)][y]
-                + this.heights[(x + rectHalf) % (mapSize - 1)][y]
-                + this.heights[x][(y + rectHalf) % (mapSize - 1)]
-                + this.heights[x][(y - rectHalf + mapSize - 1) % (mapSize - 1)]) / 4;
+        double cornerAverage = (this.heightMap[(x - rectHalf + mapSize - 1) % (mapSize - 1)][y]
+                + this.heightMap[(x + rectHalf) % (mapSize - 1)][y]
+                + this.heightMap[x][(y + rectHalf) % (mapSize - 1)]
+                + this.heightMap[x][(y - rectHalf + mapSize - 1) % (mapSize - 1)]) / 4;
         cornerAverage = cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange;
-        this.heights[x][y] = cornerAverage;
+        this.heightMap[x][y] = cornerAverage;
         wrapEdgeValues(x, mapSize, y, cornerAverage);
     }
 
     public void wrapEdgeValues(int x, int mapSize, int y, double cornerAverage) {
         if (x == 0) {
-            this.heights[mapSize - 1][y] = cornerAverage;
+            this.heightMap[mapSize - 1][y] = cornerAverage;
         }
         if (y == 0) {
-            this.heights[x][mapSize - 1] = cornerAverage;
+            this.heightMap[x][mapSize - 1] = cornerAverage;
         }
     }
     
-    public double[][] getHeights() {
-        return this.heights;
+    public double[][] getHeightMap() {
+        return this.heightMap;
     }
 
 }
