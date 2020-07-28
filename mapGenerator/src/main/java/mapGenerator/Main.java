@@ -1,17 +1,27 @@
-
 package mapGenerator;
 
-import static javafx.application.Application.launch;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import mapGenerator.domain.Map;
 import mapGenerator.gui.GraphicUI;
+import mapGenerator.logic.HeightmapGenerator;
+import mapGenerator.logic.MapConstructor;
 
-public class Main {
+public class Main extends Application {
+
+    @Override
+    public void start(Stage stage) {
+        Map map = new Map();
+        HeightmapGenerator hmGenerator = new HeightmapGenerator();
+        MapConstructor constructor = new MapConstructor(map, hmGenerator);
+        GraphicUI gui = new GraphicUI(stage, map);
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        GraphicUI gui = new GraphicUI();
-        launch(GraphicUI.class);
+        launch(Main.class);
     }
-    
+
 }
