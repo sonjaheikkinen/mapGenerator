@@ -1,12 +1,12 @@
-package mapGenerator;
+package mapgenerator;
 
 import java.util.Random;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import mapGenerator.domain.Map;
-import mapGenerator.gui.GraphicUI;
-import mapGenerator.logic.HeightmapGenerator;
-import mapGenerator.logic.MapConstructor;
+import mapgenerator.domain.Map;
+import mapgenerator.gui.GraphicUI;
+import mapgenerator.logic.HeightmapGenerator;
+import mapgenerator.logic.MapConstructor;
 
 public class Main extends Application {
 

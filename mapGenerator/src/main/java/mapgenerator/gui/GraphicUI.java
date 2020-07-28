@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mapGenerator.gui;
+package mapgenerator.gui;
 
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -11,7 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import mapGenerator.domain.Map;
+import mapgenerator.domain.Map;
 
 /**
  *
