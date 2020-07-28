@@ -1,7 +1,6 @@
 
 package mapgenerator.logic;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class HeightmapGenerator {
@@ -9,33 +8,35 @@ public class HeightmapGenerator {
     double[][] heights;
     int[][] heightMap;
     Random random;
-    int maxValue;
+    int sizeExponent;
+    int seed;
+    int randomizerRange;
 
-    public HeightmapGenerator(Random random) {
+    public HeightmapGenerator(Random random, int exponent, int seed, int range) {
         this.random = random;
+        this.sizeExponent = exponent;
+        this.seed = seed;
+        this.randomizerRange = range;
     }
 
     public int[][] calculateHeights() {
 
-        int n = 6;
-        int mapSize = (int) Math.pow(2, n) + 1;
-        int seed = 50;
+        int mapSize = (int) Math.pow(2, this.sizeExponent) + 1;
         this.heights = new double[mapSize][mapSize];
         this.heightMap = new int[mapSize][mapSize];
 
-        assignCornerValues(mapSize, seed);
+        assignCornerValues(mapSize, this.seed);
 
-        int randomizerRange = 50;
-        for (int rectSize = mapSize - 1; rectSize >= 2; rectSize /= 2, randomizerRange /= 2.0) {
+        for (int rectSize = mapSize - 1; rectSize >= 2; rectSize /= 2, this.randomizerRange /= 2.0) {
             int rectHalf = rectSize / 2;
             for (int x = 0; x < mapSize - 1; x += rectSize) {
                 for (int y = 0; y < mapSize - 1; y += rectSize) {
-                    diamondStep(x, y, rectSize, rectHalf, randomizerRange);
+                    diamondStep(x, y, rectSize, rectHalf, this.randomizerRange);
                 }
             }
             for (int x = 0; x < mapSize - 1; x += rectHalf) {
                 for (int y = (x + rectHalf) % rectSize; y < mapSize - 1; y += rectSize) {
-                    squareStep(x, y, rectHalf, mapSize, randomizerRange);
+                    squareStep(x, y, rectHalf, mapSize, this.randomizerRange);
                 }
             }
         }
@@ -80,10 +81,10 @@ public class HeightmapGenerator {
 
     public void wrapEdgeValues(int x, int mapSize, int y, double cornerAverage) {
         if (x == 0) {
-            heights[mapSize - 1][y] = cornerAverage;
+            this.heights[mapSize - 1][y] = cornerAverage;
         }
         if (y == 0) {
-            heights[x][mapSize - 1] = cornerAverage;
+            this.heights[x][mapSize - 1] = cornerAverage;
         }
     }
 

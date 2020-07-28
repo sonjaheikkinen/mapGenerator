@@ -14,7 +14,10 @@ public class Main extends Application {
     public void start(Stage stage) {
         Random random = new Random();
         Map map = new Map();
-        HeightmapGenerator hmGenerator = new HeightmapGenerator(random);
+        int mapSizeExponent = 6;
+        int mapSeed = 50;
+        int mapRandomizerRange = 50;
+        HeightmapGenerator hmGenerator = new HeightmapGenerator(random, mapSizeExponent, mapSeed, mapRandomizerRange);
         MapConstructor constructor = new MapConstructor(map, hmGenerator);
         GraphicUI gui = new GraphicUI(stage, map);
     }
