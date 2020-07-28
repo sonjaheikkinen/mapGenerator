@@ -10,20 +10,20 @@ public class HeightmapGenerator {
     int sizeExponent;
     int seed;
     int randomizerRange;
+    int mapSize;
 
     public HeightmapGenerator(Random random, int exponent, int seed, int range) {
         this.random = random;
         this.sizeExponent = exponent;
         this.seed = seed;
         this.randomizerRange = range;
+        this.mapSize = (int) Math.pow(2, this.sizeExponent) + 1;
+        this.heightMap = new double[mapSize][mapSize];
     }
 
     public double[][] calculateHeights() {
 
-        int mapSize = (int) Math.pow(2, this.sizeExponent) + 1;
-        this.heightMap = new double[mapSize][mapSize];
-
-        assignCornerValues(mapSize, this.seed);
+        assignCornerValues(this.mapSize, this.seed);
 
         for (int rectSize = mapSize - 1; rectSize >= 2; rectSize /= 2, this.randomizerRange /= 2.0) {
             int rectHalf = rectSize / 2;

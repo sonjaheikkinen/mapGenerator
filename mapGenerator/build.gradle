@@ -26,6 +26,10 @@ jacocoTestReport {
     }
 }
 
+jacoco {
+    toolVersion = "0.8.5"
+}
+
 check.dependsOn jacocoTestReport
 
 mainClassName = 'mapgenerator.Main'
