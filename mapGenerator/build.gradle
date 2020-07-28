@@ -28,4 +28,4 @@ jacocoTestReport {
 
 check.dependsOn jacocoTestReport
 
-mainClassName = 'mapGenerator.Main'
+mainClassName = 'mapgenerator.Main'
