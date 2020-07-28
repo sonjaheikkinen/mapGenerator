@@ -25,7 +25,7 @@ public class GraphicUI {
         
         this.heightMap = map.getHeightMap();
       
-        Canvas canvas = new Canvas(600, 600);
+        Canvas canvas = new Canvas(650, 650);
         GraphicsContext brush = canvas.getGraphicsContext2D();
 
         BorderPane layout = new BorderPane();
@@ -41,10 +41,10 @@ public class GraphicUI {
  
     
     public void drawMap(GraphicsContext brush) {
-       for (int x = 0; x < 100; x++) {
-           for (int y = 0; y < 100; y++) {
+       for (int x = 0; x < 65; x++) {
+           for (int y = 0; y < 65; y++) {
                brush.setFill(Color.grayRgb(this.heightMap[x][y]));
-               brush.fillRect(x * 6, y * 6, 6, 6);
+               brush.fillRect(x * 10, y * 10, 10, 10);
            }
        }
     }
