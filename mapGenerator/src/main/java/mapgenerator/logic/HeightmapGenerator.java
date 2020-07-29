@@ -67,15 +67,15 @@ public class HeightmapGenerator {
     }
 
     /**
-     * Puts the seed value on the corners of the map.
+     * Puts the seed value +/- 10 on the corners of the map.
      * @param mapSize The length of one side of the map
-     * @param seed The value to be put on corners of the map
+     * @param seed The seed value for corner values
      */
     public void assignCornerValues(int mapSize, int seed) {
-        this.heightMap[0][0] = seed;
-        this.heightMap[0][mapSize - 1] = seed;
-        this.heightMap[mapSize - 1][0] = seed;
-        this.heightMap[mapSize - 1][mapSize - 1] = seed;
+        this.heightMap[0][0] = seed + random.nextInt(20) - 10;
+        this.heightMap[0][mapSize - 1] = seed + random.nextInt(20) - 10;
+        this.heightMap[mapSize - 1][0] = seed + random.nextInt(20) - 10;
+        this.heightMap[mapSize - 1][mapSize - 1] = seed + random.nextInt(20) - 10;
     }
 
     /**
