@@ -9,13 +9,18 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import mapgenerator.domain.Map;
 
+/**
+ * Class creates the graphic user interface of the program.
+ */
 public class GraphicUI {
 
-    double[][] heightMap;
-
+    /**
+     * Method creates a window and calls for method drawMap to draw the generated map on screen.
+     * @param stage A window which shows things on screen.
+     * @param map Contains all information of the generated map.
+     * @see mapgenerator.gui.GraphicUI#drawMap(GraphicsContext)
+     */
     public GraphicUI(Stage stage, Map map) {
-
-        this.heightMap = map.getHeightMap();
 
         Canvas canvas = new Canvas(650, 650);
         GraphicsContext brush = canvas.getGraphicsContext2D();
@@ -23,7 +28,7 @@ public class GraphicUI {
         BorderPane layout = new BorderPane();
         layout.setCenter(canvas);
 
-        drawMap(brush);
+        drawMap(brush, map);
 
         Scene scene = new Scene(layout);
         stage.setScene(scene);
@@ -31,10 +36,16 @@ public class GraphicUI {
 
     }
 
-    public void drawMap(GraphicsContext brush) {
+    /**
+     * Draws a map on screen based on a map object 
+     * @param brush Draws map on canvas defined in parent method
+     * @param map Contains all information of the generated map
+     */
+    public void drawMap(GraphicsContext brush, Map map) {
+        double[][] heightMap = map.getHeightMap();
         for (int x = 0; x < 65; x++) {
             for (int y = 0; y < 65; y++) {
-                int height = (int) Math.round(this.heightMap[x][y]);
+                int height = (int) Math.round(heightMap[x][y]);
                 int shade = 255 / 100 * height;
                 Color color = Color.grayRgb(shade);
                 brush.setFill(color);
