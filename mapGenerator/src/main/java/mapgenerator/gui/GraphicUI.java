@@ -20,15 +20,15 @@ public class GraphicUI {
      * @param map Contains all information of the generated map.
      * @see mapgenerator.gui.GraphicUI#drawMap(GraphicsContext)
      */
-    public GraphicUI(Stage stage, Map map) {
+    public GraphicUI(Stage stage, Map map, int canvasSize) {
 
-        Canvas canvas = new Canvas(650, 650);
+        Canvas canvas = new Canvas(canvasSize, canvasSize);
         GraphicsContext brush = canvas.getGraphicsContext2D();
 
         BorderPane layout = new BorderPane();
         layout.setCenter(canvas);
 
-        drawMap(brush, map);
+        drawMap(brush, map, canvasSize);
 
         Scene scene = new Scene(layout);
         stage.setScene(scene);
@@ -41,14 +41,18 @@ public class GraphicUI {
      * @param brush Draws map on canvas defined in parent method
      * @param map Contains all information of the generated map
      */
-    public void drawMap(GraphicsContext brush, Map map) {
+    public void drawMap(GraphicsContext brush, Map map, int canvasSize) {
         double[][] heightMap = map.getHeightMap();
-        for (int x = 0; x < 65; x++) {
-            for (int y = 0; y < 65; y++) {
+        for (int x = 0; x < canvasSize / 10; x++) {
+            for (int y = 0; y < canvasSize / 10; y++) {
                 int height = (int) Math.round(heightMap[x][y]);
                 int shade = 255 / 100 * height;
-                Color color = Color.grayRgb(shade);
-                brush.setFill(color);
+                Color green = Color.rgb(0, shade, 0);
+                Color blue = Color.rgb(0, 0, shade);
+                brush.setFill(green);
+                if (heightMap[x][y] < 50) {
+                    brush.setFill(blue);
+                }
                 brush.fillRect(x * 10, y * 10, 10, 10);
             }
         }

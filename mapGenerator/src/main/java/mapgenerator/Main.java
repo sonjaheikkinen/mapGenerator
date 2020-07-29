@@ -22,11 +22,12 @@ public class Main extends Application {
         Random random = new Random();
         Map map = new Map();
         int mapSizeExponent = 6;
+        int canvasSize =  (int) (Math.pow(2, mapSizeExponent) + 1) * 10;
         int mapSeed = 50;
         int mapRandomizerRange = 50;
         HeightmapGenerator hmGenerator = new HeightmapGenerator(random, mapSizeExponent, mapSeed, mapRandomizerRange);
         MapConstructor constructor = new MapConstructor(map, hmGenerator);
-        GraphicUI gui = new GraphicUI(stage, map);
+        GraphicUI gui = new GraphicUI(stage, map, canvasSize);
     }
 
     /**
