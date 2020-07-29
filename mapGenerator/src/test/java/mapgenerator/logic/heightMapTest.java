@@ -73,6 +73,43 @@ public class heightMapTest {
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 5);
     }
+    
+    @Test
+    public void afterOneSquareStepThereAreRightAmountOfZerosRemaining() {
+        this.hmg.assignCornerValues(this.mapSize, this.seed);
+        this.hmg.diamondStep(0, 0, mapSize - 1, (mapSize - 1) / 2, range);
+        this.hmg.squareStep(0, 32, (mapSize - 1) / 2, mapSize, range);
+        int valuesOtherThanZero = notZeroValueCount();
+        assertTrue(valuesOtherThanZero == 7);
+    }
+    
+    @Test
+    public void edgeWrappingPutsSameValueToEdgesHorizontal() {
+        this.hmg.wrapEdgeValues(0, 10, mapSize, 7);
+        double[][] map = this.hmg.getHeightMap();
+        assertTrue(map[mapSize - 1][10] == 7);
+    }
+    
+    @Test
+    public void edgeWrappingPutsSameValueToEdgesVertical() {
+        this.hmg.wrapEdgeValues(10, 0, mapSize, 7);
+        double[][] map = this.hmg.getHeightMap();
+        assertTrue(map[10][mapSize - 1] == 7);
+    }
+    
+    @Test
+    public void edgeWrappingDoesNothingIfCoordinatesNotOnEdge() {
+        this.hmg.wrapEdgeValues(5, 5, mapSize, 7);
+        int valuesOtherThanZero = notZeroValueCount();
+        assertTrue(valuesOtherThanZero == 0);
+    }
+    
+    @Test
+    public void noZeroValuesLeftAfterRunningCalculateHeights() {
+        this.hmg.calculateHeights();
+        int valuesOtherThanZero = notZeroValueCount();
+        assertTrue(valuesOtherThanZero == 65 * 65);
+    }
 
     public int notZeroValueCount() {
         int valuesOtherThanZero = 0;
