@@ -8,8 +8,15 @@ import mapgenerator.gui.GraphicUI;
 import mapgenerator.logic.HeightmapGenerator;
 import mapgenerator.logic.MapConstructor;
 
+/**
+ * Class creates instances of other classes and launches the program.
+ */
 public class Main extends Application {
 
+    /**
+     * Method creates instances of the map, generating logic and graphic user interface
+     * @param stage Used in graphic user interface to show things on screen.
+     */
     @Override
     public void start(Stage stage) {
         Random random = new Random();
@@ -23,6 +30,7 @@ public class Main extends Application {
     }
 
     /**
+     * Main method launches the whole program
      * @param args the command line arguments
      */
     public static void main(String[] args) {
