@@ -42,9 +42,6 @@ public class HeightmapGenerator {
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
                 this.heightMap[x][y] = (int) Math.round(this.heightMap[x][y]);
-                if (this.heightMap[x][y] < 0) {
-                    this.heightMap[x][y] = 0;
-                }
             }
         }
 
@@ -75,10 +72,10 @@ public class HeightmapGenerator {
                 + this.heightMap[x][(y - rectHalf + mapSize - 1) % (mapSize - 1)]) / 4;
         double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
         this.heightMap[x][y] = newValue;
-        wrapEdgeValues(x, mapSize, y, newValue);
+        wrapEdgeValues(x, y, mapSize, newValue);
     }
 
-    public void wrapEdgeValues(int x, int mapSize, int y, double newValue) {
+    public void wrapEdgeValues(int x, int y, int mapSize, double newValue) {
         if (x == 0) {
             this.heightMap[mapSize - 1][y] = newValue;
         }
