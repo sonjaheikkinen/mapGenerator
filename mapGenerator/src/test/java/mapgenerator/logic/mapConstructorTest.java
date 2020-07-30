@@ -13,6 +13,7 @@ public class mapConstructorTest {
 
     private Map map;
     private HeightmapGenerator hmg;
+    private WaterGenerator water;
     private MapConstructor mc;
 
     public mapConstructorTest() {
@@ -22,7 +23,8 @@ public class mapConstructorTest {
     public void setUp() {
         this.map = new Map();
         this.hmg = new HeightmapGenerator(new Random(), 6, 50, 50);
-        this.mc = new MapConstructor(this.map, this.hmg);
+        this.water = new WaterGenerator(6);
+        this.mc = new MapConstructor(this.map, this.hmg, water);
     }
 
     @After
