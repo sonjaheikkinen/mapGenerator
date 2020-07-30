@@ -1,13 +1,8 @@
 package mapgenerator;
 
-import java.util.Random;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import mapgenerator.domain.Map;
-import mapgenerator.gui.GraphicUI;
-import mapgenerator.logic.HeightmapGenerator;
-import mapgenerator.logic.MapConstructor;
-import mapgenerator.logic.WaterGenerator;
+import mapgenerator.logic.ProgramHandler;
 
 /**
  * Class creates instances of other classes and launches the program.
@@ -20,16 +15,8 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) {
-        Random random = new Random();
-        Map map = new Map();
-        int mapSizeExponent = 6;
-        int canvasSize =  (int) (Math.pow(2, mapSizeExponent) + 1) * 10;
-        int mapSeed = 50;
-        int mapRandomizerRange = 50;
-        HeightmapGenerator hmGenerator = new HeightmapGenerator(random, mapSizeExponent, mapSeed, mapRandomizerRange);
-        WaterGenerator waterGenerator = new WaterGenerator(mapSizeExponent);
-        MapConstructor constructor = new MapConstructor(map, hmGenerator, waterGenerator);
-        GraphicUI gui = new GraphicUI(stage, map, canvasSize);
+        ProgramHandler handler = new ProgramHandler();
+        handler.initialize(stage);
     }
 
     /**
