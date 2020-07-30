@@ -21,8 +21,8 @@ public class ProgramHandler {
     public void initialize(Stage stage) {
         Random random = new Random();
         Map map = new Map();
-        int mapSizeExponent = 6;
-        int canvasSize = (int) (Math.pow(2, mapSizeExponent) + 1) * 10;
+        int mapSizeExponent = 8;
+        int canvasSize = (int) (Math.pow(2, mapSizeExponent) + 1) * 3;
         int mapSeed = 50;
         int mapRandomizerRange = 50;
         this.constructor = new MapConstructor(random, mapSizeExponent, mapSeed, mapRandomizerRange, map);
