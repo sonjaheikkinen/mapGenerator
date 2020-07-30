@@ -1,6 +1,6 @@
 # Week 1 
 
-Time spent on the project: 12 hours
+Time spent on the project: 15 hours
 
 ## Week 1 progress
 
@@ -18,6 +18,8 @@ Time spent on the project: 12 hours
 * Colors for land and water
 * Randomization on corner values
 * Javadoc for all created classes
+* Button for generating new maps
+* Classes and arrays for water generation
 
 ## New things learned
 
@@ -25,3 +27,5 @@ Time spent on the project: 12 hours
 
 ## Next week
 
+* Try if the diamond-square is better without edge wrapping
+* Slider or selection for water level?

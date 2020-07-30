@@ -27,24 +27,31 @@ public class GraphicUI {
 
         Canvas canvas = new Canvas(canvasSize, canvasSize);
         GraphicsContext brush = canvas.getGraphicsContext2D();
-
-        Button newMapButton = new Button("New map");
-        
-        newMapButton.setOnAction(actionEvent -> {
-            handler.newMap();  
-            drawMap(brush, map, canvasSize);
-        });
+        Button newMapButton = createNewMapButton(handler, brush, map, canvasSize);
         
         drawMap(brush, map, canvasSize);
 
-        BorderPane layout = new BorderPane();
-        layout.setRight(newMapButton);
-        layout.setCenter(canvas);
-
+        BorderPane layout = createLayout(newMapButton, canvas);
         Scene scene = new Scene(layout);
         stage.setScene(scene);
         stage.show();
 
+    }
+
+    public BorderPane createLayout(Button newMapButton, Canvas canvas) {
+        BorderPane layout = new BorderPane();
+        layout.setRight(newMapButton);
+        layout.setCenter(canvas);
+        return layout;
+    }
+
+    public Button createNewMapButton(ProgramHandler handler, GraphicsContext brush, Map map, int canvasSize) {
+        Button newMapButton = new Button("New map");
+        newMapButton.setOnAction(actionEvent -> {
+            handler.newMap();
+            drawMap(brush, map, canvasSize);
+        });
+        return newMapButton;
     }
 
     /**

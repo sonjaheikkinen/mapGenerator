@@ -35,11 +35,11 @@ public class HeightmapGenerator {
     /**
      * Uses the diamond-square algorithm to generate height values for a map.
      * The algorithm has a diamond step and a square step. The diamond step: For
-     * each square in the array, take the average of the cornes, alter by a
+     * each square in the array, take the average of the corners, alter by a
      * random value and put the new value in the middle of the rectangle. The
      * square step: For each diamond in the array, take the average of the
      * corners, alter by a random value and put the new value in the middle of
-     * the rectangle. For edges, put the same walue on opposite edges so that
+     * the rectangle. For edges, put the same value on opposite edges so that
      * the values "wrap around".
      *
      * @return An array containing height values as doubles
@@ -62,13 +62,18 @@ public class HeightmapGenerator {
             }
         }
 
+        roundHeightsToInt();
+
+        return this.heightMap;
+        
+    }
+
+    public void roundHeightsToInt() {
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
                 this.heightMap[x][y] = (int) Math.round(this.heightMap[x][y]);
             }
         }
-
-        return this.heightMap;
     }
 
     /**
@@ -121,6 +126,7 @@ public class HeightmapGenerator {
      * @param randomizerRange The range in which random values can be
      */
     public void squareStep(int x, int y, int distanceToCorner, int mapSize, int randomizerRange) {
+        
         double cornerAverage = (this.heightMap[(x - distanceToCorner + mapSize - 1) % (mapSize - 1)][y]
                 + this.heightMap[(x + distanceToCorner) % (mapSize - 1)][y]
                 + this.heightMap[x][(y + distanceToCorner) % (mapSize - 1)]

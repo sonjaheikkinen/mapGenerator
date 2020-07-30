@@ -53,10 +53,11 @@ public class heightMapTest {
     public void cornerValuesAreAssignedCorrectly() {
         this.hmg.assignCornerValues(this.mapSize, this.seed);
         double[][] map = this.hmg.getHeightMap();
-        assertTrue(map[0][0] == this.seed);
-        assertTrue(map[0][this.mapSize - 1] == this.seed);
-        assertTrue(map[this.mapSize - 1][0] == this.seed);
-        assertTrue(map[this.mapSize - 1][this.mapSize - 1] == this.seed);
+        assertTrue(map[0][0] >= seed - 10 && map[0][0] <= seed + 10);
+        assertTrue(map[0][this.mapSize - 1] >= seed - 10 && map[0][this.mapSize - 1] <= seed + 10);
+        assertTrue(map[this.mapSize - 1][0] >= seed - 10 && map[this.mapSize - 1][0] <= seed + 10);
+        assertTrue(map[this.mapSize - 1][this.mapSize - 1] >= seed - 10 
+                && map[this.mapSize - 1][this.mapSize - 1] <= seed + 10);
     }
 
     @Test
