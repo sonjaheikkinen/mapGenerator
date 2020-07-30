@@ -12,13 +12,14 @@ package mapgenerator.logic;
 public class WaterGenerator {
 
     private boolean[][] water;
-
+    private int mapSize;
+    
     public WaterGenerator(int mapSizeExponent) {
-        int mapSize = (int) Math.pow(2, mapSizeExponent) + 1;
+        mapSize = (int) Math.pow(2, mapSizeExponent) + 1;
         this.water = new boolean[mapSize][mapSize];
     }
 
-    public void addWaterByHeight(int waterlevel, double[][] heightmap) {
+    public void addWaterByHeight(int waterlevel, double[][] heightmap) {      
         for (int x = 0; x < heightmap.length; x++) {
             for (int y = 0; y < heightmap.length; y++) {
                 if (heightmap[x][y] < waterlevel) {

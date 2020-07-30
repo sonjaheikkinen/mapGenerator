@@ -15,6 +15,8 @@ import mapgenerator.gui.GraphicUI;
  * @author heisonja
  */
 public class ProgramHandler {
+    
+    private MapConstructor constructor;
 
     public void initialize(Stage stage) {
         Random random = new Random();
@@ -23,10 +25,13 @@ public class ProgramHandler {
         int canvasSize = (int) (Math.pow(2, mapSizeExponent) + 1) * 10;
         int mapSeed = 50;
         int mapRandomizerRange = 50;
-        HeightmapGenerator hmGenerator = new HeightmapGenerator(random, mapSizeExponent, mapSeed, mapRandomizerRange);
-        WaterGenerator waterGenerator = new WaterGenerator(mapSizeExponent);
-        MapConstructor constructor = new MapConstructor(map, hmGenerator, waterGenerator);
-        GraphicUI gui = new GraphicUI(stage, map, canvasSize);
+        this.constructor = new MapConstructor(random, mapSizeExponent, mapSeed, mapRandomizerRange, map);
+        this.newMap();
+        GraphicUI gui = new GraphicUI(stage, map, canvasSize, this);
+    }
+    
+    public void newMap() {
+        constructor.constructMap();
     }
 
 }

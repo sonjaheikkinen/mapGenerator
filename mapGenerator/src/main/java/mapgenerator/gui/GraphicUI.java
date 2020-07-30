@@ -1,13 +1,14 @@
-
 package mapgenerator.gui;
 
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import mapgenerator.domain.Map;
+import mapgenerator.logic.ProgramHandler;
 
 /**
  * Class creates the graphic user interface of the program.
@@ -15,20 +16,30 @@ import mapgenerator.domain.Map;
 public class GraphicUI {
 
     /**
-     * Method creates a window and calls for method drawMap to draw the generated map on screen.
+     * Method creates a window and calls for method drawMap to draw the
+     * generated map on screen.
+     *
      * @param stage A window which shows things on screen.
      * @param map Contains all information of the generated map.
      * @see mapgenerator.gui.GraphicUI#drawMap(GraphicsContext)
      */
-    public GraphicUI(Stage stage, Map map, int canvasSize) {
+    public GraphicUI(Stage stage, Map map, int canvasSize, ProgramHandler handler) {
 
         Canvas canvas = new Canvas(canvasSize, canvasSize);
         GraphicsContext brush = canvas.getGraphicsContext2D();
 
-        BorderPane layout = new BorderPane();
-        layout.setCenter(canvas);
-
+        Button newMapButton = new Button("New map");
+        
+        newMapButton.setOnAction(actionEvent -> {
+            handler.newMap();  
+            drawMap(brush, map, canvasSize);
+        });
+        
         drawMap(brush, map, canvasSize);
+
+        BorderPane layout = new BorderPane();
+        layout.setRight(newMapButton);
+        layout.setCenter(canvas);
 
         Scene scene = new Scene(layout);
         stage.setScene(scene);
@@ -37,7 +48,8 @@ public class GraphicUI {
     }
 
     /**
-     * Draws a map on screen based on a map object 
+     * Draws a map on screen based on a map object
+     *
      * @param brush Draws map on canvas defined in parent method
      * @param map Contains all information of the generated map
      */

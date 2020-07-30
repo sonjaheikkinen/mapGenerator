@@ -1,6 +1,7 @@
 
 package mapgenerator.logic;
 
+import java.util.Random;
 import mapgenerator.domain.Map;
 
 /*
@@ -9,8 +10,10 @@ import mapgenerator.domain.Map;
 public final class MapConstructor {
 
     private Map map;
-    private HeightmapGenerator heightmapGenerator;
-    private WaterGenerator waterGenerator;
+    private Random random;
+    private int exponent;
+    private int seed;
+    private int range;
     private double[][] heightMap;
     private boolean[][] water;
 
@@ -19,18 +22,21 @@ public final class MapConstructor {
      * @param map A map object in which the generated map is saved
      * @param hmGenerator Generates height values of the map
      */
-    public MapConstructor(Map map, HeightmapGenerator hmGenerator, WaterGenerator waterGenerator) {
+    public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map) {
         this.map = map;
-        this.heightmapGenerator = hmGenerator;
-        this.waterGenerator = waterGenerator;
-        constructMap();
+        this.random = random;
+        this.exponent = mapSizeExponent;
+        this.seed = mapSeed;
+        this.range = mapRandomizerRange;
     }
 
     /**
      * Calls for generateMapObjects to generate different map parts and gives these to a map object.
      */
     public void constructMap() {
-        generateMapObjects();
+        HeightmapGenerator heightmapGenerator = new HeightmapGenerator(random, exponent, seed, range);
+        WaterGenerator waterGenerator = new WaterGenerator(exponent);
+        generateMapObjects(heightmapGenerator, waterGenerator);
         map.setHeightMap(this.heightMap);
         map.setWater(water);
     }
@@ -38,8 +44,8 @@ public final class MapConstructor {
     /**
      * Calls for other methods to generate different parts of the map.
      */
-    public void generateMapObjects() {
-        heightMap = heightmapGenerator.calculateHeights();
+    public void generateMapObjects(HeightmapGenerator heigthmapGenerator, WaterGenerator waterGenerator) {
+        heightMap = heigthmapGenerator.calculateHeights();
         waterGenerator.addWaterByHeight(50, heightMap);
         water = waterGenerator.getWater();
     }
