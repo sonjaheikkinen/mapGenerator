@@ -7,6 +7,7 @@ import mapgenerator.domain.Map;
 import mapgenerator.gui.GraphicUI;
 import mapgenerator.logic.HeightmapGenerator;
 import mapgenerator.logic.MapConstructor;
+import mapgenerator.logic.WaterGenerator;
 
 /**
  * Class creates instances of other classes and launches the program.
@@ -26,7 +27,8 @@ public class Main extends Application {
         int mapSeed = 50;
         int mapRandomizerRange = 50;
         HeightmapGenerator hmGenerator = new HeightmapGenerator(random, mapSizeExponent, mapSeed, mapRandomizerRange);
-        MapConstructor constructor = new MapConstructor(map, hmGenerator);
+        WaterGenerator waterGenerator = new WaterGenerator(mapSizeExponent);
+        MapConstructor constructor = new MapConstructor(map, hmGenerator, waterGenerator);
         GraphicUI gui = new GraphicUI(stage, map, canvasSize);
     }
 

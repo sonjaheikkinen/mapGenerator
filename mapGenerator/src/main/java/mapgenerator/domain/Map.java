@@ -7,6 +7,7 @@ package mapgenerator.domain;
 public class Map {
     
     private double[][] heightMap;
+    private boolean[][] water;
     
     /**
      * Sets a height map.
@@ -18,9 +19,17 @@ public class Map {
     
     /**
      * Returns the height map.
-     * @retun An array containing the height values of the map as doubles.
+     * @return An array containing the height values of the map as doubles.
      */
     public double[][] getHeightMap() {
         return this.heightMap;
+    }
+    
+    public void setWater(boolean[][] water) {
+        this.water = water;
+    } 
+    
+    public boolean[][] getWater() {
+        return water;
     }
 }

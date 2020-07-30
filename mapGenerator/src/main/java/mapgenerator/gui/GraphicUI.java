@@ -43,6 +43,7 @@ public class GraphicUI {
      */
     public void drawMap(GraphicsContext brush, Map map, int canvasSize) {
         double[][] heightMap = map.getHeightMap();
+        boolean[][] water = map.getWater();
         for (int x = 0; x < canvasSize / 10; x++) {
             for (int y = 0; y < canvasSize / 10; y++) {
                 int height = (int) Math.round(heightMap[x][y]);
@@ -50,7 +51,7 @@ public class GraphicUI {
                 Color green = Color.rgb(0, shade, 0);
                 Color blue = Color.rgb(0, 0, shade);
                 brush.setFill(green);
-                if (heightMap[x][y] < 50) {
+                if (water[x][y]) {
                     brush.setFill(blue);
                 }
                 brush.fillRect(x * 10, y * 10, 10, 10);

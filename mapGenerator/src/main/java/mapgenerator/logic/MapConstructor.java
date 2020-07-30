@@ -10,16 +10,19 @@ public final class MapConstructor {
 
     private Map map;
     private HeightmapGenerator heightmapGenerator;
+    private WaterGenerator waterGenerator;
     private double[][] heightMap;
+    private boolean[][] water;
 
     /**
      * Constructor for this class, initializes class variables.
      * @param map A map object in which the generated map is saved
      * @param hmGenerator Generates height values of the map
      */
-    public MapConstructor(Map map, HeightmapGenerator hmGenerator) {
+    public MapConstructor(Map map, HeightmapGenerator hmGenerator, WaterGenerator waterGenerator) {
         this.map = map;
         this.heightmapGenerator = hmGenerator;
+        this.waterGenerator = waterGenerator;
         constructMap();
     }
 
@@ -29,20 +32,16 @@ public final class MapConstructor {
     public void constructMap() {
         generateMapObjects();
         map.setHeightMap(this.heightMap);
+        map.setWater(water);
     }
 
     /**
      * Calls for other methods to generate different parts of the map.
      */
     public void generateMapObjects() {
-        generateHeightmap();
-    }
-
-    /**
-     * Calls for heightmapGenerator to generate height values for the map.
-     */
-    public void generateHeightmap() {
-        this.heightMap = heightmapGenerator.calculateHeights();
+        heightMap = heightmapGenerator.calculateHeights();
+        waterGenerator.addWaterByHeight(50, heightMap);
+        water = waterGenerator.getWater();
     }
     
     /**
