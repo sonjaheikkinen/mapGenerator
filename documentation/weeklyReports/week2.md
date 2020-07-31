@@ -4,6 +4,8 @@ Time spent on the project: 17 hours
 
 ## Week 2 progress
 
+Most of this week was spent on memorizing how to code with java (since it's been almost a year since last time) and implementing the diamond-square algorithm for height map creation. First I just read the general idea and tried to create the algorithm, but since it was not quite right (the created heightmap was not natural looking but instead almost symmetrical) I searched for an example and altered my algorithm a little based on that. I am quite happy with the result, but the example algorithm makes the height values wrap around the edges in the square step which I do not like. I may have to try and fix that next week. 
+
 ### Course progress
 
 * Project uses jacoco and checkstyle
@@ -23,9 +25,13 @@ Time spent on the project: 17 hours
 
 ## New things learned
 
+This week was mostly bringing back old skills about java, javafx, JUnit and coding in general, but I also learned to make the diamond-square algorithm, altough I still need a better understanding of the square step, which is the hardest part of the algorithm because of the edges.
+
 ## Questions and problems
 
-* 
+* I have not yet found a way to test the ProgramHandler class since I cannot create a new Stage element for the initializise method without getting an ExceptionInInitializerError. I have to look into that next week, maybe there is a simple solution
+* Do we need to test the graphic ui also? Other courses I have been in did not demand it but I cannot 
+find a mention about that in the course material (or maybe I am just blind).
 
 ## Next week
 
