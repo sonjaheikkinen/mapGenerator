@@ -28,7 +28,7 @@ public class GraphicUI {
         Canvas canvas = new Canvas(canvasSize, canvasSize);
         GraphicsContext brush = canvas.getGraphicsContext2D();
         Button newMapButton = createNewMapButton(handler, brush, map, canvasSize);
-        
+
         drawMap(brush, map, canvasSize);
 
         BorderPane layout = createLayout(newMapButton, canvas);
@@ -38,6 +38,13 @@ public class GraphicUI {
 
     }
 
+    /**
+     * Method creates a scene layout from provided elements
+     *
+     * @param newMapButton A button element
+     * @param canvas A canvas element
+     * @return Produced layout
+     */
     public BorderPane createLayout(Button newMapButton, Canvas canvas) {
         BorderPane layout = new BorderPane();
         layout.setRight(newMapButton);
@@ -45,6 +52,16 @@ public class GraphicUI {
         return layout;
     }
 
+    /**
+     * Method creates a button and its eventhandler for producing new maps
+     *
+     * @param handler A ProgramHandler object which is in control of creating
+     * necessary elements for creating new map
+     * @param brush A graphicsContext element which draws the map on canvas
+     * @param map Contains the information of the generated map
+     * @param canvasSize Size of the canvas
+     * @return A button element which creates and draws a new map when pressed
+     */
     public Button createNewMapButton(ProgramHandler handler, GraphicsContext brush, Map map, int canvasSize) {
         Button newMapButton = new Button("New map");
         newMapButton.setOnAction(actionEvent -> {

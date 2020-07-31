@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package mapgenerator.logic;
 
 import java.util.Random;
@@ -11,13 +7,16 @@ import mapgenerator.domain.Map;
 import mapgenerator.gui.GraphicUI;
 
 /**
- *
- * @author heisonja
+ * Class controls the execution of the program
  */
 public class ProgramHandler {
     
     private MapConstructor constructor;
 
+    /**
+     * Method initializes variables and creates a map constructor and graphic user interface of the program
+     * @param stage The graphic user interface and generated maps are shown on stage
+     */
     public void initialize(Stage stage) {
         Random random = new Random();
         Map map = new Map();
@@ -30,6 +29,9 @@ public class ProgramHandler {
         GraphicUI gui = new GraphicUI(stage, map, canvasSize, this);
     }
     
+    /**
+     * Method calls for map constructor to create a new map
+     */
     public void newMap() {
         constructor.constructMap();
     }

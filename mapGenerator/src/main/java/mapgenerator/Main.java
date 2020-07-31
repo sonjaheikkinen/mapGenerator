@@ -5,12 +5,12 @@ import javafx.stage.Stage;
 import mapgenerator.logic.ProgramHandler;
 
 /**
- * Class creates instances of other classes and launches the program.
+ * Class creates a program handler and launches the program.
  */
 public class Main extends Application {
 
     /**
-     * Method creates instances of the map, generating logic and graphic user interface
+     * Method creates a program handler which is in control of initializing and controlling program execution
      * @param stage Used in graphic user interface to show things on screen.
      */
     @Override

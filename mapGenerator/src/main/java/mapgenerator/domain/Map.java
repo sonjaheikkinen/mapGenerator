@@ -25,10 +25,18 @@ public class Map {
         return this.heightMap;
     }
     
+    /**
+     * Sets a water map
+     * @param water A boolean array in which true means water and false means land
+     */
     public void setWater(boolean[][] water) {
         this.water = water;
     } 
     
+    /**
+     * Returns the water map
+     * @return A boolean array in which true means water and false means land
+     */
     public boolean[][] getWater() {
         return water;
     }

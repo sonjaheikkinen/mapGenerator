@@ -19,7 +19,8 @@ public class HeightmapGenerator {
      *
      * @param random Random number generator
      * @param exponent Generated map will be of size (2^exponent)-1
-     * @param seed Map corners will get the seed value before algorithm runs
+     * @param seed Map corners will get the seed value +/- 10 before algorithm
+     * runs
      * @param range A random value of +/- range will be added to values
      * calculated by algorithm
      */
@@ -62,13 +63,16 @@ public class HeightmapGenerator {
             }
         }
 
-        roundHeightsToInt();
+        roundHeightsToWholeNumbers();
 
         return this.heightMap;
-        
+
     }
 
-    public void roundHeightsToInt() {
+    /**
+     * Rounds every height value to a whole number.
+     */
+    public void roundHeightsToWholeNumbers() {
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
                 this.heightMap[x][y] = (int) Math.round(this.heightMap[x][y]);
@@ -126,7 +130,7 @@ public class HeightmapGenerator {
      * @param randomizerRange The range in which random values can be
      */
     public void squareStep(int x, int y, int distanceToCorner, int mapSize, int randomizerRange) {
-        
+
         double cornerAverage = (this.heightMap[(x - distanceToCorner + mapSize - 1) % (mapSize - 1)][y]
                 + this.heightMap[(x + distanceToCorner) % (mapSize - 1)][y]
                 + this.heightMap[x][(y + distanceToCorner) % (mapSize - 1)]

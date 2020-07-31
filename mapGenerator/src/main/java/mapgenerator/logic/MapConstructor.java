@@ -19,8 +19,10 @@ public final class MapConstructor {
 
     /**
      * Constructor for this class, initializes class variables.
+     * @param mapSizeExponent The created map will have a side length of (2^mapSizeExponent) + 1
+     * @param mapSeed The corners of the height map will be assigned a random value of mapSeed +/- 10
+     * @param mapRandomizerRange The height values calculated for the height map will be affected by a random value of +/- mapRandomizerRange
      * @param map A map object in which the generated map is saved
-     * @param hmGenerator Generates height values of the map
      */
     public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map) {
         this.map = map;
@@ -31,7 +33,8 @@ public final class MapConstructor {
     }
 
     /**
-     * Calls for generateMapObjects to generate different map parts and gives these to a map object.
+     * Creates the producers of map parts and calls for another method to generate map objects, which
+     * are then given to a map object.
      */
     public void constructMap() {
         HeightmapGenerator heightmapGenerator = new HeightmapGenerator(random, exponent, seed, range);
