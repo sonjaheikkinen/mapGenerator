@@ -11,3 +11,7 @@ A procedural map generator made as a data stuctures and algorithms course projec
 [Week 1](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/weeklyReports/week1.md)
 
 [Week 2](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/weeklyReports/week2.md)
+
+## Test coverage
+
+[Jacoco Test Report, week 2](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/testCoverage/week2.png)
