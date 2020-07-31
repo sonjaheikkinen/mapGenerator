@@ -1,8 +1,8 @@
-# Week 1 
+# Week 2
 
-Time spent on the project: 15 hours
+Time spent on the project: 17 hours
 
-## Week 1 progress
+## Week 2 progress
 
 ### Course progress
 
@@ -25,7 +25,11 @@ Time spent on the project: 15 hours
 
 ## Questions and problems
 
+* 
+
 ## Next week
 
 * Try if the diamond-square is better without edge wrapping
-* Slider or selection for water level?
+* Slider or selection for water level possibly
+* Lakes and rivers, humidity?
+* Make research concerning cities and roads
