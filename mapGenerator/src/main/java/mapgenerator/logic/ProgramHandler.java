@@ -36,4 +36,8 @@ public class ProgramHandler {
         constructor.constructMap();
     }
 
+    public MapConstructor getMapConstructor() {
+        return constructor;
+    }
+
 }

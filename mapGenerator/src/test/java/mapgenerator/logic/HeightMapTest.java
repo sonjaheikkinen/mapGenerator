@@ -1,23 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package mapgenerator.logic;
 
 import java.util.Random;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author heisonja
  */
-public class heightMapTest {
+public class HeightMapTest {
 
     Random random;
     int exponent;
@@ -26,7 +19,7 @@ public class heightMapTest {
     int mapSize;
     HeightmapGenerator hmg;
 
-    public heightMapTest() {
+    public HeightMapTest() {
     }
 
     @Before

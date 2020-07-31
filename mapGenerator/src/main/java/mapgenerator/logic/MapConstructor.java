@@ -60,5 +60,9 @@ public final class MapConstructor {
     public double[][] getHeightMap() {
         return this.heightMap;
     }
+    
+    public boolean[][] getWater() {
+        return water;
+    }
 
 }
