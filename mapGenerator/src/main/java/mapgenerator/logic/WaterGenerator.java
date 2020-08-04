@@ -112,30 +112,22 @@ public class WaterGenerator {
     public void addWind(double[][] heightmap) {
         for (int x = 1; x < mapSize - 1; x++) {
             for (int y = 1; y < mapSize - 1; y++) {
-                /*
-                if (heightmap[x - 1][y - 1] < heightmap[x][y]) {
-                    if(!water[x - 1][y - 1]) {
-                        moisture[x - 1][y - 1] = Math.max(1, moisture[x - 1][y - 1] - 1);
-                    }
-                    if(! water[x + 1][y + 1]) {
-                        moisture[x + 1][y + 1] = Math.min(6, moisture[x + 1][y + 1] + 1);
-                    }
-                }
-                 */
                 if (!water[x][y]) {
                     int averageMoisture = (moisture[x - 1][y] + moisture[x + 1][y]
                             + moisture[x][y - 1] + moisture[x][y + 1]) / 4;
-                    moisture[x][y] = Math.min(6, averageMoisture + 1);
+                    moisture[x][y] = Math.min(6, averageMoisture + 2);
                 }
+                
                 if (heightmap[x - 1][y - 1] < heightmap[x][y] && !water[x][y]) {
                     int averageMoisture = (moisture[x - 1][y] + moisture[x][y - 1]) / 2;
-                    moisture[x][y] = Math.min(6, averageMoisture + 1);
+                    moisture[x][y] = Math.min(6, averageMoisture);
                 }
                 if (heightmap[x + 1][y + 1] > heightmap[x][y] && !water[x][y]) {
                     int averageMoisture = (moisture[x + 1][y] + moisture[x][y + 1]) / 2;
-                    moisture[x][y] = Math.max(1, averageMoisture - 1);
+                    moisture[x][y] = Math.max(1, averageMoisture);
                     //moisture[x][y] = Math.min(6, averageMoisture + 1);
                 }
+             
             }
         }
     }

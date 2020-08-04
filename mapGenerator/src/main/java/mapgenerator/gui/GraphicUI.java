@@ -1,5 +1,7 @@
 package mapgenerator.gui;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -88,33 +90,33 @@ public class GraphicUI {
                 //Color green = Color.rgb(0, shade, 0);
                 //Color blue = Color.rgb(0, 0, shade);
                 //Color moisture = Color.rgb(map.getMoisture()[x][y] * 255 / 6, 0, 0);
-                Color color = Color.rgb(0, 0, shade);
+                Color color = Color.rgb(0, 0, 0);
+                Color blue = Color.rgb(0, 0, shade);
                 brush.setFill(color);
                 int biome = biomes[x][y];
-                //biomes: 1-desert, 2-grassland, 3-deciduousforest, 4-rainforest, 5-taiga, 6-baremountain, 7-tundra, 8-snowymountain
-                if (biome == 1) {
-                    color = Color.rgb(227, 214, 179);
+                //biomes: "sand;grass;leaf;taiga;tundra;snow";
+                Color sand = Color.rgb(231, 232, 207);
+                Color grass = Color.rgb(199, 209, 157);
+                Color leaf = Color.rgb(91, 194, 110);
+                Color taiga = Color.rgb(27, 122, 43);
+                Color tundra = Color.rgb(140, 171, 145);
+                Color snow = Color.rgb(230, 240, 239);
+                if (water[x][y]) {
+                    color = blue;
+                } else if (biome == 1) {
+                    color = sand;
                 } else if (biome == 2) {
-                    color = Color.rgb(199, 209, 157);
+                    color = grass;
                 } else if (biome == 3) {
-                    color = Color.rgb(171, 196, 145);
+                    color = leaf;
                 } else if (biome == 4) {
-                    color = Color.rgb(57, 145, 154);
+                    color = taiga;
                 } else if (biome == 5) {
-                    color = Color.rgb(50, 156, 108);
+                    color = tundra;
                 } else if (biome == 6) {
-                    color = Color.rgb(131, 137, 150);
-                } else if (biome == 7) {
-                    color = Color.rgb(178, 194, 190);
-                } else if (biome == 8) {
-                    color = Color.rgb(233, 242, 242);
+                    color = snow;
                 }
                 brush.setFill(color);
-                /*
-                if (water[x][y]) {
-                    brush.setFill(blue);
-                }
-                 */
                 brush.fillRect(x * 3, y * 3, 3, 3);
             }
         }
@@ -125,7 +127,7 @@ public class GraphicUI {
         boolean[][] water = map.getWater();
         int[][] moisture = map.getMoisture();
         int[][] biomes = new int[heightMap.length][heightMap.length];
-        int[][] biomeSelection = new int[4][6];
+        int[] biomeSelection = new int[6];
         biomeSelection = fillBiomes(biomeSelection);
         //biomes: 1-desert, 2-grassland, 3-deciduousforest, 4-rainforest, 5-taiga, 6-baremountain, 7-tundra, 8-snowymountain
         //heights: 50-60=0, 60-70=1, 70-80=2, 80+=3
@@ -135,32 +137,81 @@ public class GraphicUI {
                 if (!water[x][y]) {
                     int heightlevel;
                     double height = heightMap[x][y];
-                    if (height >= 50 && height < 60) {
+                    if (height >= 50 && height < 52) {
                         heightlevel = 0;
-                    } else if (height >= 60 && height < 70) {
+                    } else if (height >= 52 && height < 55) {
                         heightlevel = 1;
-                    } else if (height >= 70 && height < 80) {
+                    } else if (height >= 55 && height < 65) {
                         heightlevel = 2;
-                    } else {
+                    } else if (height >= 65 && height < 80){
                         heightlevel = 3;
+                    } else if (height >= 80 && height < 90) {
+                        heightlevel = 4;
+                    } else {
+                        heightlevel = 5;
                     }
-                    biomes[x][y] = biomeSelection[heightlevel][moisture[x][y] - 1];
+                    biomes[x][y] = biomeSelection[heightlevel];
                 }
             }
         }
         return biomes;
     }
 
-    public int[][] fillBiomes(int[][] biomes) {
+    public int[] fillBiomes(int[] biomes) {
+        //biomes: 1-desert, 2-grass, 3-leaf, 4-rain, 5-taiga, 6-mountain, 7-tundra, 8-snow
+        /*
+        String biomeString = "desert;grass;leaf;leaf;rain;rain;"
+                + "desert;grass;grass;leaf;leaf;rain;"
+                + "desert;grass;taiga;taiga;tundra;tundra;"
+                + "mountain;taiga;tundra;tundra;snow;snow";
+        */
+        String biomeString = "sand;grass;leaf;taiga;tundra;snow";
+        String[] biomeList = biomeString.split(";");
+        
+        int index = 0;
+        for (int height = 0; height < 6; height++) {
+            //for (int moisture = 0; moisture < 6; moisture++) {
+                int biome = getBiomeNumber(biomeList[index]);
+                biomes[height] = biome;
+                index++;
+            //}
+        }
+        /*
         biomes[0][0] = biomes[1][0] = biomes[2][0] = biomes[2][1] = 1;
-        biomes[0][1] = biomes[1][1] = biomes[1][2] = biomes[2][2] = 2;
+        biomes[0][1] = biomes[1][1] = biomes[1][2] = biomes[2][2] = biomes[2][3] = 2;
         biomes[0][2] = biomes[0][3] = biomes[1][3] = biomes[1][4] = 3;
         biomes[0][4] = biomes[0][5] = biomes[1][5] = 4;
         biomes[2][4] = biomes[2][5] = 5;
         biomes[3][0] = biomes[3][1] = 6;
         biomes[3][2] = biomes[3][3] = 7;
         biomes[3][4] = biomes[3][5] = 8;
+        */
         return biomes;
+    }
+
+    public int getBiomeNumber(String biomeName) {
+        //biomes: 1-desert, 2-grass, 3-leaf, 4-rain, 5-taiga, 6-mountain, 7-tundra, 8-snow
+        switch (biomeName) {
+            case "sand":
+                return 1;
+            case "grass":
+                return 2;
+            case "leaf":
+                return 3;
+            case "taiga":
+                return 4;
+            case "tundra":
+                return 5;
+            case "snow":
+                return 6;
+            /*
+            case "tundra":
+                return 7;
+            case "snow":
+                return 8;
+            */
+        }
+        return 0;
     }
 
 }
