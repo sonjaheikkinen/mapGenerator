@@ -40,4 +40,5 @@ public class Map {
     public boolean[][] getWater() {
         return water;
     }
+
 }

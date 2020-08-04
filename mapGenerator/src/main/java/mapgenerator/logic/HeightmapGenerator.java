@@ -1,5 +1,6 @@
 package mapgenerator.logic;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -56,8 +57,8 @@ public class HeightmapGenerator {
                     diamondStep(x, y, squareSize, squareHalf, this.randomizerRange);
                 }
             }
-            for (int x = 0; x < mapSize - 1; x += squareHalf) {
-                for (int y = (x + squareHalf) % squareSize; y < mapSize - 1; y += squareSize) {
+            for (int x = 0; x < mapSize; x += squareHalf) {
+                for (int y = (x + squareHalf) % squareSize; y < mapSize; y += squareSize) {
                     squareStep(x, y, squareHalf, mapSize, this.randomizerRange);
                 }
             }
@@ -70,27 +71,16 @@ public class HeightmapGenerator {
     }
 
     /**
-     * Rounds every height value to a whole number.
-     */
-    public void roundHeightsToWholeNumbers() {
-        for (int x = 0; x < mapSize; x++) {
-            for (int y = 0; y < mapSize; y++) {
-                this.heightMap[x][y] = (int) Math.round(this.heightMap[x][y]);
-            }
-        }
-    }
-
-    /**
      * Puts the seed value +/- 10 on the corners of the map.
      *
      * @param mapSize The length of one side of the map
      * @param seed The seed value for corner values
      */
     public void assignCornerValues(int mapSize, int seed) {
-        this.heightMap[0][0] = seed + random.nextInt(20) - 10;
-        this.heightMap[0][mapSize - 1] = seed + random.nextInt(20) - 10;
-        this.heightMap[mapSize - 1][0] = seed + random.nextInt(20) - 10;
-        this.heightMap[mapSize - 1][mapSize - 1] = seed + random.nextInt(20) - 10;
+        this.heightMap[0][0] = seed;
+        this.heightMap[0][mapSize - 1] = seed;
+        this.heightMap[mapSize - 1][0] = seed;
+        this.heightMap[mapSize - 1][mapSize - 1] = seed;
     }
 
     /**
@@ -130,31 +120,37 @@ public class HeightmapGenerator {
      * @param randomizerRange The range in which random values can be
      */
     public void squareStep(int x, int y, int distanceToCorner, int mapSize, int randomizerRange) {
-
-        double cornerAverage = (this.heightMap[(x - distanceToCorner + mapSize - 1) % (mapSize - 1)][y]
-                + this.heightMap[(x + distanceToCorner) % (mapSize - 1)][y]
-                + this.heightMap[x][(y + distanceToCorner) % (mapSize - 1)]
-                + this.heightMap[x][(y - distanceToCorner + mapSize - 1) % (mapSize - 1)]) / 4;
+        double cornerSum = 0;
+        double cornerCount = 0;
+        if (x - distanceToCorner >= 0) {
+            cornerSum = cornerSum + this.heightMap[x - distanceToCorner][y];
+            cornerCount++;
+        }
+        if (x + distanceToCorner < mapSize) {
+            cornerSum = cornerSum + this.heightMap[Math.min(x + distanceToCorner, mapSize - 1)][y];
+            cornerCount++;
+        }
+        if (y + distanceToCorner < mapSize) {
+            cornerSum = cornerSum + this.heightMap[x][y + distanceToCorner];
+            cornerCount++;
+        }
+        if (y - distanceToCorner >= 0) {
+            cornerSum = cornerSum + this.heightMap[x][y - distanceToCorner];
+            cornerCount++;
+        }
+        double cornerAverage = cornerSum / cornerCount;
         double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
         this.heightMap[x][y] = newValue;
-        wrapEdgeValues(x, y, mapSize, newValue);
     }
 
     /**
-     * When coordinates x and y define a place at the edge of the map, puts the
-     * given value to the other side of the map.
-     *
-     * @param x The given x coordinate
-     * @param y The given y coordinate
-     * @param mapSize The size of the map
-     * @param newValue The given value to be inserted
+     * Rounds every height value to a whole number.
      */
-    public void wrapEdgeValues(int x, int y, int mapSize, double newValue) {
-        if (x == 0) {
-            this.heightMap[mapSize - 1][y] = newValue;
-        }
-        if (y == 0) {
-            this.heightMap[x][mapSize - 1] = newValue;
+    public void roundHeightsToWholeNumbers() {
+        for (int x = 0; x < mapSize; x++) {
+            for (int y = 0; y < mapSize; y++) {
+                this.heightMap[x][y] = (int) Math.round(this.heightMap[x][y]);
+            }
         }
     }
 
