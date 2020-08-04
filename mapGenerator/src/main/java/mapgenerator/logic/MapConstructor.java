@@ -16,7 +16,7 @@ public final class MapConstructor {
     private int range;
     private double[][] heightMap;
     private boolean[][] water;
-    private int[][] moisture;
+    private double[][] moisture;
 
     /**
      * Constructor for this class, initializes class variables.
@@ -49,10 +49,10 @@ public final class MapConstructor {
     /**
      * Calls for other methods to generate different parts of the map.
      */
-    public void generateMapObjects(HeightmapGenerator heigthmapGenerator, WaterGenerator waterGenerator) {
-        heightMap = heigthmapGenerator.calculateHeights();
+    public void generateMapObjects(HeightmapGenerator heightmapGenerator, WaterGenerator waterGenerator) {
+        heightMap = heightmapGenerator.calculateHeights();
         waterGenerator.addWaterByHeight(50, heightMap);
-        waterGenerator.addMoisture(heightMap);
+        waterGenerator.addMoisture();
         moisture = waterGenerator.getMoisture();
         water = waterGenerator.getWater();
     }

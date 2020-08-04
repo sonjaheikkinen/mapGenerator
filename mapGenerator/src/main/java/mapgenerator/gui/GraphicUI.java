@@ -87,51 +87,52 @@ public class GraphicUI {
             for (int y = 0; y < canvasSize / 3; y++) {
                 int height = (int) Math.round(heightMap[x][y]);
                 int shade = 255 / 100 * height;
-                //Color green = Color.rgb(0, shade, 0);
-                //Color blue = Color.rgb(0, 0, shade);
-                //Color moisture = Color.rgb(map.getMoisture()[x][y] * 255 / 6, 0, 0);
+                shade = Math.min(255, shade);
                 Color color = Color.rgb(0, 0, 0);
-                Color blue = Color.rgb(0, 0, shade);
                 brush.setFill(color);
                 int biome = biomes[x][y];
-                //biomes: "sand;grass;leaf;taiga;tundra;snow";
-                Color sand = Color.rgb(231, 232, 207);
-                Color grass = Color.rgb(199, 209, 157);
-                Color leaf = Color.rgb(91, 194, 110);
-                Color taiga = Color.rgb(27, 122, 43);
-                Color tundra = Color.rgb(140, 171, 145);
-                Color snow = Color.rgb(230, 240, 239);
-                if (water[x][y]) {
-                    color = blue;
-                } else if (biome == 1) {
-                    color = sand;
-                } else if (biome == 2) {
-                    color = grass;
-                } else if (biome == 3) {
-                    color = leaf;
-                } else if (biome == 4) {
-                    color = taiga;
-                } else if (biome == 5) {
-                    color = tundra;
-                } else if (biome == 6) {
-                    color = snow;
-                }
+                color = pickColor(water, x, y, color, shade, biome);
                 brush.setFill(color);
                 brush.fillRect(x * 3, y * 3, 3, 3);
             }
         }
     }
 
+    public Color pickColor(boolean[][] water, int x, int y, Color color, int shade, int biome) {
+        Color blue = Color.rgb(0, 0, shade);
+        //biomes: "sand;grass;leaf;taiga;tundra;snow";
+        Color sand = Color.rgb(231, 232, 207);
+        Color grass = Color.rgb(199, 209, 157);
+        Color leaf = Color.rgb(91, 194, 110);
+        Color taiga = Color.rgb(27, 122, 43);
+        Color tundra = Color.rgb(140, 171, 145);
+        Color snow = Color.rgb(230, 240, 239);
+        if (water[x][y]) {
+            color = blue;
+        } else if (biome == 1) {
+            color = sand;
+        } else if (biome == 2) {
+            color = grass;
+        } else if (biome == 3) {
+            color = leaf;
+        } else if (biome == 4) {
+            color = taiga;
+        } else if (biome == 5) {
+            color = tundra;
+        } else if (biome == 6) {
+            color = snow;
+        }
+        return color;
+    }
+
+    //TODO move biome creation out of graphic ui
     public int[][] createBiomes(Map map) {
         double[][] heightMap = map.getHeightMap();
         boolean[][] water = map.getWater();
-        int[][] moisture = map.getMoisture();
+        double[][] moisture = map.getMoisture();
         int[][] biomes = new int[heightMap.length][heightMap.length];
         int[] biomeSelection = new int[6];
         biomeSelection = fillBiomes(biomeSelection);
-        //biomes: 1-desert, 2-grassland, 3-deciduousforest, 4-rainforest, 5-taiga, 6-baremountain, 7-tundra, 8-snowymountain
-        //heights: 50-60=0, 60-70=1, 70-80=2, 80+=3
-        //moisture: moisture - 1;
         for (int x = 0; x < heightMap.length; x++) {
             for (int y = 0; y < heightMap.length; y++) {
                 if (!water[x][y]) {
@@ -143,7 +144,7 @@ public class GraphicUI {
                         heightlevel = 1;
                     } else if (height >= 55 && height < 65) {
                         heightlevel = 2;
-                    } else if (height >= 65 && height < 80){
+                    } else if (height >= 65 && height < 80) {
                         heightlevel = 3;
                     } else if (height >= 80 && height < 90) {
                         heightlevel = 4;
@@ -158,39 +159,19 @@ public class GraphicUI {
     }
 
     public int[] fillBiomes(int[] biomes) {
-        //biomes: 1-desert, 2-grass, 3-leaf, 4-rain, 5-taiga, 6-mountain, 7-tundra, 8-snow
-        /*
-        String biomeString = "desert;grass;leaf;leaf;rain;rain;"
-                + "desert;grass;grass;leaf;leaf;rain;"
-                + "desert;grass;taiga;taiga;tundra;tundra;"
-                + "mountain;taiga;tundra;tundra;snow;snow";
-        */
         String biomeString = "sand;grass;leaf;taiga;tundra;snow";
         String[] biomeList = biomeString.split(";");
-        
+
         int index = 0;
         for (int height = 0; height < 6; height++) {
-            //for (int moisture = 0; moisture < 6; moisture++) {
-                int biome = getBiomeNumber(biomeList[index]);
-                biomes[height] = biome;
-                index++;
-            //}
+            int biome = getBiomeNumber(biomeList[index]);
+            biomes[height] = biome;
+            index++;
         }
-        /*
-        biomes[0][0] = biomes[1][0] = biomes[2][0] = biomes[2][1] = 1;
-        biomes[0][1] = biomes[1][1] = biomes[1][2] = biomes[2][2] = biomes[2][3] = 2;
-        biomes[0][2] = biomes[0][3] = biomes[1][3] = biomes[1][4] = 3;
-        biomes[0][4] = biomes[0][5] = biomes[1][5] = 4;
-        biomes[2][4] = biomes[2][5] = 5;
-        biomes[3][0] = biomes[3][1] = 6;
-        biomes[3][2] = biomes[3][3] = 7;
-        biomes[3][4] = biomes[3][5] = 8;
-        */
         return biomes;
     }
 
     public int getBiomeNumber(String biomeName) {
-        //biomes: 1-desert, 2-grass, 3-leaf, 4-rain, 5-taiga, 6-mountain, 7-tundra, 8-snow
         switch (biomeName) {
             case "sand":
                 return 1;
@@ -204,12 +185,6 @@ public class GraphicUI {
                 return 5;
             case "snow":
                 return 6;
-            /*
-            case "tundra":
-                return 7;
-            case "snow":
-                return 8;
-            */
         }
         return 0;
     }
