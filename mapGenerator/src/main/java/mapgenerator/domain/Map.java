@@ -8,6 +8,7 @@ public class Map {
     
     private double[][] heightMap;
     private boolean[][] water;
+    private int[][] moisture;
     
     /**
      * Sets a height map.
@@ -39,6 +40,14 @@ public class Map {
      */
     public boolean[][] getWater() {
         return water;
+    }
+    
+    public void setMoisture(int[][] moisture) {
+        this.moisture = moisture;
+    }
+    
+    public int[][] getMoisture() {
+        return moisture;
     }
 
 }
