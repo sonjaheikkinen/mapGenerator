@@ -63,8 +63,6 @@ public class NoiseMapGenerator {
             }
         }
 
-        roundToWholeNumbers();
-
         return this.noiseMap;
 
     }
@@ -140,17 +138,6 @@ public class NoiseMapGenerator {
         double cornerAverage = cornerSum / cornerCount;
         double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
         this.noiseMap[x][y] = newValue;
-    }
-
-    /**
-     * Rounds every height value to a whole number.
-     */
-    public void roundToWholeNumbers() {
-        for (int x = 0; x < mapSize; x++) {
-            for (int y = 0; y < mapSize; y++) {
-                this.noiseMap[x][y] = (int) Math.round(this.noiseMap[x][y]);
-            }
-        }
     }
 
     /**

@@ -8,8 +8,6 @@ import java.util.Random;
 public class WaterGenerator {
 
     private boolean[][] water;
-    private double[][] moisture;
-    private int[][] distanceToWater;
     private int mapSize;
     private Random random;
 
@@ -21,8 +19,6 @@ public class WaterGenerator {
     public WaterGenerator(int mapSizeExponent) {
         mapSize = (int) Math.pow(2, mapSizeExponent) + 1;
         this.water = new boolean[mapSize][mapSize];
-        this.moisture = new double[mapSize][mapSize];
-        this.distanceToWater = new int[mapSize][mapSize];
         this.random = new Random();
     }
 
@@ -49,10 +45,6 @@ public class WaterGenerator {
      */
     public boolean[][] getWater() {
         return water;
-    }
-
-    public double[][] getMoisture() {
-        return moisture;
     }
 
 }

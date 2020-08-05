@@ -12,7 +12,6 @@ import mapgenerator.gui.GraphicUI;
  */
 public class ProgramHandler {
     
-    private BiomeSelector biomes;
     private MapConstructor constructor;
 
     /**
