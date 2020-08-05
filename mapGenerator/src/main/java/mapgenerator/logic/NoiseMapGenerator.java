@@ -88,7 +88,7 @@ public class NoiseMapGenerator {
         this.noiseMap[0][mapSize - 1] = value2;
         this.noiseMap[mapSize - 1][0] = value3;
         this.noiseMap[mapSize - 1][mapSize - 1] = value4;
-        
+
     }
 
     /**
@@ -152,7 +152,7 @@ public class NoiseMapGenerator {
         checkMaxValue(newValue);
         this.noiseMap[x][y] = newValue;
     }
-    
+
     public void checkMaxValue(double value) {
         if (value > maxValue) {
             maxValue = value;
@@ -167,7 +167,7 @@ public class NoiseMapGenerator {
     public double[][] getNoiseMap() {
         return this.noiseMap;
     }
-    
+
     public double getMaxValue() {
         return maxValue;
     }

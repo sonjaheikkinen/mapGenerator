@@ -5,6 +5,7 @@
  */
 package mapgenerator.logic;
 
+import java.util.Random;
 import mapgenerator.domain.Biomes;
 
 public class BiomeSelector {
@@ -20,7 +21,7 @@ public class BiomeSelector {
         int[][] biomes = new int[heightMap.length][heightMap.length];
         double waterHeight = waterLevel * maxHeight;
         double landHeightRange = maxHeight - waterHeight;
-        
+        Random random = new Random();
         for (int x = 0; x < heightMap.length; x++) {
             for (int y = 0; y < heightMap.length; y++) {
                 if (!water[x][y]) {
@@ -40,7 +41,7 @@ public class BiomeSelector {
                     } else {
                         heightlevel = 5;
                     }
-                    if (moisture[x][y] < 0.3 * maxMoisture) {
+                    if (moisture[x][y] < 0.4 * maxMoisture) {
                         moisturelevel = 0;
                     } else if (moisture[x][y] < 0.6 * maxMoisture) {
                         moisturelevel = 1;

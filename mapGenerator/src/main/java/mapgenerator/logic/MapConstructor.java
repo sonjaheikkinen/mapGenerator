@@ -57,15 +57,38 @@ public final class MapConstructor {
      */
     public void generateMapObjects(WaterGenerator waterGen) {
         NoiseMapGenerator heightGen = new NoiseMapGenerator(random, exponent, seed, range);
-        NoiseMapGenerator moistureGen = new NoiseMapGenerator(random, exponent, seed, range);
         heightMap = heightGen.createNoise();
         double maxHeight = heightGen.getMaxValue();
         double waterLevel = 0.5;
         waterGen.addWaterByHeight(waterLevel * maxHeight, heightMap);
-        moisture = moistureGen.createNoise();
-        double maxMoisture = moistureGen.getMaxValue();
         water = waterGen.getWater();
+        NoiseMapGenerator moistureGen = new NoiseMapGenerator(random, exponent, seed, range);
+        moisture = moistureGen.createNoise();
+        moisture = roughen(moisture);
+        heightMap = roughen(heightMap);
+        double maxMoisture = moistureGen.getMaxValue();
         biomes = bioS.createBiomes(heightMap, maxHeight, waterLevel, water, moisture, maxMoisture);
+    }
+
+    public double[][] roughen(double[][] map) {
+        for (int x = 1; x < map.length - 1; x++) {
+            for (int y = 1; y < map.length - 1; y++) {
+                if (!water[x][y]) {
+                    if (heightMap[x][y] > heightMap[x - 1][y - 1]
+                            || heightMap[x][y] > heightMap[x - 1][y]
+                            || heightMap[x][y] > heightMap[x][y - 1]) {
+                        double average = (map[x - 1][y - 1] + map[x - 1][y] + map[x][y - 1]) / 3 + 5;
+                        map[x][y] = Math.max(1, average);
+                    } else if (heightMap[x][y] > heightMap[x + 1][y + 1]
+                            || heightMap[x][y] > heightMap[x + 1][y]
+                            || heightMap[x][y] > heightMap[x + 1][y - 1]) {
+                        double average = (map[x + 1][y + 1] + map[x + 1][y] + map[x + 1][y - 1]) / 3 + 5;
+                        map[x][y] = Math.max(1, average);
+                    }
+                }
+            }
+        }
+        return map;
     }
 
     /**

@@ -17,9 +17,9 @@ public class Biomes {
     
     public void fillBiomes() {
         String biomeString = "sand;grass;leaf;"
-                           + "drygrass;leaf;leaf;"
+                           + "sand;leaf;leaf;"
                            + "drygrass;taiga;leaf;"
-                           + "grass;taiga;taiga;"
+                           + "drygrass;taiga;taiga;"
                            + "bare;tundra;tundra;"
                            + "bare;snow;snow";
         String[] biomeList = biomeString.split(";");

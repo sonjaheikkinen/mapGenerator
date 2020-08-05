@@ -126,7 +126,7 @@ public class GraphicUI {
         } else if (biome == 8) {
             color = snow;
         }
-        //color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, 0.95 + random.nextDouble() * 0.05, 1);
+        color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, 0.95 + random.nextDouble() * 0.05, 1);
         return color;
     }
 
