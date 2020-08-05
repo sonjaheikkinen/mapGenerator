@@ -11,6 +11,7 @@ import mapgenerator.gui.GraphicUI;
  */
 public class ProgramHandler {
     
+    private BiomeCreator biomes;
     private MapConstructor constructor;
 
     /**
@@ -24,7 +25,8 @@ public class ProgramHandler {
         int canvasSize = (int) (Math.pow(2, mapSizeExponent) + 1) * 3;
         int mapSeed = 50;
         int mapRandomizerRange = 50;
-        this.constructor = new MapConstructor(random, mapSizeExponent, mapSeed, mapRandomizerRange, map);
+        this.biomes = new BiomeCreator();
+        this.constructor = new MapConstructor(random, mapSizeExponent, mapSeed, mapRandomizerRange, map, biomes);
         this.newMap();
         GraphicUI gui = new GraphicUI(stage, map, canvasSize, this);
     }

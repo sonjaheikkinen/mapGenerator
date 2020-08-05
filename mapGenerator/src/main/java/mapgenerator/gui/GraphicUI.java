@@ -81,34 +81,32 @@ public class GraphicUI {
      */
     public void drawMap(GraphicsContext brush, Map map, int canvasSize) {
         double[][] heightMap = map.getHeightMap();
-        boolean[][] water = map.getWater();
-        int[][] biomes = createBiomes(map);
+        int[][] biomes = map.getBiomes();
         for (int x = 0; x < canvasSize / 3; x++) {
             for (int y = 0; y < canvasSize / 3; y++) {
                 int height = (int) Math.round(heightMap[x][y]);
                 int shade = 255 / 100 * height;
                 shade = Math.min(255, shade);
                 Color color = Color.rgb(0, 0, 0);
-                brush.setFill(color);
                 int biome = biomes[x][y];
-                color = pickColor(water, x, y, color, shade, biome);
+                color = pickColor(x, y, color, shade, biome);
                 brush.setFill(color);
                 brush.fillRect(x * 3, y * 3, 3, 3);
             }
         }
     }
 
-    public Color pickColor(boolean[][] water, int x, int y, Color color, int shade, int biome) {
-        Color blue = Color.rgb(0, 0, shade);
-        //biomes: "sand;grass;leaf;taiga;tundra;snow";
+    public Color pickColor(int x, int y, Color color, int shade, int biome) {
+        //biomes: "water;sand;grass;leaf;taiga;tundra;snow";
+        Color water = Color.rgb(0, 0, shade);
         Color sand = Color.rgb(231, 232, 207);
         Color grass = Color.rgb(199, 209, 157);
         Color leaf = Color.rgb(91, 194, 110);
         Color taiga = Color.rgb(27, 122, 43);
         Color tundra = Color.rgb(140, 171, 145);
         Color snow = Color.rgb(230, 240, 239);
-        if (water[x][y]) {
-            color = blue;
+        if (biome == 0) {
+            color = water;
         } else if (biome == 1) {
             color = sand;
         } else if (biome == 2) {
@@ -125,68 +123,6 @@ public class GraphicUI {
         return color;
     }
 
-    //TODO move biome creation out of graphic ui
-    public int[][] createBiomes(Map map) {
-        double[][] heightMap = map.getHeightMap();
-        boolean[][] water = map.getWater();
-        double[][] moisture = map.getMoisture();
-        int[][] biomes = new int[heightMap.length][heightMap.length];
-        int[] biomeSelection = new int[6];
-        biomeSelection = fillBiomes(biomeSelection);
-        for (int x = 0; x < heightMap.length; x++) {
-            for (int y = 0; y < heightMap.length; y++) {
-                if (!water[x][y]) {
-                    int heightlevel;
-                    double height = heightMap[x][y];
-                    if (height >= 50 && height < 52) {
-                        heightlevel = 0;
-                    } else if (height >= 52 && height < 55) {
-                        heightlevel = 1;
-                    } else if (height >= 55 && height < 65) {
-                        heightlevel = 2;
-                    } else if (height >= 65 && height < 80) {
-                        heightlevel = 3;
-                    } else if (height >= 80 && height < 90) {
-                        heightlevel = 4;
-                    } else {
-                        heightlevel = 5;
-                    }
-                    biomes[x][y] = biomeSelection[heightlevel];
-                }
-            }
-        }
-        return biomes;
-    }
 
-    public int[] fillBiomes(int[] biomes) {
-        String biomeString = "sand;grass;leaf;taiga;tundra;snow";
-        String[] biomeList = biomeString.split(";");
-
-        int index = 0;
-        for (int height = 0; height < 6; height++) {
-            int biome = getBiomeNumber(biomeList[index]);
-            biomes[height] = biome;
-            index++;
-        }
-        return biomes;
-    }
-
-    public int getBiomeNumber(String biomeName) {
-        switch (biomeName) {
-            case "sand":
-                return 1;
-            case "grass":
-                return 2;
-            case "leaf":
-                return 3;
-            case "taiga":
-                return 4;
-            case "tundra":
-                return 5;
-            case "snow":
-                return 6;
-        }
-        return 0;
-    }
 
 }

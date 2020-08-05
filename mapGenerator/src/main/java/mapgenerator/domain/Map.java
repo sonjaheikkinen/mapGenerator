@@ -9,6 +9,7 @@ public class Map {
     private double[][] heightMap;
     private boolean[][] water;
     private double[][] moisture;
+    private int[][] biomes;
     
     /**
      * Sets a height map.
@@ -48,6 +49,14 @@ public class Map {
     
     public double[][] getMoisture() {
         return moisture;
+    }
+    
+    public void setBiomes(int[][] biomes) {
+        this.biomes = biomes;
+    }
+    
+    public int[][] getBiomes() {
+        return biomes;
     }
 
 }

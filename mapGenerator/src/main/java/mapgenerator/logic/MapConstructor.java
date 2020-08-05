@@ -17,6 +17,8 @@ public final class MapConstructor {
     private double[][] heightMap;
     private boolean[][] water;
     private double[][] moisture;
+    private int[][] biomes;
+    private BiomeCreator bioc;
 
     /**
      * Constructor for this class, initializes class variables.
@@ -25,12 +27,13 @@ public final class MapConstructor {
      * @param mapRandomizerRange The height values calculated for the height map will be affected by a random value of +/- mapRandomizerRange
      * @param map A map object in which the generated map is saved
      */
-    public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map) {
+    public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map, BiomeCreator bioc) {
         this.map = map;
         this.random = random;
         this.exponent = mapSizeExponent;
         this.seed = mapSeed;
         this.range = mapRandomizerRange;
+        this.bioc = bioc;
     }
 
     /**
@@ -44,6 +47,7 @@ public final class MapConstructor {
         map.setHeightMap(this.heightMap);
         map.setWater(water);
         map.setMoisture(moisture);
+        map.setBiomes(biomes);
     }
 
     /**
@@ -55,6 +59,7 @@ public final class MapConstructor {
         waterGenerator.addMoisture();
         moisture = waterGenerator.getMoisture();
         water = waterGenerator.getWater();
+        biomes = bioc.createBiomes(heightMap, water, moisture);
     }
     
     /**
