@@ -76,10 +76,10 @@ public class NoiseMapGenerator {
      * @param seed The seed value for corner values
      */
     public void assignCornerValues(int mapSize, int seed) {
-        double value1 = random.nextInt(2*seed);
-        double value2 = random.nextInt(2*seed);
-        double value3 = random.nextInt(2*seed);
-        double value4 = random.nextInt(2*seed);
+        double value1 = seed + random.nextInt(20) - 10;
+        double value2 = seed + random.nextInt(20) - 10;
+        double value3 = seed + random.nextInt(20) - 10;
+        double value4 = seed + random.nextInt(20) - 10;
         checkMaxValue(value1);
         checkMaxValue(value2);
         checkMaxValue(value3);
@@ -88,6 +88,7 @@ public class NoiseMapGenerator {
         this.noiseMap[0][mapSize - 1] = value2;
         this.noiseMap[mapSize - 1][0] = value3;
         this.noiseMap[mapSize - 1][mapSize - 1] = value4;
+        
     }
 
     /**

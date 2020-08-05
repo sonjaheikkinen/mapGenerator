@@ -1,5 +1,6 @@
 package mapgenerator.gui;
 
+import java.util.Random;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -80,8 +81,8 @@ public class GraphicUI {
     public void drawMap(GraphicsContext brush, Map map, int canvasSize) {
         double[][] heightMap = map.getHeightMap();
         int[][] biomes = map.getBiomes();
-        for (int x = 0; x < canvasSize / 3; x++) {
-            for (int y = 0; y < canvasSize / 3; y++) {
+        for (int x = 0; x < canvasSize; x++) {
+            for (int y = 0; y < canvasSize; y++) {
                 int height = (int) Math.round(heightMap[x][y]);
                 int shade = 255 / 100 * height;
                 shade = Math.min(255, shade);
@@ -89,35 +90,43 @@ public class GraphicUI {
                 int biome = biomes[x][y];
                 color = pickColor(x, y, color, shade, biome);
                 brush.setFill(color);
-                brush.fillRect(x * 3, y * 3, 3, 3);
+                brush.fillRect(x, y, 1, 1);
             }
         }
     }
 
     public Color pickColor(int x, int y, Color color, int shade, int biome) {
+        Random random = new Random();
         //biomes: "water;sand;grass;leaf;taiga;tundra;snow";
         Color water = Color.rgb(0, 0, shade);
         Color sand = Color.rgb(231, 232, 207);
-        Color grass = Color.rgb(199, 209, 157);
+        Color drygrass = Color.rgb(199, 209, 157);
+        Color grass = Color.rgb(122, 232, 100);
         Color leaf = Color.rgb(91, 194, 110);
         Color taiga = Color.rgb(27, 122, 43);
         Color tundra = Color.rgb(140, 171, 145);
+        Color bare = Color.rgb(208, 216, 217);
         Color snow = Color.rgb(230, 240, 239);
         if (biome == 0) {
             color = water;
         } else if (biome == 1) {
             color = sand;
         } else if (biome == 2) {
-            color = grass;
+            color = drygrass;
         } else if (biome == 3) {
-            color = leaf;
+            color = grass;
         } else if (biome == 4) {
-            color = taiga;
+            color = leaf;
         } else if (biome == 5) {
-            color = tundra;
+            color = taiga;
         } else if (biome == 6) {
+            color = tundra;
+        } else if (biome == 7) {
+            color = bare;
+        } else if (biome == 8) {
             color = snow;
         }
+        //color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, 0.95 + random.nextDouble() * 0.05, 1);
         return color;
     }
 

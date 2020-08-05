@@ -62,9 +62,10 @@ public final class MapConstructor {
         double maxHeight = heightGen.getMaxValue();
         double waterLevel = 0.5;
         waterGen.addWaterByHeight(waterLevel * maxHeight, heightMap);
-        moisture = new NoiseMapGenerator(random, exponent, seed, range).createNoise();
+        moisture = moistureGen.createNoise();
+        double maxMoisture = moistureGen.getMaxValue();
         water = waterGen.getWater();
-        biomes = bioS.createBiomes(heightMap, maxHeight, waterLevel, water, moisture);
+        biomes = bioS.createBiomes(heightMap, maxHeight, waterLevel, water, moisture, maxMoisture);
     }
 
     /**

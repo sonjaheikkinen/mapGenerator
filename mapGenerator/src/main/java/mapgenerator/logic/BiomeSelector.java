@@ -9,20 +9,23 @@ import mapgenerator.domain.Biomes;
 
 public class BiomeSelector {
     
-    int[] biomeSelection;
+    int[][] biomeSelection;
 
     public BiomeSelector(Biomes biomes) {
         this.biomeSelection = biomes.getBiomeSelection();
     }
 
-    public int[][] createBiomes(double[][] heightMap, double maxHeight, double waterLevel, boolean[][] water, double[][] moisture) {
+    public int[][] createBiomes(double[][] heightMap, double maxHeight, double waterLevel, boolean[][] water,
+            double[][] moisture, double maxMoisture) {
         int[][] biomes = new int[heightMap.length][heightMap.length];
         double waterHeight = waterLevel * maxHeight;
         double landHeightRange = maxHeight - waterHeight;
+        
         for (int x = 0; x < heightMap.length; x++) {
             for (int y = 0; y < heightMap.length; y++) {
                 if (!water[x][y]) {
                     int heightlevel;
+                    int moisturelevel;
                     double landHeight = heightMap[x][y] - waterHeight;
                     if (landHeight >= 0 && landHeight < 0.1 * landHeightRange) {
                         heightlevel = 0;
@@ -37,7 +40,14 @@ public class BiomeSelector {
                     } else {
                         heightlevel = 5;
                     }
-                    biomes[x][y] = biomeSelection[heightlevel];
+                    if (moisture[x][y] < 0.3 * maxMoisture) {
+                        moisturelevel = 0;
+                    } else if (moisture[x][y] < 0.6 * maxMoisture) {
+                        moisturelevel = 1;
+                    } else {
+                        moisturelevel = 2;
+                    }
+                    biomes[x][y] = biomeSelection[heightlevel][moisturelevel];
                 } else {
                     biomes[x][y] = 0;
                 }
