@@ -17,7 +17,7 @@ public final class MapConstructor {
     private boolean[][] water;
     private double[][] moisture;
     private int[][] biomes;
-    private BiomeSelector bioc;
+    private BiomeSelector bioS;
 
     /**
      * Constructor for this class, initializes class variables.
@@ -30,13 +30,13 @@ public final class MapConstructor {
      * will be affected by a random value of +/- mapRandomizerRange
      * @param map A map object in which the generated map is saved
      */
-    public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map, BiomeSelector bioc) {
+    public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map, BiomeSelector bioS) {
         this.map = map;
         this.random = random;
         this.exponent = mapSizeExponent;
         this.seed = mapSeed;
         this.range = mapRandomizerRange;
-        this.bioc = bioc;
+        this.bioS = bioS;
     }
 
     /**
@@ -56,11 +56,15 @@ public final class MapConstructor {
      * Calls for other methods to generate different parts of the map.
      */
     public void generateMapObjects(WaterGenerator waterGen) {
-        heightMap = new NoiseMapGenerator(random, exponent, seed, range).createNoise();
-        waterGen.addWaterByHeight(50, heightMap);
+        NoiseMapGenerator heightGen = new NoiseMapGenerator(random, exponent, seed, range);
+        NoiseMapGenerator moistureGen = new NoiseMapGenerator(random, exponent, seed, range);
+        heightMap = heightGen.createNoise();
+        double maxHeight = heightGen.getMaxValue();
+        double waterLevel = 0.5;
+        waterGen.addWaterByHeight(waterLevel * maxHeight, heightMap);
         moisture = new NoiseMapGenerator(random, exponent, seed, range).createNoise();
         water = waterGen.getWater();
-        biomes = bioc.createBiomes(heightMap, water, moisture);
+        biomes = bioS.createBiomes(heightMap, maxHeight, waterLevel, water, moisture);
     }
 
     /**

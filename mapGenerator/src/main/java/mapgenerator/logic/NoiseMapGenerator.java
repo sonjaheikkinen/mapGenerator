@@ -13,6 +13,7 @@ public class NoiseMapGenerator {
     private int seed;
     private int randomizerRange;
     private int mapSize;
+    private double maxValue;
 
     /**
      * Constructor for HeightmapGenerator, initializes class variables.
@@ -31,6 +32,7 @@ public class NoiseMapGenerator {
         this.randomizerRange = range;
         mapSize = (int) Math.pow(2, this.sizeExponent) + 1;
         this.noiseMap = new double[mapSize][mapSize];
+        this.maxValue = 0;
     }
 
     /**
@@ -74,10 +76,18 @@ public class NoiseMapGenerator {
      * @param seed The seed value for corner values
      */
     public void assignCornerValues(int mapSize, int seed) {
-        this.noiseMap[0][0] = random.nextInt(2*seed);
-        this.noiseMap[0][mapSize - 1] = random.nextInt(2*seed);
-        this.noiseMap[mapSize - 1][0] = random.nextInt(2*seed);
-        this.noiseMap[mapSize - 1][mapSize - 1] = random.nextInt(2*seed);
+        double value1 = random.nextInt(2*seed);
+        double value2 = random.nextInt(2*seed);
+        double value3 = random.nextInt(2*seed);
+        double value4 = random.nextInt(2*seed);
+        checkMaxValue(value1);
+        checkMaxValue(value2);
+        checkMaxValue(value3);
+        checkMaxValue(value4);
+        this.noiseMap[0][0] = value1;
+        this.noiseMap[0][mapSize - 1] = value2;
+        this.noiseMap[mapSize - 1][0] = value3;
+        this.noiseMap[mapSize - 1][mapSize - 1] = value4;
     }
 
     /**
@@ -100,6 +110,7 @@ public class NoiseMapGenerator {
                 + this.noiseMap[x + squareSize][y + squareSize]) / 4;
         double newValue = Math.max(1, cornerAverage
                 + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
+        checkMaxValue(newValue);
         this.noiseMap[x + squareHalf][y + squareHalf] = newValue;
     }
 
@@ -137,7 +148,14 @@ public class NoiseMapGenerator {
         }
         double cornerAverage = cornerSum / cornerCount;
         double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
+        checkMaxValue(newValue);
         this.noiseMap[x][y] = newValue;
+    }
+    
+    public void checkMaxValue(double value) {
+        if (value > maxValue) {
+            maxValue = value;
+        }
     }
 
     /**
@@ -147,6 +165,10 @@ public class NoiseMapGenerator {
      */
     public double[][] getNoiseMap() {
         return this.noiseMap;
+    }
+    
+    public double getMaxValue() {
+        return maxValue;
     }
 
 }

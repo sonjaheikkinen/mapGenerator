@@ -28,7 +28,7 @@ public class WaterGenerator {
      * @param waterlevel All heights under this are water
      * @param heightmap All height values of the map
      */
-    public void addWaterByHeight(int waterlevel, double[][] heightmap) {
+    public void addWaterByHeight(double waterlevel, double[][] heightmap) {
         for (int x = 0; x < heightmap.length; x++) {
             for (int y = 0; y < heightmap.length; y++) {
                 if (heightmap[x][y] < waterlevel) {

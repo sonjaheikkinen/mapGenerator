@@ -15,22 +15,24 @@ public class BiomeSelector {
         this.biomeSelection = biomes.getBiomeSelection();
     }
 
-    public int[][] createBiomes(double[][] heightMap, boolean[][] water, double[][] moisture) {
+    public int[][] createBiomes(double[][] heightMap, double maxHeight, double waterLevel, boolean[][] water, double[][] moisture) {
         int[][] biomes = new int[heightMap.length][heightMap.length];
+        double waterHeight = waterLevel * maxHeight;
+        double landHeightRange = maxHeight - waterHeight;
         for (int x = 0; x < heightMap.length; x++) {
             for (int y = 0; y < heightMap.length; y++) {
                 if (!water[x][y]) {
                     int heightlevel;
-                    double height = heightMap[x][y];
-                    if (height >= 50 && height < 52) {
+                    double landHeight = heightMap[x][y] - waterHeight;
+                    if (landHeight >= 0 && landHeight < 0.1 * landHeightRange) {
                         heightlevel = 0;
-                    } else if (height >= 52 && height < 55) {
+                    } else if (landHeight >= 0.1 * landHeightRange && landHeight < 0.2 * landHeightRange) {
                         heightlevel = 1;
-                    } else if (height >= 55 && height < 65) {
+                    } else if (landHeight >= 0.2 * landHeightRange && landHeight < 0.4 * landHeightRange) {
                         heightlevel = 2;
-                    } else if (height >= 65 && height < 80) {
+                    } else if (landHeight >= 0.4 * landHeightRange && landHeight < 0.6 * landHeightRange) {
                         heightlevel = 3;
-                    } else if (height >= 80 && height < 90) {
+                    } else if (landHeight >= 0.6 * landHeightRange && landHeight < 0.8 * landHeightRange) {
                         heightlevel = 4;
                     } else {
                         heightlevel = 5;
