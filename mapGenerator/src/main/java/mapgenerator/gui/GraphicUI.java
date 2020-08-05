@@ -1,7 +1,5 @@
 package mapgenerator.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

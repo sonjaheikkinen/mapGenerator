@@ -41,12 +41,6 @@ public class WaterGenerator {
             }
         }
     }
-    
-    //TODO = refactor diamond square into its own class so that both moisture and heightmap can use it
-    public void addMoisture() {
-        HeightmapGenerator hmg = new HeightmapGenerator(random, 8, 50, 50);
-        moisture = hmg.calculateHeights();
-    }
 
     /**
      * Returns the water array

@@ -1,4 +1,3 @@
-
 package mapgenerator.logic;
 
 import java.util.Random;
@@ -22,9 +21,13 @@ public final class MapConstructor {
 
     /**
      * Constructor for this class, initializes class variables.
-     * @param mapSizeExponent The created map will have a side length of (2^mapSizeExponent) + 1
-     * @param mapSeed The corners of the height map will be assigned a random value of mapSeed +/- 10
-     * @param mapRandomizerRange The height values calculated for the height map will be affected by a random value of +/- mapRandomizerRange
+     *
+     * @param mapSizeExponent The created map will have a side length of
+     * (2^mapSizeExponent) + 1
+     * @param mapSeed The corners of the height map will be assigned a random
+     * value of mapSeed +/- 10
+     * @param mapRandomizerRange The height values calculated for the height map
+     * will be affected by a random value of +/- mapRandomizerRange
      * @param map A map object in which the generated map is saved
      */
     public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map, BiomeCreator bioc) {
@@ -37,13 +40,12 @@ public final class MapConstructor {
     }
 
     /**
-     * Creates the producers of map parts and calls for another method to generate map objects, which
-     * are then given to a map object.
+     * Creates the producers of map parts and calls for another method to
+     * generate map objects, which are then given to a map object.
      */
     public void constructMap() {
-        HeightmapGenerator heightmapGenerator = new HeightmapGenerator(random, exponent, seed, range);
-        WaterGenerator waterGenerator = new WaterGenerator(exponent);
-        generateMapObjects(heightmapGenerator, waterGenerator);
+        WaterGenerator waterGen = new WaterGenerator(exponent);
+        generateMapObjects(waterGen);
         map.setHeightMap(this.heightMap);
         map.setWater(water);
         map.setMoisture(moisture);
@@ -53,23 +55,23 @@ public final class MapConstructor {
     /**
      * Calls for other methods to generate different parts of the map.
      */
-    public void generateMapObjects(HeightmapGenerator heightmapGenerator, WaterGenerator waterGenerator) {
-        heightMap = heightmapGenerator.calculateHeights();
-        waterGenerator.addWaterByHeight(50, heightMap);
-        waterGenerator.addMoisture();
-        moisture = waterGenerator.getMoisture();
-        water = waterGenerator.getWater();
+    public void generateMapObjects(WaterGenerator waterGen) {
+        heightMap = new NoiseMapGenerator(random, exponent, seed, range).createNoise();
+        waterGen.addWaterByHeight(50, heightMap);
+        moisture = new NoiseMapGenerator(random, exponent, seed, range).createNoise();
+        water = waterGen.getWater();
         biomes = bioc.createBiomes(heightMap, water, moisture);
     }
-    
+
     /**
      * Returns height map
+     *
      * @return An array containing height values as doubles.
      */
     public double[][] getHeightMap() {
         return this.heightMap;
     }
-    
+
     public boolean[][] getWater() {
         return water;
     }

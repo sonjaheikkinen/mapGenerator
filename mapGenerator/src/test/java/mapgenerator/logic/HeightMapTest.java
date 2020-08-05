@@ -17,7 +17,7 @@ public class HeightMapTest {
     int seed;
     int range;
     int mapSize;
-    HeightmapGenerator hmg;
+    NoiseMapGenerator hmg;
 
     public HeightMapTest() {
     }
@@ -29,7 +29,7 @@ public class HeightMapTest {
         this.seed = 50;
         this.range = 50;
         this.mapSize = (int) Math.pow(2, this.exponent) + 1;
-        this.hmg = new HeightmapGenerator(this.random, this.exponent, this.seed, this.range);
+        this.hmg = new NoiseMapGenerator(this.random, this.exponent, this.seed, this.range);
     }
 
     @After
@@ -45,7 +45,7 @@ public class HeightMapTest {
     @Test
     public void cornerValuesAreAssignedCorrectly() {
         this.hmg.assignCornerValues(this.mapSize, this.seed);
-        double[][] map = this.hmg.getHeightMap();
+        double[][] map = this.hmg.getNoiseMap();
         assertTrue(map[0][0] >= seed - 10 && map[0][0] <= seed + 10);
         assertTrue(map[0][this.mapSize - 1] >= seed - 10 && map[0][this.mapSize - 1] <= seed + 10);
         assertTrue(map[this.mapSize - 1][0] >= seed - 10 && map[this.mapSize - 1][0] <= seed + 10);
@@ -80,14 +80,14 @@ public class HeightMapTest {
     @Test
     public void edgeWrappingPutsSameValueToEdgesHorizontal() {
         this.hmg.wrapEdgeValues(0, 10, mapSize, 7);
-        double[][] map = this.hmg.getHeightMap();
+        double[][] map = this.hmg.getNoiseMap();
         assertTrue(map[mapSize - 1][10] == 7);
     }
     
     @Test
     public void edgeWrappingPutsSameValueToEdgesVertical() {
         this.hmg.wrapEdgeValues(10, 0, mapSize, 7);
-        double[][] map = this.hmg.getHeightMap();
+        double[][] map = this.hmg.getNoiseMap();
         assertTrue(map[10][mapSize - 1] == 7);
     }
     
@@ -100,7 +100,7 @@ public class HeightMapTest {
     
     @Test
     public void noZeroValuesLeftAfterRunningCalculateHeights() {
-        this.hmg.calculateHeights();
+        this.hmg.createNoise();
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 65 * 65);
     }
@@ -109,7 +109,7 @@ public class HeightMapTest {
         int valuesOtherThanZero = 0;
         for (int x = 0; x < this.mapSize; x++) {
             for (int y = 0; y < this.mapSize; y++) {
-                double[][] map = this.hmg.getHeightMap();
+                double[][] map = this.hmg.getNoiseMap();
                 if (map[x][y] != 0) {
                     valuesOtherThanZero++;
                 }

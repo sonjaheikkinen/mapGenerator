@@ -1,14 +1,13 @@
 package mapgenerator.logic;
 
-import java.util.Arrays;
 import java.util.Random;
 
 /**
  * Generates height values to be used on a map
  */
-public class HeightmapGenerator {
+public class NoiseMapGenerator {
 
-    private double[][] heightMap;
+    private double[][] noiseMap;
     private Random random;
     private int sizeExponent;
     private int seed;
@@ -25,13 +24,13 @@ public class HeightmapGenerator {
      * @param range A random value of +/- range will be added to values
      * calculated by algorithm
      */
-    public HeightmapGenerator(Random random, int exponent, int seed, int range) {
+    public NoiseMapGenerator(Random random, int exponent, int seed, int range) {
         this.random = random;
         this.sizeExponent = exponent;
         this.seed = seed;
         this.randomizerRange = range;
         mapSize = (int) Math.pow(2, this.sizeExponent) + 1;
-        this.heightMap = new double[mapSize][mapSize];
+        this.noiseMap = new double[mapSize][mapSize];
     }
 
     /**
@@ -46,7 +45,7 @@ public class HeightmapGenerator {
      *
      * @return An array containing height values as doubles
      */
-    public double[][] calculateHeights() {
+    public double[][] createNoise() {
 
         assignCornerValues(this.mapSize, this.seed);
 
@@ -64,9 +63,9 @@ public class HeightmapGenerator {
             }
         }
 
-        roundHeightsToWholeNumbers();
+        roundToWholeNumbers();
 
-        return this.heightMap;
+        return this.noiseMap;
 
     }
 
@@ -77,10 +76,10 @@ public class HeightmapGenerator {
      * @param seed The seed value for corner values
      */
     public void assignCornerValues(int mapSize, int seed) {
-        this.heightMap[0][0] = random.nextInt(2*seed);
-        this.heightMap[0][mapSize - 1] = random.nextInt(2*seed);
-        this.heightMap[mapSize - 1][0] = random.nextInt(2*seed);
-        this.heightMap[mapSize - 1][mapSize - 1] = random.nextInt(2*seed);
+        this.noiseMap[0][0] = random.nextInt(2*seed);
+        this.noiseMap[0][mapSize - 1] = random.nextInt(2*seed);
+        this.noiseMap[mapSize - 1][0] = random.nextInt(2*seed);
+        this.noiseMap[mapSize - 1][mapSize - 1] = random.nextInt(2*seed);
     }
 
     /**
@@ -97,13 +96,13 @@ public class HeightmapGenerator {
      * counted values can be
      */
     public void diamondStep(int x, int y, int squareSize, int squareHalf, int randomizerRange) {
-        double cornerAverage = (this.heightMap[x][y]
-                + this.heightMap[x + squareSize][y]
-                + this.heightMap[x][y + squareSize]
-                + this.heightMap[x + squareSize][y + squareSize]) / 4;
+        double cornerAverage = (this.noiseMap[x][y]
+                + this.noiseMap[x + squareSize][y]
+                + this.noiseMap[x][y + squareSize]
+                + this.noiseMap[x + squareSize][y + squareSize]) / 4;
         double newValue = Math.max(1, cornerAverage
                 + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
-        this.heightMap[x + squareHalf][y + squareHalf] = newValue;
+        this.noiseMap[x + squareHalf][y + squareHalf] = newValue;
     }
 
     /**
@@ -123,33 +122,33 @@ public class HeightmapGenerator {
         double cornerSum = 0;
         double cornerCount = 0;
         if (x - distanceToCorner >= 0) {
-            cornerSum = cornerSum + this.heightMap[x - distanceToCorner][y];
+            cornerSum = cornerSum + this.noiseMap[x - distanceToCorner][y];
             cornerCount++;
         }
         if (x + distanceToCorner < mapSize) {
-            cornerSum = cornerSum + this.heightMap[Math.min(x + distanceToCorner, mapSize - 1)][y];
+            cornerSum = cornerSum + this.noiseMap[Math.min(x + distanceToCorner, mapSize - 1)][y];
             cornerCount++;
         }
         if (y + distanceToCorner < mapSize) {
-            cornerSum = cornerSum + this.heightMap[x][y + distanceToCorner];
+            cornerSum = cornerSum + this.noiseMap[x][y + distanceToCorner];
             cornerCount++;
         }
         if (y - distanceToCorner >= 0) {
-            cornerSum = cornerSum + this.heightMap[x][y - distanceToCorner];
+            cornerSum = cornerSum + this.noiseMap[x][y - distanceToCorner];
             cornerCount++;
         }
         double cornerAverage = cornerSum / cornerCount;
         double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
-        this.heightMap[x][y] = newValue;
+        this.noiseMap[x][y] = newValue;
     }
 
     /**
      * Rounds every height value to a whole number.
      */
-    public void roundHeightsToWholeNumbers() {
+    public void roundToWholeNumbers() {
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
-                this.heightMap[x][y] = (int) Math.round(this.heightMap[x][y]);
+                this.noiseMap[x][y] = (int) Math.round(this.noiseMap[x][y]);
             }
         }
     }
@@ -159,8 +158,8 @@ public class HeightmapGenerator {
      *
      * @return An array containing height values as doubles
      */
-    public double[][] getHeightMap() {
-        return this.heightMap;
+    public double[][] getNoiseMap() {
+        return this.noiseMap;
     }
 
 }
