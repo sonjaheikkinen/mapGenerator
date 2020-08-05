@@ -3,6 +3,7 @@ package mapgenerator.logic;
 
 import java.util.Random;
 import javafx.stage.Stage;
+import mapgenerator.domain.Biomes;
 import mapgenerator.domain.Map;
 import mapgenerator.gui.GraphicUI;
 
@@ -11,7 +12,7 @@ import mapgenerator.gui.GraphicUI;
  */
 public class ProgramHandler {
     
-    private BiomeCreator biomes;
+    private BiomeSelector biomes;
     private MapConstructor constructor;
 
     /**
@@ -21,12 +22,13 @@ public class ProgramHandler {
     public void initialize(Stage stage) {
         Random random = new Random();
         Map map = new Map();
+        Biomes biomes = new Biomes();
+        BiomeSelector selector = new BiomeSelector(biomes);
         int mapSizeExponent = 8;
         int canvasSize = (int) (Math.pow(2, mapSizeExponent) + 1) * 3;
         int mapSeed = 50;
         int mapRandomizerRange = 50;
-        this.biomes = new BiomeCreator();
-        this.constructor = new MapConstructor(random, mapSizeExponent, mapSeed, mapRandomizerRange, map, biomes);
+        this.constructor = new MapConstructor(random, mapSizeExponent, mapSeed, mapRandomizerRange, map, selector);
         this.newMap();
         GraphicUI gui = new GraphicUI(stage, map, canvasSize, this);
     }

@@ -17,7 +17,7 @@ public final class MapConstructor {
     private boolean[][] water;
     private double[][] moisture;
     private int[][] biomes;
-    private BiomeCreator bioc;
+    private BiomeSelector bioc;
 
     /**
      * Constructor for this class, initializes class variables.
@@ -30,7 +30,7 @@ public final class MapConstructor {
      * will be affected by a random value of +/- mapRandomizerRange
      * @param map A map object in which the generated map is saved
      */
-    public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map, BiomeCreator bioc) {
+    public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map, BiomeSelector bioc) {
         this.map = map;
         this.random = random;
         this.exponent = mapSizeExponent;
