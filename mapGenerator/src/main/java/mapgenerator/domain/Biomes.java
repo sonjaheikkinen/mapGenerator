@@ -5,11 +5,15 @@
  */
 package mapgenerator.domain;
 
+import java.util.HashMap;
+
 public class Biomes {
     int[][] biomeSelection;
+    HashMap<String, Integer> biomeNumbers;
 
     public Biomes() {
         this.biomeSelection = new int[6][3];
+        fillBiomeNumbers();
         fillBiomes();
     }
     
@@ -24,33 +28,23 @@ public class Biomes {
         int index = 0;
         for (int height = 0; height < 6; height++) {
             for (int moisture = 0; moisture < 3; moisture++) {
-                int biome = getBiomeNumber(biomeList[index]);
+                int biome = biomeNumbers.get(biomeList[index]);
                 biomeSelection[height][moisture] = biome;
                 index++;
             }
         }
     }
     
-    public int getBiomeNumber(String biomeName) {
-         switch (biomeName) {
-            case "sand":
-                return 1;
-            case "drygrass":
-                return 2;
-            case "grass":
-                return 3;
-            case "leaf":
-                return 4;
-            case "taiga":
-                return 5;
-            case "tundra":
-                return 6;
-            case "bare":
-                return 7;
-            case "snow":
-                return 8;
-        }
-        return 0;
+    public void fillBiomeNumbers() {
+        this.biomeNumbers = new HashMap<>();
+        biomeNumbers.put("sand", 1);
+        biomeNumbers.put("drygrass", 2);
+        biomeNumbers.put("grass", 3);
+        biomeNumbers.put("leaf", 4);
+        biomeNumbers.put("taiga", 5);
+        biomeNumbers.put("tundra", 6);
+        biomeNumbers.put("bare", 7);
+        biomeNumbers.put("snow", 8);
     }
     
     public int[][] getBiomeSelection() {

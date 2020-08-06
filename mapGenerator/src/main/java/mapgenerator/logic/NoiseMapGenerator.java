@@ -131,15 +131,22 @@ public class NoiseMapGenerator {
     public void squareStep(int x, int y, int distanceToCorner, int mapSize, int randomizerRange) {
         double cornerSum = 0;
         double cornerCount = 0;
+        double cornerAverage = countCornerAverage(x, y, distanceToCorner, cornerSum, cornerCount, mapSize);
+        double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
+        checkMaxValue(newValue);
+        this.noiseMap[x][y] = newValue;
+    }
+
+    public double countCornerAverage(int x, int y, int distanceToCorner, double cornerSum, double cornerCount, int mapSize1) {
         if (x - distanceToCorner >= 0) {
             cornerSum = cornerSum + this.noiseMap[x - distanceToCorner][y];
             cornerCount++;
         }
-        if (x + distanceToCorner < mapSize) {
-            cornerSum = cornerSum + this.noiseMap[Math.min(x + distanceToCorner, mapSize - 1)][y];
+        if (x + distanceToCorner < mapSize1) {
+            cornerSum = cornerSum + this.noiseMap[Math.min(x + distanceToCorner, mapSize1 - 1)][y];
             cornerCount++;
         }
-        if (y + distanceToCorner < mapSize) {
+        if (y + distanceToCorner < mapSize1) {
             cornerSum = cornerSum + this.noiseMap[x][y + distanceToCorner];
             cornerCount++;
         }
@@ -148,9 +155,7 @@ public class NoiseMapGenerator {
             cornerCount++;
         }
         double cornerAverage = cornerSum / cornerCount;
-        double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
-        checkMaxValue(newValue);
-        this.noiseMap[x][y] = newValue;
+        return cornerAverage;
     }
 
     public void checkMaxValue(double value) {
