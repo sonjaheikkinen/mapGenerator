@@ -1,6 +1,7 @@
 package mapgenerator.logic;
 
 import java.util.Random;
+import mapgenerator.domain.Biomes;
 import mapgenerator.domain.Map;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,6 +13,8 @@ import static org.junit.Assert.*;
 public class MapConstructorTest {
 
     private Map map;
+    private Biomes biomes;
+    private BiomeSelector bioS;
     private MapConstructor mc;
 
     public MapConstructorTest() {
@@ -20,7 +23,9 @@ public class MapConstructorTest {
     @Before
     public void setUp() {
         this.map = new Map();
-        this.mc = new MapConstructor(new Random(), 6, 50, 50, this.map);
+        this.biomes = new Biomes();
+        this.bioS = new BiomeSelector(biomes);
+        this.mc = new MapConstructor(new Random(), 6, 50, 50, this.map, this.bioS);
     }
 
     @After
