@@ -107,7 +107,7 @@ public class MathTest {
     public void doublePowWorks() {
         assertTrue(calc.pow(2.0, 6.0) == 64);
         assertTrue(calc.pow(5.0, -2.0) == 0.04);
-        assertTrue(calc.pow(7, 0) == 1);
+        assertTrue(calc.pow(7.0, 0.0) == 1.0);
     }
     
     @Test
