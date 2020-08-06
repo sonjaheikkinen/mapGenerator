@@ -30,7 +30,7 @@ I learned that creating my own wind-simulating distance-calculating algorithm is
 ## Questions and problems
 
 * When using map exponents greater than 9, the program takes too long (about a minute or more) to 
-get started. After initial start, new maps are still generated rather quickly so this is not too much of a problem, but I would still like to find a way to make it a bit faster. Problem is, I don't really know whats taking so long on the first time (propably something to do with the computer allocating memory space for big arrays?), but maybe that will clear out. 
+get started. After initial start, new maps are still generated rather quickly so this is not too much of a problem, but I would still like to find a way to make it a bit faster. Problem is, I don't really know whats taking so long on the first time (propably something to do with the computer allocating memory space for big arrays?), but maybe that will clear up. 
 
 ## Next week
 
