@@ -54,6 +54,7 @@ public class MapConstructorTest {
         assertTrue(this.map.getBiomes() != null);
     }
     
+    /*
     @Test
     public void maxValueReturnsCorrectValueAfterRoughen() {
         NoiseMapGenerator generator = new NoiseMapGenerator(new Random(), 6, 50, 50);
@@ -63,6 +64,7 @@ public class MapConstructorTest {
         double maxHeight = checkMaxValue(this.mc.getHeightMap());
         assertTrue(maxHeight == generator.getMaxValue());
     }
+    */
 
     public int countZeros(double[][] map) {
         int zeroCount = 0;

@@ -143,13 +143,13 @@ public final class MapConstructor {
                             || heightMap[x][y] > heightMap[x - 1][y]
                             || heightMap[x][y] > heightMap[x][y - 1]) {
                         double average = (map[x - 1][y - 1] + map[x - 1][y] + map[x][y - 1]) / 3 + 5;
-                        generator.checkMaxValue(average);
+                        //generator.checkMaxValue(average);
                         map[x][y] = Math.max(1, average);
                     } else if (heightMap[x][y] > heightMap[x + 1][y + 1]
                             || heightMap[x][y] > heightMap[x + 1][y]
                             || heightMap[x][y] > heightMap[x + 1][y - 1]) {
                         double average = (map[x + 1][y + 1] + map[x + 1][y] + map[x + 1][y - 1]) / 3 + 5;
-                        generator.checkMaxValue(average);
+                        //generator.checkMaxValue(average);
                         map[x][y] = Math.max(1, average);
                     }
                 }
