@@ -1,4 +1,3 @@
-
 package mapgenerator.logic;
 
 import java.util.Random;
@@ -10,7 +9,7 @@ import static org.junit.Assert.*;
 /**
  *
  */
-public class HeightMapTest {
+public class NoiseMapGeneratorTest {
 
     Random random;
     int exponent;
@@ -19,7 +18,7 @@ public class HeightMapTest {
     int mapSize;
     NoiseMapGenerator hmg;
 
-    public HeightMapTest() {
+    public NoiseMapGeneratorTest() {
     }
 
     @Before
@@ -37,7 +36,7 @@ public class HeightMapTest {
     }
 
     @Test
-    public void allHeightsAreZeroOnInitialization() {
+    public void allValuesAreZeroOnInitialization() {
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 0);
     }
@@ -49,7 +48,7 @@ public class HeightMapTest {
         assertTrue(map[0][0] >= seed - 10 && map[0][0] <= seed + 10);
         assertTrue(map[0][this.mapSize - 1] >= seed - 10 && map[0][this.mapSize - 1] <= seed + 10);
         assertTrue(map[this.mapSize - 1][0] >= seed - 10 && map[this.mapSize - 1][0] <= seed + 10);
-        assertTrue(map[this.mapSize - 1][this.mapSize - 1] >= seed - 10 
+        assertTrue(map[this.mapSize - 1][this.mapSize - 1] >= seed - 10
                 && map[this.mapSize - 1][this.mapSize - 1] <= seed + 10);
     }
 
@@ -67,7 +66,7 @@ public class HeightMapTest {
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 5);
     }
-    
+
     @Test
     public void afterOneSquareStepThereAreRightAmountOfZerosRemaining() {
         this.hmg.assignCornerValues(this.mapSize, this.seed);
@@ -76,12 +75,19 @@ public class HeightMapTest {
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 6);
     }
-    
+
     @Test
-    public void noZeroValuesLeftAfterRunningCalculateHeights() {
+    public void noZeroValuesLeftAfterCreatingNoise() {
         this.hmg.createNoise();
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 65 * 65);
+    }
+    
+    @Test
+    public void maxValueHasRightValueAfterCreatingNoise() {
+        this.hmg.createNoise();
+        double maxValue = checkMaxValue(this.hmg.getNoiseMap());
+        assertTrue(maxValue == this.hmg.getMaxValue());
     }
 
     public int notZeroValueCount() {
@@ -95,6 +101,18 @@ public class HeightMapTest {
             }
         }
         return valuesOtherThanZero;
+    }
+
+    public double checkMaxValue(double[][] map) {
+        double maxValue = 0;
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map.length; y++) {
+                if (map[x][y] > maxValue) {
+                    maxValue = map[x][y];
+                }
+            }
+        }
+        return maxValue;
     }
 
 }

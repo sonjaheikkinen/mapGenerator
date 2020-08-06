@@ -4,9 +4,7 @@ import java.util.Random;
 import mapgenerator.domain.Biomes;
 import mapgenerator.domain.Map;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -33,15 +31,37 @@ public class MapConstructorTest {
     }
 
     @Test
-    public void heightMapHasNoZerosAfterRunningConstructMap() {
-        this.mc.constructMap();
-        assertTrue(countZeros(this.mc.getHeightMap()) == 0);
-    }
-
-    @Test
     public void mapHasAHeightMapWithNoZerosAfterRunningConstructMap() {
         this.mc.constructMap();
         assertTrue(countZeros(this.map.getHeightMap()) == 0);
+    }
+
+    @Test
+    public void mapHasAMoistureMapWithNoZerosAfterRunningConstructMap() {
+        this.mc.constructMap();
+        assertTrue(countZeros(this.map.getMoisture()) == 0);
+    }
+    
+    @Test
+    public void mapHasAWaterMapAfterRunningConstructMap() {
+        this.mc.constructMap();
+        assertTrue(this.map.getWater() != null);
+    }
+    
+    @Test
+    public void mapHasABiomeMapAfterRunningConstructMap() {
+        this.mc.constructMap();
+        assertTrue(this.map.getBiomes() != null);
+    }
+    
+    @Test
+    public void maxValueReturnsCorrectValueAfterRoughen() {
+        NoiseMapGenerator generator = new NoiseMapGenerator(new Random(), 6, 50, 50);
+        this.mc.generateHeightMap(generator);
+        this.mc.generateWater(new WaterGenerator(6), 0.5, generator.getMaxValue());
+        this.mc.roughen(this.mc.getHeightMap(), generator);
+        double maxHeight = checkMaxValue(this.mc.getHeightMap());
+        assertTrue(maxHeight == generator.getMaxValue());
     }
 
     public int countZeros(double[][] map) {
@@ -54,6 +74,18 @@ public class MapConstructorTest {
             }
         }
         return zeroCount;
+    }
+    
+    public double checkMaxValue(double[][] map) {
+        double maxValue = 0;
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map.length; y++) {
+                if (map[x][y] > maxValue) {
+                    maxValue = map[x][y];
+                }
+            }
+        }
+        return maxValue;
     }
 
 }

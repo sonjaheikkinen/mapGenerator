@@ -62,19 +62,23 @@ public final class MapConstructor {
      * Calls for other methods to generate different parts of the map.
      */
     public void generateMapObjects(WaterGenerator waterGen, NoiseMapGenerator heightGen, NoiseMapGenerator moistureGen) {
-        heightMap = heightGen.createNoise();
+        generateHeightMap(heightGen);
         double maxHeight = heightGen.getMaxValue();
         double waterLevel = 0.5;
         generateWater(waterGen, waterLevel, maxHeight);
         generateMoisture(moistureGen);
-        heightMap = roughen(heightMap);
+        heightMap = roughen(heightMap, heightGen);
         double maxMoisture = moistureGen.getMaxValue();
         biomes = bioS.createBiomes(heightMap, maxHeight, waterLevel, water, moisture, maxMoisture);
     }
 
+    public void generateHeightMap(NoiseMapGenerator heightGen) {
+        heightMap = heightGen.createNoise();
+    }
+
     public void generateMoisture(NoiseMapGenerator moistureGen) {
         moisture = moistureGen.createNoise();
-        moisture = roughen(moisture);
+        moisture = roughen(moisture, moistureGen);
     }
 
     public void generateWater(WaterGenerator waterGen, double waterLevel, double maxHeight) {
@@ -82,7 +86,7 @@ public final class MapConstructor {
         water = waterGen.getWater();
     }
 
-    public double[][] roughen(double[][] map) {
+    public double[][] roughen(double[][] map, NoiseMapGenerator generator) {
         for (int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map.length - 1; y++) {
                 if (!water[x][y]) {
@@ -90,11 +94,13 @@ public final class MapConstructor {
                             || heightMap[x][y] > heightMap[x - 1][y]
                             || heightMap[x][y] > heightMap[x][y - 1]) {
                         double average = (map[x - 1][y - 1] + map[x - 1][y] + map[x][y - 1]) / 3 + 5;
+                        generator.checkMaxValue(average);
                         map[x][y] = Math.max(1, average);
                     } else if (heightMap[x][y] > heightMap[x + 1][y + 1]
                             || heightMap[x][y] > heightMap[x + 1][y]
                             || heightMap[x][y] > heightMap[x + 1][y - 1]) {
                         double average = (map[x + 1][y + 1] + map[x + 1][y] + map[x + 1][y - 1]) / 3 + 5;
+                        generator.checkMaxValue(average);
                         map[x][y] = Math.max(1, average);
                     }
                 }
@@ -114,6 +120,10 @@ public final class MapConstructor {
 
     public boolean[][] getWater() {
         return water;
+    }
+    
+    public double[][] getMoisture() {
+        return moisture;
     }
 
 }
