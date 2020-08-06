@@ -8,6 +8,8 @@ package mapgenerator.logic;
 import mapgenerator.domain.Biomes;
 
 public class BiomeSelector {
+    
+    private int[][] biomes;
 
     int[][] biomeSelection;
    
@@ -15,9 +17,9 @@ public class BiomeSelector {
         this.biomeSelection = biomes.getBiomeSelection();
     }
 
-    public int[][] createBiomes(double[][] heightMap, double maxHeight, double waterLevel, boolean[][] water,
+    public void createBiomes(double[][] heightMap, double maxHeight, double waterLevel, boolean[][] water,
             double[][] moisture, double maxMoisture) {
-        int[][] biomes = new int[heightMap.length][heightMap.length];
+        this.biomes = new int[heightMap.length][heightMap.length];
         double waterHeight = waterLevel * maxHeight;
         double landHeightRange = maxHeight - waterHeight;
         for (int x = 0; x < heightMap.length; x++) {
@@ -31,7 +33,6 @@ public class BiomeSelector {
                 }
             }
         }
-        return biomes;
     }
 
     public int defineHeightLevel(double[][] heightMap, int x, int y, double waterHeight, double landHeightRange) {
@@ -63,6 +64,10 @@ public class BiomeSelector {
             moisturelevel = 2;
         }
         return moisturelevel;
+    }
+    
+    public int[][] getBiomes() {
+        return biomes;
     }
 
 }

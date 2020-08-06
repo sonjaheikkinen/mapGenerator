@@ -69,7 +69,12 @@ public final class MapConstructor {
         generateMoisture(moistureGen);
         heightMap = roughen(heightMap, heightGen);
         double maxMoisture = moistureGen.getMaxValue();
-        biomes = bioS.createBiomes(heightMap, maxHeight, waterLevel, water, moisture, maxMoisture);
+        generateBiomes(maxHeight, waterLevel, maxMoisture);
+    }
+
+    public void generateBiomes(double maxHeight, double waterLevel, double maxMoisture) {
+        bioS.createBiomes(heightMap, maxHeight, waterLevel, water, moisture, maxMoisture);
+        biomes = bioS.getBiomes();
     }
 
     public void generateHeightMap(NoiseMapGenerator heightGen) {
