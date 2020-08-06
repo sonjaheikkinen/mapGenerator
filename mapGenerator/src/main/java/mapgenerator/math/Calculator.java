@@ -40,17 +40,37 @@ public class Calculator {
     }
 
     public int pow(int value, int exponent) {
-        for (int i = 0; i < exponent; i++) {
-            value = value * exponent;
+        int result = value;
+        if (exponent > 0) {
+            for (int i = 0; i < exponent - 1; i++) {
+                result = result * value;
+            }
+        } else if (exponent < 0) {
+            for (int i = 0; i < (-1) * exponent - 1; i++) {
+                result = result * value;
+            }
+            result = 1 / result;
+        } else {
+            result = 1;
         }
-        return value;
+        return result;
     }
 
     public double pow(double value, double exponent) {
-        for (int i = 0; i < exponent; i++) {
-            value = value * exponent;
+        double result = value;
+        if (exponent > 0) {
+            for (int i = 0; i < exponent - 1; i++) {
+                result = result * value;
+            }
+        } else if (exponent < 0) {
+            for (int i = 0; i < (-1) * exponent - 1; i++) {
+                result = result * value;
+            }
+            result = 1 / result;
+        } else {
+            result = 1;
         }
-        return value;
+        return result;
     }
 
 }
