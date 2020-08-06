@@ -37,13 +37,20 @@ public class NoiseMapGenerator {
 
     /**
      * Uses the diamond-square algorithm to generate height values for a map.
-     * The algorithm has a diamond step and a square step. The diamond step: For
-     * each square in the array, take the average of the corners, alter by a
-     * random value and put the new value in the middle of the rectangle. The
-     * square step: For each diamond in the array, take the average of the
-     * corners, alter by a random value and put the new value in the middle of
-     * the rectangle. For edges, put the same value on opposite edges so that
-     * the values "wrap around".
+     * Basic idea of the diamond-square-algorithm:
+     * 1. Assign random values (possibly near some seed) to the corners of the map
+     * 2. The diamond step: Take the four courners and put their average +/- a random number within a range (randomizerRange) in the middle.
+     * 3. The square step: Now we have five values. Looking from center, we can form a diamond to the top, bottom, left and right of the center value
+     * (if we imagine a fourth corner outside the array). Take the corners of every diamond and put their average +/- a random value within range 
+     * to the middle of the diamond (at the this step it is on the edge of the map). Since at this step there are only tree corners that are in the array, 
+     * use only those to count the average.
+     * 4. Now we have more values from which we can form four smaller squares. For every square, repeat step two. Now we have more diamonds. For every diamond,
+     * repeat step 3. If all the four corners are now inside the array, use all four corners to count the average.
+     * 5. As the size of the squares halves, divide the random number range by two.
+     * The algorithm starts by generating big height differences for big areas, and as the areas (diamonds and squares) get smaller, so do the height differences 
+     * (randomizer range).
+     * I have no idea why the step with squares is illogically called the diamond step and vice versa, but several sources claim so.
+     * Every time a new value is inserted, the current maximum value is checked.
      *
      * @return An array containing height values as doubles
      */
@@ -116,11 +123,8 @@ public class NoiseMapGenerator {
     }
 
     /**
-     * The square step of the diamond-square algorithm. Counts the average
-     * values of the corners of a diamond defined by centre coordinates of x, y
-     * and distance to corners. This average value is then altered by a random
-     * value and put in the middle of the diamond. If the middle of the diamond
-     * is on the edge, the same value is put on the opposite side also.
+     * The square step of the diamond-square algorithm. Counts the average values of the corners of a diamond defined by centre coordinates of x, y
+     * and distance to corners. This average value is then altered by a randomvalue and put in the middle of the diamond.
      *
      * @param x The x coordinate of the centre of the diamond
      * @param y The y coordinate of the centre of the diamond
@@ -129,24 +133,33 @@ public class NoiseMapGenerator {
      * @param randomizerRange The range in which random values can be
      */
     public void squareStep(int x, int y, int distanceToCorner, int mapSize, int randomizerRange) {
-        double cornerSum = 0;
-        double cornerCount = 0;
-        double cornerAverage = countCornerAverage(x, y, distanceToCorner, cornerSum, cornerCount, mapSize);
+        double cornerAverage = countCornerAverage(x, y, distanceToCorner, mapSize);
         double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
         checkMaxValue(newValue);
         this.noiseMap[x][y] = newValue;
     }
 
-    public double countCornerAverage(int x, int y, int distanceToCorner, double cornerSum, double cornerCount, int mapSize1) {
+    /**
+     * Counts the average values of the corners of the diamond defined by centre coordinates of x, y, and distance to corner.
+     * Only corners falling inside the map count towards average.
+     * @param x X coordinate of the centre of the diamond
+     * @param y Y coordinate of the centre of the diamond
+     * @param distanceToCorner Distance from centre to corner
+     * @param mapSize length of one side of the map
+     * @return average value of the corners
+     */
+    public double countCornerAverage(int x, int y, int distanceToCorner, int mapSize) {
+        double cornerSum = 0;
+        double cornerCount = 0;
         if (x - distanceToCorner >= 0) {
             cornerSum = cornerSum + this.noiseMap[x - distanceToCorner][y];
             cornerCount++;
         }
-        if (x + distanceToCorner < mapSize1) {
-            cornerSum = cornerSum + this.noiseMap[Math.min(x + distanceToCorner, mapSize1 - 1)][y];
+        if (x + distanceToCorner < mapSize) {
+            cornerSum = cornerSum + this.noiseMap[Math.min(x + distanceToCorner, mapSize - 1)][y];
             cornerCount++;
         }
-        if (y + distanceToCorner < mapSize1) {
+        if (y + distanceToCorner < mapSize) {
             cornerSum = cornerSum + this.noiseMap[x][y + distanceToCorner];
             cornerCount++;
         }
@@ -158,6 +171,10 @@ public class NoiseMapGenerator {
         return cornerAverage;
     }
 
+    /**
+     * Checks if given value is greater than current max value
+     * @param value A value to be checked
+     */
     public void checkMaxValue(double value) {
         if (value > maxValue) {
             maxValue = value;
@@ -173,6 +190,10 @@ public class NoiseMapGenerator {
         return this.noiseMap;
     }
 
+    /**
+     * Returns the maximum value of the height map
+     * @return The maximum value as double
+     */
     public double getMaxValue() {
         return maxValue;
     }

@@ -24,7 +24,6 @@ public class GraphicUI {
      *
      * @param stage A window which shows things on screen.
      * @param map Contains all information of the generated map.
-     * @see mapgenerator.gui.GraphicUI#drawMap(GraphicsContext)
      */
     public GraphicUI(Stage stage, Map map, int canvasSize, ProgramHandler handler, Random random) {
 
@@ -91,17 +90,23 @@ public class GraphicUI {
                 int shade = 255 / 100 * height;
                 int biome = biomes[x][y];
                 shade = Math.min(255, shade);
-                Color color = Color.rgb(0, 0, 0);
-                color = pickColor(x, y, color, shade, biome);
+                Color color = pickColor(shade, biome);
                 brush.setFill(color);
                 brush.fillRect(x, y, 1, 1);
             }
         }
     }
 
-    public Color pickColor(int x, int y, Color color, int shade, int biome) {
+    /**
+     * Picks correct brush color based on biome.
+     * @param shade A height map based integer which can be used to affect color
+     * @param biome An integer telling which biome to base color on
+     * @return 
+     */
+    public Color pickColor(int shade, int biome) {
         //biomes: "0-water;1-sand;2-drygrass;3-grasss;4-leaf;5-taiga;6-tundra;7-bare;8-snow";
         //TODO: make color array a hashmap and get color by biome name instead of number?
+        Color color;
         Color[] colors = new Color[9];
         colors[0] = Color.rgb(0, 0, shade);
         colors[1] = Color.rgb(231, 232, 207);

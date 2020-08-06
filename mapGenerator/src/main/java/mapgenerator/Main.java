@@ -21,7 +21,7 @@ public class Main extends Application {
 
     /**
      * Main method launches the whole program
-     * @param args the command line arguments
+     * @param args The command line arguments
      */
     public static void main(String[] args) {
         launch(Main.class);

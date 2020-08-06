@@ -28,7 +28,7 @@ public class Map {
     }
     
     /**
-     * Sets a water map
+     * Sets a water map.
      * @param water A boolean array in which true means water and false means land
      */
     public void setWater(boolean[][] water) {
@@ -36,25 +36,41 @@ public class Map {
     } 
     
     /**
-     * Returns the water map
+     * Returns the water map.
      * @return A boolean array in which true means water and false means land
      */
     public boolean[][] getWater() {
         return water;
     }
     
+    /**
+     * Sets a moisture map.
+     * @param moisture An array containing moisture values as doubles
+     */
     public void setMoisture(double[][] moisture) {
         this.moisture = moisture;
     }
     
+    /**
+     * Returns the moisture map.
+     * @return An array containing moisture values as doubles
+     */
     public double[][] getMoisture() {
         return moisture;
     }
     
+    /**
+     * Sets a biome map.
+     * @param biomes An array containing biome numbers as integers
+     */
     public void setBiomes(int[][] biomes) {
         this.biomes = biomes;
     }
     
+    /**
+     * Returns the biome map.
+     * @return An array containing biome numbers as integers
+     */
     public int[][] getBiomes() {
         return biomes;
     }

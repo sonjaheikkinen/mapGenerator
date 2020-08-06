@@ -39,6 +39,10 @@ public class ProgramHandler {
         constructor.constructMap();
     }
 
+    /**
+     * Method returns the map constructor
+     * @return MapConstructor
+     */
     public MapConstructor getMapConstructor() {
         return constructor;
     }
