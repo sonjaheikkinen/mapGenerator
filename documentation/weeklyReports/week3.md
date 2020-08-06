@@ -24,6 +24,7 @@ get started. After initial start, new maps are still generated rather quickly so
 ## Next week
 
 * Create rivers and lakes based on humidity (less water to dry areas)
+* Reduce space complexity by making water another biome?
 * Make a better roughen method for more natural looking noise maps (maybe separate methods for heights and humidity?)
 * Make research concerning cities and roads
 * Slider or selection for water level if time
