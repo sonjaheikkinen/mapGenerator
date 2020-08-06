@@ -16,6 +16,8 @@ import mapgenerator.logic.ProgramHandler;
  */
 public class GraphicUI {
 
+    private Random random;
+
     /**
      * Method creates a window and calls for method drawMap to draw the
      * generated map on screen.
@@ -24,7 +26,9 @@ public class GraphicUI {
      * @param map Contains all information of the generated map.
      * @see mapgenerator.gui.GraphicUI#drawMap(GraphicsContext)
      */
-    public GraphicUI(Stage stage, Map map, int canvasSize, ProgramHandler handler) {
+    public GraphicUI(Stage stage, Map map, int canvasSize, ProgramHandler handler, Random random) {
+
+        this.random = random;
 
         Canvas canvas = new Canvas(canvasSize, canvasSize);
         GraphicsContext brush = canvas.getGraphicsContext2D();
@@ -85,9 +89,9 @@ public class GraphicUI {
             for (int y = 0; y < canvasSize; y++) {
                 int height = (int) Math.round(heightMap[x][y]);
                 int shade = 255 / 100 * height;
+                int biome = biomes[x][y];
                 shade = Math.min(255, shade);
                 Color color = Color.rgb(0, 0, 0);
-                int biome = biomes[x][y];
                 color = pickColor(x, y, color, shade, biome);
                 brush.setFill(color);
                 brush.fillRect(x, y, 1, 1);
@@ -96,40 +100,21 @@ public class GraphicUI {
     }
 
     public Color pickColor(int x, int y, Color color, int shade, int biome) {
-        Random random = new Random();
-        //biomes: "water;sand;grass;leaf;taiga;tundra;snow";
-        Color water = Color.rgb(0, 0, shade);
-        Color sand = Color.rgb(231, 232, 207);
-        Color drygrass = Color.rgb(199, 209, 157);
-        Color grass = Color.rgb(122, 232, 100);
-        Color leaf = Color.rgb(91, 194, 110);
-        Color taiga = Color.rgb(27, 122, 43);
-        Color tundra = Color.rgb(140, 171, 145);
-        Color bare = Color.rgb(208, 216, 217);
-        Color snow = Color.rgb(230, 240, 239);
-        if (biome == 0) {
-            color = water;
-        } else if (biome == 1) {
-            color = sand;
-        } else if (biome == 2) {
-            color = drygrass;
-        } else if (biome == 3) {
-            color = grass;
-        } else if (biome == 4) {
-            color = leaf;
-        } else if (biome == 5) {
-            color = taiga;
-        } else if (biome == 6) {
-            color = tundra;
-        } else if (biome == 7) {
-            color = bare;
-        } else if (biome == 8) {
-            color = snow;
-        }
+        //biomes: "0-water;1-sand;2-drygrass;3-grasss;4-leaf;5-taiga;6-tundra;7-bare;8-snow";
+        //TODO: make color array a hashmap and get color by biome name instead of number?
+        Color[] colors = new Color[9];
+        colors[0] = Color.rgb(0, 0, shade);
+        colors[1] = Color.rgb(231, 232, 207);
+        colors[2] = Color.rgb(199, 209, 157);
+        colors[3] = Color.rgb(122, 232, 100);
+        colors[4] = Color.rgb(91, 194, 110);
+        colors[5] = Color.rgb(27, 122, 43);
+        colors[6] = Color.rgb(140, 171, 145);
+        colors[7] = Color.rgb(208, 216, 217);
+        colors[8] = Color.rgb(230, 240, 239);
+        color = colors[biome];
         color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, 0.95 + random.nextDouble() * 0.05, 1);
         return color;
     }
-
-
 
 }

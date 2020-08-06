@@ -45,7 +45,13 @@ public final class MapConstructor {
      */
     public void constructMap() {
         WaterGenerator waterGen = new WaterGenerator(exponent);
-        generateMapObjects(waterGen);
+        NoiseMapGenerator heightGen = new NoiseMapGenerator(random, exponent, seed, range);
+        NoiseMapGenerator moistureGen = new NoiseMapGenerator(random, exponent, seed, range);
+        generateMapObjects(waterGen, heightGen, moistureGen);
+        setObjectsToMap();
+    }
+
+    public void setObjectsToMap() {
         map.setHeightMap(this.heightMap);
         map.setWater(water);
         map.setMoisture(moisture);
@@ -55,19 +61,25 @@ public final class MapConstructor {
     /**
      * Calls for other methods to generate different parts of the map.
      */
-    public void generateMapObjects(WaterGenerator waterGen) {
-        NoiseMapGenerator heightGen = new NoiseMapGenerator(random, exponent, seed, range);
+    public void generateMapObjects(WaterGenerator waterGen, NoiseMapGenerator heightGen, NoiseMapGenerator moistureGen) {
         heightMap = heightGen.createNoise();
         double maxHeight = heightGen.getMaxValue();
         double waterLevel = 0.5;
-        waterGen.addWaterByHeight(waterLevel * maxHeight, heightMap);
-        water = waterGen.getWater();
-        NoiseMapGenerator moistureGen = new NoiseMapGenerator(random, exponent, seed, range);
-        moisture = moistureGen.createNoise();
-        moisture = roughen(moisture);
+        generateWater(waterGen, waterLevel, maxHeight);
+        generateMoisture(moistureGen);
         heightMap = roughen(heightMap);
         double maxMoisture = moistureGen.getMaxValue();
         biomes = bioS.createBiomes(heightMap, maxHeight, waterLevel, water, moisture, maxMoisture);
+    }
+
+    public void generateMoisture(NoiseMapGenerator moistureGen) {
+        moisture = moistureGen.createNoise();
+        moisture = roughen(moisture);
+    }
+
+    public void generateWater(WaterGenerator waterGen, double waterLevel, double maxHeight) {
+        waterGen.addWaterByHeight(waterLevel * maxHeight, heightMap);
+        water = waterGen.getWater();
     }
 
     public double[][] roughen(double[][] map) {
