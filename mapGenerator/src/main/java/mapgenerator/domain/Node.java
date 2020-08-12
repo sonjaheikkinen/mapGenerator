@@ -13,6 +13,7 @@ public class Node implements Comparable<Node> {
     
     private int x;
     private int y;
+    private Node parent;
     private double distance;
    
     public Node(int x, int y, double distance) {
@@ -27,6 +28,14 @@ public class Node implements Comparable<Node> {
     
     public int getY() {
         return y;
+    }
+    
+    public void setParent(Node parent) {
+        this.parent = parent;
+    }
+    
+    public Node getParent() {
+        return parent;
     }
     
     public double getDistance() {
