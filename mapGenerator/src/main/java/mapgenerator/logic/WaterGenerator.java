@@ -181,11 +181,15 @@ public class WaterGenerator {
                             //calculate distance of the neighbor if going trough current place
                             double heightDifferenceToNeighbor = heightmap[xCoord][yCoord]
                                     - heightmap[place.getX()][place.getY()];
-                            double distanceFromPlaceToNeighbor = heightDifferenceToNeighbor;
-                            if (distanceFromPlaceToNeighbor < 0) {
-                                distanceFromPlaceToNeighbor = 4 * Math.abs(distanceFromPlaceToNeighbor);
+                            double costFromPlaceToNeighbor;
+                            if (heightDifferenceToNeighbor < 0) {
+                                costFromPlaceToNeighbor = Math.max(1, -1 * heightDifferenceToNeighbor);
+                            } else if (heightDifferenceToNeighbor > 0) {
+                                costFromPlaceToNeighbor = 0;
+                            } else {
+                                costFromPlaceToNeighbor = 1;
                             }
-                            double newNeighborDistance = place.getDistance() + distanceFromPlaceToNeighbor;
+                            double newNeighborDistance = place.getDistance() + costFromPlaceToNeighbor;
 
                             //if distance smaller, set current place as parent and add neighbor to priorityqueue
                             if (newNeighborDistance < currentNeighborDistance) {
