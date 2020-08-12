@@ -125,6 +125,8 @@ public final class MapConstructor {
      */
     public void generateWater(WaterGenerator waterGen, double waterLevel, double maxHeight) {
         waterGen.addWaterByHeight(waterLevel * maxHeight, heightMap);
+        waterGen.removeSmallWaters();
+        waterGen.addRivers(heightMap);
         water = waterGen.getWater();
     }
 
