@@ -9,14 +9,16 @@ package mapgenerator.domain;
  *
  * @author heisonja
  */
-public class CoordinatePair {
+public class Node implements Comparable<Node> {
     
     private int x;
     private int y;
-    
-    public CoordinatePair(int x, int y) {
+    private double distance;
+   
+    public Node(int x, int y, double distance) {
         this.x = x;
         this.y = y;
+        this.distance = distance;
     }
     
     public int getX() {
@@ -27,8 +29,23 @@ public class CoordinatePair {
         return y;
     }
     
+    public double getDistance() {
+        return distance;
+    }
+    
     public String toString() {
         return "(x=" + x + ", y=" + y + ")";
+    }
+    
+    @Override
+    public int compareTo(Node node) {
+        if (this.distance > node.getDistance()) {
+            return 1;
+        } else if (this.distance < node.getDistance()) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
     
 }

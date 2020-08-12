@@ -3,9 +3,10 @@ package mapgenerator.logic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
-import mapgenerator.domain.CoordinatePair;
+import mapgenerator.domain.Node;
 import mapgenerator.domain.Map;
 
 /**
@@ -15,11 +16,12 @@ public class WaterGenerator {
 
     private boolean[][] water;
     private boolean[][] visited;
-    private HashMap<CoordinatePair, CoordinatePair> parentNodes;
+    private HashMap<Node, Node> parentNodes;
     private int mapSize;
     private Random random;
-    private Queue<CoordinatePair> queue;
-    private int[][] distance;
+    private Queue<Node> queue;
+    private PriorityQueue<Node> stack;
+    private double[][] distance;
 
     /**
      * The constructor initializes the boolean array for water placement
@@ -31,7 +33,8 @@ public class WaterGenerator {
         this.water = new boolean[mapSize][mapSize];
         this.visited = new boolean[mapSize][mapSize];
         this.parentNodes = new HashMap<>();
-        this.distance = new int[mapSize][mapSize];
+        this.distance = new double[mapSize][mapSize];
+        this.stack = new PriorityQueue<>();
         this.queue = new LinkedList<>();
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
@@ -78,10 +81,11 @@ public class WaterGenerator {
     public void addRivers(double[][] heightmap) {
         int startX = heightmap.length / 2;
         int startY = heightmap.length / 2;
-        CoordinatePair riverEnd = bfs(startX, startY);
-        CoordinatePair currentPlace = riverEnd;
+        //Node riverEnd = bfs(startX, startY);
+        Node riverEnd = dijkstra(startX, startY, heightmap);
+        Node currentPlace = riverEnd;
         while (true) {
-            CoordinatePair parent = parentNodes.get(currentPlace);
+            Node parent = parentNodes.get(currentPlace);
             int x = currentPlace.getX();
             int y = currentPlace.getY();
             for (int xCoord = x - 1; xCoord <= x + 1; xCoord++) {
@@ -101,27 +105,33 @@ public class WaterGenerator {
 
     }
 
-    public CoordinatePair bfs(int x, int y) {
-        CoordinatePair start = new CoordinatePair(x, y);
+    public Node dijkstra(int x, int y, double[][] heightmap) {
+        Node start = new Node(x, y, 0);
         parentNodes.put(start, start);
-        queue.add(start);
-        visited[x][y] = true;
+        stack.add(start);
         distance[x][y] = 0;
-        int size = mapSize * mapSize;
-        int index = 1;
-        CoordinatePair place = start;
-        while (!queue.isEmpty()) {
-            place = queue.poll();
-            for (int xCoord = place.getX() - 1; xCoord <= place.getX() + 1; xCoord++) {
-                for (int yCoord = place.getY() - 1; yCoord <= place.getY() + 1; yCoord++) {
-                    if (xCoord >= 0 && xCoord < mapSize && yCoord >= 0 && yCoord < mapSize) {
-                        if (!visited[xCoord][yCoord]) {
-                            CoordinatePair neighbor = new CoordinatePair(xCoord, yCoord);
-                            queue.add(neighbor);
-                            visited[xCoord][yCoord] = true;
-                            index++;
-                            distance[neighbor.getX()][neighbor.getY()] = distance[x][y] + 1;
-                            parentNodes.put(neighbor, place);
+        Node place = start;
+        while (!stack.isEmpty()) {
+            place = stack.poll();
+            if (!visited[place.getX()][place.getY()]) {
+                visited[place.getX()][place.getY()] = true;
+                for (int xCoord = place.getX() - 1; xCoord <= place.getX() + 1; xCoord++) {
+                    for (int yCoord = place.getY() - 1; yCoord <= place.getY() + 1; yCoord++) {
+                        if (xCoord >= 0 && xCoord < mapSize && yCoord >= 0 && yCoord < mapSize) {
+                            double currentNeighborDistance = distance[xCoord][yCoord];
+                            double heightDifferenceToNeighbor = heightmap[xCoord][yCoord] 
+                                    - heightmap[place.getX()][place.getY()];
+                            double distanceFromPlaceToNeighbor = heightDifferenceToNeighbor;
+                            if (distanceFromPlaceToNeighbor < 0) {
+                                distanceFromPlaceToNeighbor = 2 * Math.abs(distanceFromPlaceToNeighbor);
+                            }
+                            double newNeighborDistance = place.getDistance() + distanceFromPlaceToNeighbor;
+                            if (newNeighborDistance < currentNeighborDistance) {
+                                distance[xCoord][yCoord] = newNeighborDistance;
+                                Node neighbor = new Node(xCoord, yCoord, newNeighborDistance);
+                                parentNodes.put(neighbor, place);
+                                stack.add(neighbor);
+                            } 
                         }
                     }
                 }
