@@ -24,9 +24,9 @@ The basic idea of the diamond square is:
 1. Set map corners to random values
 2. Perform diamond and square steps repeatedly until all array values have been set. At each iteration, divide the square size by two. 
 
-	**The diamond step:** For each square in the array (where the values put to the array in the square step work as 		square corners, except at first iteration where we use the actual map corners), count the average values of the 	corners and put this average + random value in the middle of the square. 
-	**The square step:** For each diamond the array (where the values put to the array in the diamond step work as 		diamond corners), take the average value of the corners and put this average + random value in the middle of the 	 diamond.
+**The diamond step:** For each square in the array (where the values put to the array in the square step work as square corners, except at first iteration where we use the actual map corners), count the average values of the corners and put this average + random value in the middle of the square. 
 
+**The square step:** For each diamond the array (where the values put to the array in the diamond step work as diamond corners), take the average value of the corners and put this average + random value in the middle of the diamond.
 
 As we can see, we have one value calculation for every slot of the array. Since the are n^2 slots, the time complexity of the algorithm is O(n^2). 
 
@@ -40,4 +40,5 @@ Algorithm still unclear.
 ## Sources
 
 https://en.wikipedia.org/wiki/Diamond-square_algorithm
+
 Tirakirja
