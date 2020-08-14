@@ -1,8 +1,8 @@
-# Week 2
+# Week 3
 
 Time spent on the project: 17 hours
 
-## Week 2 progress
+## Week 3 progress
 
 This week I meant to do rivers and lakes, but I changed my plans since I wanted to focus on moisture 
 first and use that ase a guide for adding more water next week. I spent several hours in trying to create my own moisture algorithm which would simulate wind effect and distance from water, but I could not get that to look good enough, so I then decided to use the diamond-square for moisture generation also. I will probably attempt to do an additional wind simulating and/or distance from water algorithm and take my moisture map trough that if I have time later.
