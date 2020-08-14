@@ -4,19 +4,19 @@
 
 Testing by package:
 
-## mapgenerator
+### mapgenerator
 
 Only Main class is here, which does nothing else than create and launch a program handler. No reason to test it. 
 
-## mapgenerator.domain
+### mapgenerator.domain
 
 This package is mainly for storing information, so most of the methods are getters and setters. Biomes class has one method to create a biome selection table, but the table is currently so small, that automated testing is not needed. If it was really big, it may be reasonable to check that all slots are filled with some biome. 
 
-## mapgenerator.gui
+### mapgenerator.gui
 
 Graphic UI does not need to be tested in this course. 
 
-## mapgenerator.logic
+### mapgenerator.logic
 
 **BiomeSelector**: Checked that all water slots are filled with biome zero and not with a land biome.
 
