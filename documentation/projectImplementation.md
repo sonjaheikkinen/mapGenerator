@@ -28,7 +28,7 @@ The basic idea of the diamond square is:
 
 **The square step:** For each diamond the array (where the values put to the array in the diamond step work as diamond corners), take the average value of the corners and put this average + random value in the middle of the diamond.
 
-As we can see, we have one value calculation for every slot of the array. Since the are n^2 slots, the time complexity of the algorithm is O(n^2). 
+As we can see, we have one value calculation for every slot of the array. Since the are n^2 slots, the time complexity of the algorithm is O(n^2) (The first row of works in constant time).  
 
 ### Time complexity of river generation
 
