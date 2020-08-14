@@ -167,8 +167,7 @@ public class NoiseMapGenerator {
             cornerSum = cornerSum + this.noiseMap[x][y - distanceToCorner];
             cornerCount++;
         }
-        double cornerAverage = cornerSum / cornerCount;
-        return cornerAverage;
+        return cornerSum / cornerCount;
     }
 
     /**

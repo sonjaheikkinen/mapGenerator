@@ -1,13 +1,9 @@
 package mapgenerator.logic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 import mapgenerator.domain.Node;
-import mapgenerator.domain.Map;
 
 /**
  * Class generates water for the map
@@ -17,7 +13,6 @@ public class WaterGenerator {
     private boolean[][] water;
     private boolean[][] rivers;
     private boolean[][] visited;
-    //private HashMap<Node, Node> parentNodes;
     private int mapSize;
     private Random random;
     private Queue<Node> queue;
@@ -52,24 +47,6 @@ public class WaterGenerator {
         }
     }
 
-    public void removeSmallWaters() {
-        for (int x = 0; x < water.length; x++) {
-            for (int y = 0; y < water.length; y++) {
-                int wateryNeighbors = 0;
-                for (int xCoord = x - 1; xCoord <= x + 1; xCoord++) {
-                    for (int yCoord = y - 1; yCoord <= y + 1; yCoord++) {
-                        if (xCoord >= 0 && xCoord < mapSize && yCoord >= 0 && yCoord < mapSize && water[xCoord][yCoord]) {
-                            wateryNeighbors++;
-                        }
-                    }
-                }
-                if (wateryNeighbors <= 4) {
-                    water[x][y] = false;
-                }
-            }
-        }
-    }
-
     public void addRivers(double[][] heightmap) {
         int riverCount = 0;
         startNewRivers(heightmap, "wide");
@@ -81,7 +58,7 @@ public class WaterGenerator {
     public void startNewRivers(double[][] heightmap, String width) {
         for (int startX = 0; startX < heightmap.length; startX++) {
             for (int startY = 0; startY < heightmap.length; startY++) {
-                
+
                 int randomNumber = random.nextInt(1000);
                 makeRivers(startX, startY, randomNumber, heightmap, width);
             }
@@ -99,22 +76,30 @@ public class WaterGenerator {
             double riverLength = Math.sqrt(Math.pow(startX - riverEnd.getX(), 2) + Math.pow(startY - riverEnd.getY(), 2));
             while (true) {
                 Node parent = currentPlace.getParent();
-                int x = currentPlace.getX();
-                int y = currentPlace.getY();
-                double distanceToStart = Math.sqrt(Math.pow(startX - x, 2) + Math.pow(startY - y, 2));
-                if (x >= 0 && x < mapSize && y >= 0 && y < mapSize) {
-                    rivers[x][y] = true;
-                    if (distanceToStart > (riverLength / 2) && x < mapSize - 1 && y > 0 && width.equals("wide")) {
-                        rivers[x][y - 1] = true;
-                        rivers[x + 1][y - 1] = true;
-                        rivers[x + 1][y] = true;
-                    }
-                }
+                continueRiver(currentPlace, startX, startY, riverLength, width);
                 currentPlace = parent;
                 if (parent.getX() == startX && parent.getY() == startY) {
                     break;
                 }
             }
+        }
+    }
+
+    public void continueRiver(Node currentPlace, int startX, int startY, double riverLength, String width) {
+        int x = currentPlace.getX();
+        int y = currentPlace.getY();
+        double distanceToStart = Math.sqrt(Math.pow(startX - x, 2) + Math.pow(startY - y, 2));
+        if (x >= 0 && x < mapSize && y >= 0 && y < mapSize) {
+            markAsRiver(x, y, distanceToStart, riverLength, width);
+        }
+    }
+
+    public void markAsRiver(int x, int y, double distanceToStart, double riverLength, String width) {
+        rivers[x][y] = true;
+        if (distanceToStart > (riverLength / 2) && x < mapSize - 1 && y > 0 && width.equals("wide")) {
+            rivers[x][y - 1] = true;
+            rivers[x + 1][y - 1] = true;
+            rivers[x + 1][y] = true;
         }
     }
 
@@ -128,12 +113,6 @@ public class WaterGenerator {
         }
     }
 
-    public void fillLake(int x, int y, double waterlevel, double[][] heights) {
-        if (heights[x][y] < waterlevel) {
-
-        }
-    }
-
     public Node dijkstra(int x, int y, double[][] heightmap) {
         initArrays();
         String direction = nearestWaterDirection(x, y);
@@ -142,24 +121,27 @@ public class WaterGenerator {
             place = priorityQ.poll();
             if (!visited[place.getX()][place.getY()]) {
                 visited[place.getX()][place.getY()] = true;
-                for (int xCoord = place.getX() - 1; xCoord <= place.getX() + 1; xCoord = xCoord + 1) {
-                    for (int yCoord = place.getY() - 1; yCoord <= place.getY() + 1; yCoord = yCoord + 1) {
-                        if (direction.equals("right") && xCoord < place.getX()
-                                || direction.equals("left") && xCoord > place.getX()
-                                || direction.equals("up") && yCoord > place.getY()
-                                || direction.equals("down") && yCoord < place.getY()) {
-                            continue;
-                        } else if (xCoord >= 0 && xCoord < mapSize && yCoord >= 0 && yCoord < mapSize) {
-                            updateDistances(xCoord, yCoord, heightmap, place);
-                        }
-                    }
-                }
+                checkNeighborDistances(place, direction, heightmap);
             }
             if (water[place.getX()][place.getY()]) {
                 return place;
             }
         }
         return place;
+    }
+
+    public void checkNeighborDistances(Node place, String direction, double[][] heightmap) {
+        for (int xCoord = place.getX() - 1; xCoord <= place.getX() + 1; xCoord = xCoord + 1) {
+            for (int yCoord = place.getY() - 1; yCoord <= place.getY() + 1; yCoord = yCoord + 1) {
+                if (!(direction.equals("right") && xCoord < place.getX()
+                        || direction.equals("left") && xCoord > place.getX()
+                        || direction.equals("up") && yCoord > place.getY()
+                        || direction.equals("down") && yCoord < place.getY())
+                        && xCoord >= 0 && xCoord < mapSize && yCoord >= 0 && yCoord < mapSize) {
+                    updateDistances(xCoord, yCoord, heightmap, place);
+                }
+            }
+        }
     }
 
     public Node setStartingPlace(int x, int y) {
@@ -227,7 +209,6 @@ public class WaterGenerator {
 
     public int searchWater(int x, int y, String direction) {
         int searchDistance = 0;
-        boolean waterFound = false;
         while (!water[x][y] && x < mapSize - 1 && x > 0 && y < mapSize - 1 && y > 0) {
             searchDistance++;
             if (direction.equals("Right")) {
@@ -240,14 +221,10 @@ public class WaterGenerator {
                 y--;
             }
             if (water[x][y]) {
-                waterFound = true;
+                return searchDistance;
             }
         }
-        if (waterFound) {
-            return searchDistance;
-        } else {
-            return Integer.MAX_VALUE;
-        }
+        return Integer.MAX_VALUE;
     }
 
     public String selectSearchingDirection(int shortestDistance,

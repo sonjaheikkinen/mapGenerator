@@ -53,18 +53,6 @@ public class MapConstructorTest {
         this.mc.constructMap();
         assertTrue(this.map.getBiomes() != null);
     }
-    
-    /*
-    @Test
-    public void maxValueReturnsCorrectValueAfterRoughen() {
-        NoiseMapGenerator generator = new NoiseMapGenerator(new Random(), 6, 50, 50);
-        this.mc.generateHeightMap(generator);
-        this.mc.generateWater(new WaterGenerator(6), 0.5, generator.getMaxValue());
-        this.mc.roughen(this.mc.getHeightMap(), generator);
-        double maxHeight = checkMaxValue(this.mc.getHeightMap());
-        assertTrue(maxHeight == generator.getMaxValue());
-    }
-    */
 
     public int countZeros(double[][] map) {
         int zeroCount = 0;
