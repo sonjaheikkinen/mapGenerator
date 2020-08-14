@@ -30,6 +30,6 @@ Graphic UI does not need to be tested in this course.
 
 ## Manual tests
 
-So far this has basicly been looking at the maps and checking if they look like what they should. 
+So far this has just been looking at the maps and checking if they look like what they should. 
 
 
