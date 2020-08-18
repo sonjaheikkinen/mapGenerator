@@ -8,9 +8,11 @@ package mapgenerator.domain;
 import java.util.HashMap;
 
 /**
- * Class is responsible for storing biome names and their order in relation to height and moisture.
+ * Class is responsible for storing biome names and their order in relation to
+ * height and moisture.
  */
 public class Biomes {
+
     int[][] biomeSelection;
     HashMap<String, Integer> biomeNumbers;
 
@@ -22,15 +24,24 @@ public class Biomes {
         fillBiomeNumbers();
         fillBiomes();
     }
-    
+
     /**
-     * Creates an array of biomes from which they can be selected based on height and moisture.
+     * Creates an array of biomes from which they can be selected based on
+     * height and moisture.
      */
     public void fillBiomes() {
+        /*
         String biomeString = "sand;grass;leaf;"
                            + "sand;leaf;leaf;"
                            + "drygrass;taiga;leaf;"
                            + "drygrass;taiga;taiga;"
+                           + "bare;tundra;tundra;"
+                           + "bare;snow;snow";
+         */
+        String biomeString = "sand;sand;grass;"
+                           + "sand;grass;leaf;"
+                           + "drygrass;leaf;taiga;"
+                           + "drygrass;leaf;taiga;"
                            + "bare;tundra;tundra;"
                            + "bare;snow;snow";
         String[] biomeList = biomeString.split(";");
@@ -43,9 +54,10 @@ public class Biomes {
             }
         }
     }
-    
+
     /**
-     * Creates a hashmap where biome names are the keys and biome numbers are values.
+     * Creates a hashmap where biome names are the keys and biome numbers are
+     * values.
      */
     public void fillBiomeNumbers() {
         this.biomeNumbers = new HashMap<>();
@@ -58,9 +70,10 @@ public class Biomes {
         biomeNumbers.put("bare", 7);
         biomeNumbers.put("snow", 8);
     }
-    
+
     /**
      * Returns biome selection table.
+     *
      * @return An array containing biome numbers.
      */
     public int[][] getBiomeSelection() {

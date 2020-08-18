@@ -25,15 +25,15 @@ public class GraphicUI {
      * @param stage A window which shows things on screen.
      * @param map Contains all information of the generated map.
      */
-    public GraphicUI(Stage stage, Map map, int canvasSize, ProgramHandler handler, Random random) {
+    public GraphicUI(Stage stage, Map map, int canvasSize, ProgramHandler handler, Random random, int multiplier) {
 
         this.random = random;
 
         Canvas canvas = new Canvas(canvasSize, canvasSize);
         GraphicsContext brush = canvas.getGraphicsContext2D();
-        Button newMapButton = createNewMapButton(handler, brush, map, canvasSize);
+        Button newMapButton = createNewMapButton(handler, brush, map, canvasSize, multiplier);
 
-        drawMap(brush, map, canvasSize);
+        drawMap(brush, map, canvasSize, multiplier);
 
         BorderPane layout = createLayout(newMapButton, canvas);
         Scene scene = new Scene(layout);
@@ -66,11 +66,11 @@ public class GraphicUI {
      * @param canvasSize Size of the canvas
      * @return A button element which creates and draws a new map when pressed
      */
-    public Button createNewMapButton(ProgramHandler handler, GraphicsContext brush, Map map, int canvasSize) {
+    public Button createNewMapButton(ProgramHandler handler, GraphicsContext brush, Map map, int canvasSize, int multiplier) {
         Button newMapButton = new Button("New map");
         newMapButton.setOnAction(actionEvent -> {
             handler.newMap();
-            drawMap(brush, map, canvasSize);
+            drawMap(brush, map, canvasSize, multiplier);
         });
         return newMapButton;
     }
@@ -81,13 +81,13 @@ public class GraphicUI {
      * @param brush Draws map on canvas defined in parent method
      * @param map Contains all information of the generated map
      */
-    public void drawMap(GraphicsContext brush, Map map, int canvasSize) {
+    public void drawMap(GraphicsContext brush, Map map, int canvasSize, int multiplier) {
         double[][] heightMap = map.getHeightMap();
         double[][] heightMapOrig = map.getHeightMapOrig();
         double maxHeight = map.getMaxHeight();
         int[][] biomes = map.getBiomes();
-        for (int x = 0; x < canvasSize; x++) {
-            for (int y = 0; y < canvasSize; y++) {
+        for (int x = 0; x < canvasSize / multiplier; x++) {
+            for (int y = 0; y < canvasSize / multiplier; y++) {
                 double height = heightMap[x][y];
                 double shadow = 1;
                 if (x > 0 && x < canvasSize -1 && y > 0 && y < canvasSize - 1) {
@@ -103,7 +103,7 @@ public class GraphicUI {
                 shade = Math.min(255, shade);
                 Color color = pickColor(shade, shadow, biome);
                 brush.setFill(color);
-                brush.fillRect(x, y, 1, 1);
+                brush.fillRect(multiplier * x, multiplier * y, multiplier, multiplier);
             }
         }
     }
@@ -131,7 +131,7 @@ public class GraphicUI {
         colors[2] = Color.rgb(199, 209, 157);
         colors[3] = Color.rgb(122, 232, 100);
         colors[4] = Color.rgb(91, 194, 110);
-        colors[5] = Color.rgb(27, 122, 43);
+        colors[5] = Color.rgb(28, 117, 66);
         colors[6] = Color.rgb(140, 171, 145);
         colors[7] = Color.rgb(208, 216, 217);
         colors[8] = Color.rgb(230, 240, 239);

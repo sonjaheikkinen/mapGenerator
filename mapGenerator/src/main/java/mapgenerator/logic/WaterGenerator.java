@@ -78,10 +78,10 @@ public class WaterGenerator {
     public int setNewCoordinates(int earlierCoord, int currentCoord) {
         if (earlierCoord < currentCoord) {
             earlierCoord = currentCoord;
-            currentCoord++;
+            currentCoord = currentCoord + random.nextInt(2);
         } else {
             earlierCoord = currentCoord;
-            currentCoord--;
+            currentCoord = currentCoord - random.nextInt(2);
         }
         return currentCoord;
     }
