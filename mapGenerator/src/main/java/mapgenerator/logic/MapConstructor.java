@@ -14,10 +14,12 @@ public final class MapConstructor {
     private int seed;
     private int range;
     private double[][] heightMap;
+    private double[][] heightMapOrig;
     private boolean[][] water;
     private double[][] moisture;
     private int[][] biomes;
     private BiomeSelector bioS;
+    private double maxHeight;
 
     /**
      * Constructor for this class, initializes class variables.
@@ -58,6 +60,8 @@ public final class MapConstructor {
      */
     public void setObjectsToMap() {
         map.setHeightMap(this.heightMap);
+        map.setHeightMapOrig(this.heightMapOrig);
+        map.setMaxHeight(maxHeight);
         map.setWater(water);
         map.setMoisture(moisture);
         map.setBiomes(biomes);
@@ -77,6 +81,7 @@ public final class MapConstructor {
         double waterLevel = 0.5;
         generateWater(waterGen, waterLevel, maxHeight);
         generateMoisture(moistureGen);
+        waterGen.addRivers(heightMap, moisture);
         heightMap = roughen(heightMap, heightGen);
         double maxMoisture = moistureGen.getMaxValue();
         generateBiomes(maxHeight, waterLevel, maxMoisture);
@@ -102,6 +107,13 @@ public final class MapConstructor {
      */
     public void generateHeightMap(NoiseMapGenerator heightGen) {
         heightMap = heightGen.createNoise();
+        this.heightMapOrig = new double[heightMap.length][heightMap.length];
+        for (int x = 0; x < heightMap.length; x++) {
+            for (int y = 0; y < heightMap.length; y++) {
+                this.heightMapOrig[x][y] = heightMap[x][y];
+            }
+        }
+        this.maxHeight = heightGen.getMaxValue();
     }
 
     /**
@@ -125,7 +137,6 @@ public final class MapConstructor {
      */
     public void generateWater(WaterGenerator waterGen, double waterLevel, double maxHeight) {
         waterGen.addWaterByHeight(waterLevel * maxHeight, heightMap);
-        waterGen.addRivers(heightMap);
         water = waterGen.getWater();
     }
 

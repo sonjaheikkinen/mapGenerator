@@ -14,12 +14,12 @@ public class Node implements Comparable<Node> {
     private int x;
     private int y;
     private Node parent;
-    private double distance;
+    private double weight;
    
     public Node(int x, int y, double distance) {
         this.x = x;
         this.y = y;
-        this.distance = distance;
+        this.weight = distance;
     }
     
     public int getX() {
@@ -38,8 +38,8 @@ public class Node implements Comparable<Node> {
         return parent;
     }
     
-    public double getDistance() {
-        return distance;
+    public double getWeight() {
+        return weight;
     }
     
     public String toString() {
@@ -48,9 +48,9 @@ public class Node implements Comparable<Node> {
     
     @Override
     public int compareTo(Node node) {
-        if (this.distance > node.getDistance()) {
+        if (this.weight > node.getWeight()) {
             return 1;
-        } else if (this.distance < node.getDistance()) {
+        } else if (this.weight < node.getWeight()) {
             return -1;
         } else {
             return 0;

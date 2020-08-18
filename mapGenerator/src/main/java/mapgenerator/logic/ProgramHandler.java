@@ -26,7 +26,7 @@ public class ProgramHandler {
         int mapSizeExponent = 9;
         int canvasSize = (int) (Math.pow(2, mapSizeExponent) + 1);
         int mapSeed = 100;
-        int mapRandomizerRange = 150;
+        int mapRandomizerRange = 200;
         this.constructor = new MapConstructor(random, mapSizeExponent, mapSeed, mapRandomizerRange, map, selector);
         this.newMap();
         GraphicUI gui = new GraphicUI(stage, map, canvasSize, this, random);
