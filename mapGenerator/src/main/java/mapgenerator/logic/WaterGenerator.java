@@ -1,5 +1,6 @@
 package mapgenerator.logic;
 
+import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
@@ -46,66 +47,51 @@ public class WaterGenerator {
             }
         }
     }
+    
+    public void addRivers(double[][] heightmap, double[][] moisture) {
+        for (int x = 0; x < heightmap.length; x++) {
+            for (int y = 0; y < heightmap.length; y++) {
+                int randomValue = random.nextInt(1000000);
+                int riverX = x;
+                int riverY = y;
+                int earlierX = x;
+                int earlierY = y;
+                if (randomValue < heightmap[x][y] * 4 || randomValue < moisture[x][y] * 4) {
+                    while (!water[riverX][riverY]) {
+                        water[riverX][riverY] = true;
+                        if (riverX == 0 || riverX == mapSize - 1 || riverY == 0 || riverY == mapSize - 1) {
+                            break;
+                        }
+                        PriorityQueue<Node> neighbors = getNeighbors(riverX, riverY, heightmap);
+                        if (neighbors.isEmpty()) {
+                            int randomValueX = random.nextInt(100);
+                            int randomValueY = random.nextInt(100);
+                            if (earlierX < riverX) {
+                                earlierX = riverX;
+                                riverX++;
+                            } else {
+                                earlierX = riverX;
+                                riverX--;
+                            }
+                            if (earlierY < riverY) {
+                                earlierY = riverY;
+                                riverY++;
+                            } else {
+                                earlierY = riverY;
+                                riverY--;
+                            }
 
-    public void addRivers(double[][] heightmap) {
-        int riverCount = 0;
-        startNewRivers(heightmap, "wide");
-        setRiversToWater();
-        startNewRivers(heightmap, "narrow");
-        setRiversToWater();
-    }
-
-    public void startNewRivers(double[][] heightmap, String width) {
-        for (int startX = 0; startX < heightmap.length; startX++) {
-            for (int startY = 0; startY < heightmap.length; startY++) {
-
-                int randomNumber = random.nextInt(1000);
-                makeRivers(startX, startY, randomNumber, heightmap, width);
-            }
-        }
-    }
-
-    public void makeRivers(int startX, int startY, int randomNumber, double[][] heightmap, String width) {
-        int riverProbability = 1;
-        if (width.equals("Narrow")) {
-            riverProbability = 5;
-        }
-        if (!water[startX][startY] && randomNumber <= riverProbability) {
-            Node riverEnd = dijkstra(startX, startY, heightmap);
-            Node currentPlace = riverEnd;
-            double riverLength = Math.sqrt(Math.pow(startX - riverEnd.getX(), 2) + Math.pow(startY - riverEnd.getY(), 2));
-            while (true) {
-                Node parent = currentPlace.getParent();
-                continueRiver(currentPlace, startX, startY, riverLength, width);
-                currentPlace = parent;
-                if (parent.getX() == startX && parent.getY() == startY) {
-                    break;
+                        } else {
+                            Node next = neighbors.poll();
+                            riverX = next.getX();
+                            riverY = next.getY();
+                        }
+                    }
                 }
             }
         }
-    }
-
-    public void continueRiver(Node currentPlace, int startX, int startY, double riverLength, String width) {
-        int x = currentPlace.getX();
-        int y = currentPlace.getY();
-        double distanceToStart = Math.sqrt(Math.pow(startX - x, 2) + Math.pow(startY - y, 2));
-        if (x >= 0 && x < mapSize && y >= 0 && y < mapSize) {
-            markAsRiver(x, y, distanceToStart, riverLength, width);
-        }
-    }
-
-    public void markAsRiver(int x, int y, double distanceToStart, double riverLength, String width) {
-        rivers[x][y] = true;
-        if (distanceToStart > (riverLength / 2) && x < mapSize - 1 && y > 0 && width.equals("wide")) {
-            rivers[x][y - 1] = true;
-            rivers[x + 1][y - 1] = true;
-            rivers[x + 1][y] = true;
-        }
-    }
-
-    public void setRiversToWater() {
-        for (int x = 0; x < mapSize; x++) {
-            for (int y = 0; y < mapSize; y++) {
+        for (int x = 0; x < heightmap.length; x++) {
+            for (int y = 0; y < heightmap.length; y++) {
                 if (rivers[x][y]) {
                     water[x][y] = true;
                 }
@@ -113,139 +99,20 @@ public class WaterGenerator {
         }
     }
 
-    public Node dijkstra(int x, int y, double[][] heightmap) {
-        initArrays();
-        String direction = nearestWaterDirection(x, y);
-        Node place = setStartingPlace(x, y);
-        while (!priorityQ.isEmpty()) {
-            place = priorityQ.poll();
-            if (!visited[place.getX()][place.getY()]) {
-                visited[place.getX()][place.getY()] = true;
-                checkNeighborDistances(place, direction, heightmap);
-            }
-            if (water[place.getX()][place.getY()]) {
-                return place;
-            }
-        }
-        return place;
-    }
-
-    public void checkNeighborDistances(Node place, String direction, double[][] heightmap) {
-        for (int xCoord = place.getX() - 1; xCoord <= place.getX() + 1; xCoord = xCoord + 1) {
-            for (int yCoord = place.getY() - 1; yCoord <= place.getY() + 1; yCoord = yCoord + 1) {
-                if (!(direction.equals("right") && xCoord < place.getX()
-                        || direction.equals("left") && xCoord > place.getX()
-                        || direction.equals("up") && yCoord > place.getY()
-                        || direction.equals("down") && yCoord < place.getY())
-                        && xCoord >= 0 && xCoord < mapSize && yCoord >= 0 && yCoord < mapSize) {
-                    updateDistances(xCoord, yCoord, heightmap, place);
+    public PriorityQueue<Node> getNeighbors(int x, int y, double[][] heightmap) {
+        PriorityQueue<Node> neighbors = new PriorityQueue<>();
+        for (int xCoord = x - 1; xCoord <= x + 1; xCoord++) {
+            for (int yCoord = y - 1; yCoord <= y + 1; yCoord++) {
+                if (xCoord >= 0 && xCoord < mapSize && yCoord >= 0 && yCoord < mapSize) {
+                    if (xCoord == x && yCoord == y || water[xCoord][yCoord]) {
+                        continue;
+                    }
+                    Node neighbor = new Node(xCoord, yCoord, heightmap[xCoord][yCoord]);
+                    neighbors.add(neighbor);
                 }
             }
         }
-    }
-
-    public Node setStartingPlace(int x, int y) {
-        //Set start
-        Node start = new Node(x, y, 0);
-        start.setParent(start);
-        priorityQ.add(start);
-        distance[x][y] = 0;
-        Node place = start;
-        return place;
-    }
-
-    public void updateDistances(int xCoord, int yCoord, double[][] heightmap, Node place) {
-        //get current distance of the neightbor and the distance if going trough current place
-        double currentNeighborDistance = distance[xCoord][yCoord];
-        double newNeighborDistance = calculateNewNeighborDistance(heightmap, xCoord, yCoord, place);
-
-        //if distance smaller, set current place as parent and add neighbor to priorityqueue
-        if (newNeighborDistance < currentNeighborDistance) {
-            distance[xCoord][yCoord] = newNeighborDistance;
-            Node neighbor = new Node(xCoord, yCoord, newNeighborDistance);
-            neighbor.setParent(place);
-            priorityQ.add(neighbor);
-        }
-    }
-
-    public double calculateNewNeighborDistance(double[][] heightmap, int xCoord, int yCoord, Node place) {
-        //calculate distance of the neighbor if going trough current place
-        double heightDifferenceToNeighbor = heightmap[xCoord][yCoord]
-                - heightmap[place.getX()][place.getY()];
-        double costFromPlaceToNeighbor;
-        if (heightDifferenceToNeighbor < 0) {
-            costFromPlaceToNeighbor = Math.max(1, -1 * heightDifferenceToNeighbor);
-        } else if (heightDifferenceToNeighbor > 0) {
-            costFromPlaceToNeighbor = 0;
-        } else {
-            costFromPlaceToNeighbor = 1;
-        }
-        double newNeighborDistance = place.getDistance() + costFromPlaceToNeighbor;
-        return newNeighborDistance;
-    }
-
-    public void initArrays() {
-        //Initialize
-        this.visited = new boolean[mapSize][mapSize];
-        this.distance = new double[mapSize][mapSize];
-        this.priorityQ = new PriorityQueue<>();
-        for (int row = 0; row < mapSize; row++) {
-            for (int column = 0; column < mapSize; column++) {
-                this.distance[row][column] = Integer.MAX_VALUE;
-            }
-        }
-    }
-
-    public String nearestWaterDirection(int x, int y) {
-        int shortestDistance = Integer.MAX_VALUE;
-        int distanceToWaterRight = searchWater(x, y, "Right");
-        int distanceToWaterLeft = searchWater(x, y, "Left");
-        int distanceToWaterUp = searchWater(x, y, "Up");
-        int distanceToWaterDown = searchWater(x, y, "Down");
-        String direction = selectSearchingDirection(shortestDistance,
-                distanceToWaterRight, distanceToWaterLeft, distanceToWaterUp, distanceToWaterDown);
-        return direction;
-    }
-
-    public int searchWater(int x, int y, String direction) {
-        int searchDistance = 0;
-        while (!water[x][y] && x < mapSize - 1 && x > 0 && y < mapSize - 1 && y > 0) {
-            searchDistance++;
-            if (direction.equals("Right")) {
-                x++;
-            } else if (direction.equals("Left")) {
-                x--;
-            } else if (direction.equals("Down")) {
-                y++;
-            } else if (direction.equals("Up")) {
-                y--;
-            }
-            if (water[x][y]) {
-                return searchDistance;
-            }
-        }
-        return Integer.MAX_VALUE;
-    }
-
-    public String selectSearchingDirection(int shortestDistance,
-            int distanceToWaterRight, int distanceToWaterLeft, int distanceToWaterUp, int distanceToWaterDown) {
-        String direction = "";
-        if (distanceToWaterRight < shortestDistance) {
-            direction = "Right";
-        }
-        if (distanceToWaterLeft < shortestDistance) {
-            direction = "Left";
-        }
-        if (distanceToWaterUp < shortestDistance) {
-            direction = "Up";
-        }
-        if (distanceToWaterUp < shortestDistance) {
-            direction = "Up";
-        }
-        if (distanceToWaterDown < shortestDistance) {
-            direction = "Down";
-        }
-        return direction;
+        return neighbors;
     }
 
     /**
