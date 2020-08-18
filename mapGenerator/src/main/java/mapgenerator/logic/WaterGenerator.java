@@ -12,13 +12,8 @@ import mapgenerator.domain.Node;
 public class WaterGenerator {
 
     private boolean[][] water;
-    private boolean[][] rivers;
-    private boolean[][] visited;
     private int mapSize;
     private Random random;
-    private Queue<Node> queue;
-    private PriorityQueue<Node> priorityQ;
-    private double[][] distance;
 
     /**
      * The constructor initializes the boolean array for water placement
@@ -28,7 +23,6 @@ public class WaterGenerator {
     public WaterGenerator(int mapSizeExponent) {
         mapSize = (int) Math.pow(2, mapSizeExponent) + 1;
         this.water = new boolean[mapSize][mapSize];
-        this.rivers = new boolean[mapSize][mapSize];
         this.random = new Random();
     }
 
@@ -57,46 +51,39 @@ public class WaterGenerator {
                 int earlierX = x;
                 int earlierY = y;
                 if (randomValue < heightmap[x][y] * 4 || randomValue < moisture[x][y] * 4) {
-                    while (!water[riverX][riverY]) {
-                        water[riverX][riverY] = true;
-                        if (riverX == 0 || riverX == mapSize - 1 || riverY == 0 || riverY == mapSize - 1) {
-                            break;
-                        }
-                        PriorityQueue<Node> neighbors = getNeighbors(riverX, riverY, heightmap);
-                        if (neighbors.isEmpty()) {
-                            int randomValueX = random.nextInt(100);
-                            int randomValueY = random.nextInt(100);
-                            if (earlierX < riverX) {
-                                earlierX = riverX;
-                                riverX++;
-                            } else {
-                                earlierX = riverX;
-                                riverX--;
-                            }
-                            if (earlierY < riverY) {
-                                earlierY = riverY;
-                                riverY++;
-                            } else {
-                                earlierY = riverY;
-                                riverY--;
-                            }
+                    createRiver(riverX, riverY, heightmap, earlierX, earlierY);
+                }
+            }
+        }
+    }
 
-                        } else {
-                            Node next = neighbors.poll();
-                            riverX = next.getX();
-                            riverY = next.getY();
-                        }
-                    }
-                }
+    public void createRiver(int riverX, int riverY, double[][] heightmap, int earlierX, int earlierY) {
+        while (!water[riverX][riverY]) {
+            water[riverX][riverY] = true;
+            if (riverX == 0 || riverX == mapSize - 1 || riverY == 0 || riverY == mapSize - 1) {
+                break;
+            }
+            PriorityQueue<Node> neighbors = getNeighbors(riverX, riverY, heightmap);
+            if (neighbors.isEmpty()) {
+                riverX = setNewCoordinates(earlierX, riverX);
+                riverY = setNewCoordinates(earlierY, riverY);               
+            } else {
+                Node next = neighbors.poll();
+                riverX = next.getX();
+                riverY = next.getY();
             }
         }
-        for (int x = 0; x < heightmap.length; x++) {
-            for (int y = 0; y < heightmap.length; y++) {
-                if (rivers[x][y]) {
-                    water[x][y] = true;
-                }
-            }
+    }
+
+    public int setNewCoordinates(int earlierCoord, int currentCoord) {
+        if (earlierCoord < currentCoord) {
+            earlierCoord = currentCoord;
+            currentCoord++;
+        } else {
+            earlierCoord = currentCoord;
+            currentCoord--;
         }
+        return currentCoord;
     }
 
     public PriorityQueue<Node> getNeighbors(int x, int y, double[][] heightmap) {
