@@ -1,9 +1,8 @@
 package mapgenerator.logic;
 
-import java.util.Collections;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Random;
+import mapgenerator.datastructures.BinaryHeap;
 import mapgenerator.datastructures.Node;
 
 /**
@@ -63,7 +62,7 @@ public class WaterGenerator {
             if (riverX == 0 || riverX == mapSize - 1 || riverY == 0 || riverY == mapSize - 1) {
                 break;
             }
-            PriorityQueue<Node> neighbors = getNeighbors(riverX, riverY, heightmap);
+            BinaryHeap neighbors = getNeighbors(riverX, riverY, heightmap);
             if (neighbors.isEmpty()) {
                 riverX = setNewCoordinates(earlierX, riverX);
                 riverY = setNewCoordinates(earlierY, riverY);               
@@ -86,8 +85,8 @@ public class WaterGenerator {
         return currentCoord;
     }
 
-    public PriorityQueue<Node> getNeighbors(int x, int y, double[][] heightmap) {
-        PriorityQueue<Node> neighbors = new PriorityQueue<>();
+    public BinaryHeap getNeighbors(int x, int y, double[][] heightmap) {
+        BinaryHeap neighbors = new BinaryHeap();
         for (int xCoord = x - 1; xCoord <= x + 1; xCoord++) {
             for (int yCoord = y - 1; yCoord <= y + 1; yCoord++) {
                 if (xCoord >= 0 && xCoord < mapSize && yCoord >= 0 && yCoord < mapSize) {

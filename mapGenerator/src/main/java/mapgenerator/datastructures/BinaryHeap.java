@@ -23,14 +23,21 @@ public class BinaryHeap {
     }
 
     public void add(Node node) {
-        if (nodesInHeap == heap.length) {
+        if (nodesInHeap == heap.length - 1) {
             increaseHeapSize();
         }
         int nodeIndex = nodesInHeap + 1;
         heap[nodeIndex] = node;
         nodesInHeap++;
-        while (heap[nodeIndex / 2].compareTo(node) == 1 && nodeIndex > 1) {
-            switchPlaces(nodeIndex / 2, nodeIndex);
+        while (true) {
+            if (nodeIndex == 1) {
+                break;
+            }
+            if (heap[nodeIndex / 2].compareTo(node) == 1) {
+                switchPlaces(nodeIndex / 2, nodeIndex);
+            } else {
+                break;
+            }
             nodeIndex = nodeIndex / 2;
         }
     }
@@ -54,13 +61,17 @@ public class BinaryHeap {
         if (nodesInHeap <= heap.length / 4) {
             decreaseHeapSize();
         }
+        nodesInHeap--;
         return nodeToReturn;
     }
 
     public void moveNodeInHeap(int nodeIndex) {
         Node child1 = heap[nodeIndex * 2];
-        Node child2 = heap[nodeIndex * 2 + 1];
-        if (child1.compareTo(child2) == 1) {
+        Node child2 = null;
+        if (nodeIndex * 2 + 1 <= nodesInHeap) {
+            child2 = heap[nodeIndex * 2 + 1];
+        }
+        if (child2 != null && child1.compareTo(child2) == 1) {
             switchPlaces(nodeIndex, nodeIndex * 2 + 1);
         } else {
             switchPlaces(nodeIndex, nodeIndex * 2);
@@ -84,10 +95,14 @@ public class BinaryHeap {
 
     public void decreaseHeapSize() {
         Node[] newHeap = new Node[heap.length / 2];
-        for (int i = 0; i < heap.length; i++) {
+        for (int i = 0; i < newHeap.length; i++) {
             newHeap[i] = heap[i];
         }
         heap = newHeap;
+    }
+
+    public boolean isEmpty() {
+        return nodesInHeap == 0;
     }
 
 }
