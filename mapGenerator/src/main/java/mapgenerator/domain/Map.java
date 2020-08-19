@@ -30,10 +30,18 @@ public class Map {
         return this.heightMap;
     }
 
+    /**
+     * Sets max height
+     * @param maxHeight Maximum value of the height map
+     */
     public void setMaxHeight(double maxHeight) {
         this.maxHeight = maxHeight;
     }
 
+    /**
+     * Returns max height.
+     * @return max height
+     */
     public double getMaxHeight() {
         return maxHeight;
     }

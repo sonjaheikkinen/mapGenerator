@@ -64,6 +64,7 @@ public class GraphicUI {
      * @param brush A graphicsContext element which draws the map on canvas
      * @param map Contains the information of the generated map
      * @param canvasSize Size of the canvas
+     * @param multiplier Canvas and drawing size can be increased via multiplier
      * @return A button element which creates and draws a new map when pressed
      */
     public Button createNewMapButton(ProgramHandler handler, GraphicsContext brush, Map map, int canvasSize, int multiplier) {
@@ -80,6 +81,8 @@ public class GraphicUI {
      *
      * @param brush Draws map on canvas defined in parent method
      * @param map Contains all information of the generated map
+     * @param canvasSize Size of the canvas
+     * @param multiplier Canvas and drawing size can be increased via multiplier
      */
     public void drawMap(GraphicsContext brush, Map map, int canvasSize, int multiplier) {
         double[][] heightMap = map.getHeightMap();
@@ -88,15 +91,7 @@ public class GraphicUI {
         for (int x = 0; x < canvasSize / multiplier; x++) {
             for (int y = 0; y < canvasSize / multiplier; y++) {
                 double height = heightMap[x][y];
-                double shadow = 1;
-                if (x > 0 && x < canvasSize -1 && y > 0 && y < canvasSize - 1) {
-                    if (heightMap[x - 1][y - 1] < heightMap[x][y] && biomes[x][y] != 0) {
-                        shadow = 0.8;
-                    } else if (heightMap[x - 1][y] < heightMap[x][y] 
-                            || heightMap[x][y] - 1 < heightMap[x][y]) {
-                        shadow = 0.9;
-                    }
-                }
+                double shadow = calculateShadow(x, canvasSize, y, heightMap, biomes);
                 double shade = height / maxHeight;
                 int biome = biomes[x][y];
                 shade = Math.min(255, shade);
@@ -107,11 +102,26 @@ public class GraphicUI {
         }
     }
 
+    //TODO improve this, calculates shadow
+    public double calculateShadow(int x, int canvasSize, int y, double[][] heightMap, int[][] biomes) {
+        double shadow = 1;
+        if (x > 0 && x < canvasSize -1 && y > 0 && y < canvasSize - 1) {
+            if (heightMap[x - 1][y - 1] < heightMap[x][y] && biomes[x][y] != 0) {
+                shadow = 0.8;
+            } else if (heightMap[x - 1][y] < heightMap[x][y]
+                    || heightMap[x][y] - 1 < heightMap[x][y]) {
+                shadow = 0.9;
+            }
+        }
+        return shadow;
+    }
+
     /**
      * Picks correct brush color based on biome.
      * @param shade A height map based integer which can be used to affect color
      * @param biome An integer telling which biome to base color on
-     * @return 
+     * @param shadow Has an effect of color brightness
+     * @return brush color
      */
     public Color pickColor(double shade, double shadow, int biome) {
         double blueShade = shade * 255;
