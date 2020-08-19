@@ -83,7 +83,6 @@ public class GraphicUI {
      */
     public void drawMap(GraphicsContext brush, Map map, int canvasSize, int multiplier) {
         double[][] heightMap = map.getHeightMap();
-        double[][] heightMapOrig = map.getHeightMapOrig();
         double maxHeight = map.getMaxHeight();
         int[][] biomes = map.getBiomes();
         for (int x = 0; x < canvasSize / multiplier; x++) {
@@ -91,10 +90,10 @@ public class GraphicUI {
                 double height = heightMap[x][y];
                 double shadow = 1;
                 if (x > 0 && x < canvasSize -1 && y > 0 && y < canvasSize - 1) {
-                    if (heightMapOrig[x - 1][y - 1] < heightMapOrig[x][y] && biomes[x][y] != 0) {
+                    if (heightMap[x - 1][y - 1] < heightMap[x][y] && biomes[x][y] != 0) {
                         shadow = 0.8;
-                    } else if (heightMapOrig[x - 1][y] < heightMapOrig[x][y] 
-                            || heightMapOrig[x][y] - 1 < heightMapOrig[x][y]) {
+                    } else if (heightMap[x - 1][y] < heightMap[x][y] 
+                            || heightMap[x][y] - 1 < heightMap[x][y]) {
                         shadow = 0.9;
                     }
                 }

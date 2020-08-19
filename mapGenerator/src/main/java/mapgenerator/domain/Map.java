@@ -6,7 +6,6 @@ package mapgenerator.domain;
 public class Map {
 
     private double[][] heightMap;
-    private double[][] heightMapOrig;
     private boolean[][] water;
     private double[][] moisture;
     private int[][] biomes;
@@ -29,19 +28,6 @@ public class Map {
      */
     public double[][] getHeightMap() {
         return this.heightMap;
-    }
-
-    public void setHeightMapOrig(double[][] heightMap) {
-        this.heightMapOrig = heightMap;
-    }
-
-    /**
-     * Returns the height map.
-     *
-     * @return An array containing the height values of the map as doubles.
-     */
-    public double[][] getHeightMapOrig() {
-        return this.heightMapOrig;
     }
 
     public void setMaxHeight(double maxHeight) {

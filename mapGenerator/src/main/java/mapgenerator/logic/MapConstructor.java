@@ -14,7 +14,6 @@ public final class MapConstructor {
     private int seed;
     private int range;
     private double[][] heightMap;
-    private double[][] heightMapOrig;
     private boolean[][] water;
     private double[][] moisture;
     private int[][] biomes;
@@ -60,7 +59,6 @@ public final class MapConstructor {
      */
     public void setObjectsToMap() {
         map.setHeightMap(this.heightMap);
-        map.setHeightMapOrig(this.heightMapOrig);
         map.setMaxHeight(maxHeight);
         map.setWater(water);
         map.setMoisture(moisture);
@@ -107,12 +105,6 @@ public final class MapConstructor {
      */
     public void generateHeightMap(NoiseMapGenerator heightGen) {
         heightMap = heightGen.createNoise();
-        this.heightMapOrig = new double[heightMap.length][heightMap.length];
-        for (int x = 0; x < heightMap.length; x++) {
-            for (int y = 0; y < heightMap.length; y++) {
-                this.heightMapOrig[x][y] = heightMap[x][y];
-            }
-        }
         this.maxHeight = heightGen.getMaxValue();
     }
 
