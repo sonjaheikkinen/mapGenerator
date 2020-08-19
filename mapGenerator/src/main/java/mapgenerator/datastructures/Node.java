@@ -1,43 +1,61 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package mapgenerator.datastructures;
 
 /**
- *
- * @author heisonja
+ * Class is used for river generation to store new directions and their costs. 
  */
 public class Node implements Comparable<Node> {
     
     private int x;
     private int y;
-    private double weight;
+    private double cost;
    
-    public Node(int x, int y, double weight) {
+    /**
+     * Constructor creates a new node object.
+     * @param x X coordinate of the direction.
+     * @param y Y coordinate of the direction.
+     * @param cost Cost of the direction. 
+     */
+    public Node(int x, int y, double cost) {
         this.x = x;
         this.y = y;
-        this.weight = weight;
+        this.cost = cost;
     }
     
+    /**
+     * Returns X.
+     * @return x
+     */
     public int getX() {
         return x;
     }
     
+    /**
+     * Returns Y.
+     * @return y
+     */
     public int getY() {
         return y;
     }
     
-    public double getWeight() {
-        return weight;
+    /**
+     * Returns cost.
+     * @return cost
+     */
+    public double getCost() {
+        return cost;
     }
     
+    /**
+     * Method compares directions by their cost. 
+     * @param node A node for comparison
+     * @return 1 if this node has bigger cost, -1 if this node has smaller cost and 0 if node costs are equal. 
+     */
     @Override
     public int compareTo(Node node) {
-        if (this.weight > node.getWeight()) {
+        if (this.cost > node.getCost()) {
             return 1;
-        } else if (this.weight < node.getWeight()) {
+        } else if (this.cost < node.getCost()) {
             return -1;
         } else {
             return 0;
