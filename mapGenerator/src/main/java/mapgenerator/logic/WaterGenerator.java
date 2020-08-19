@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
-import mapgenerator.domain.Node;
+import mapgenerator.datastructures.Node;
 
 /**
  * Class generates water for the map
