@@ -11,10 +11,19 @@ package mapgenerator.math;
  */
 public class RandomNumberGenerator {
     
+    /**
+     * Returns a random integer between zero (inclusive) and bound (exclusive).
+     * @param bound
+     * @return 
+     */
     public int nextInt(int bound) {
         return (int) System.nanoTime() % bound;
     } 
     
+    /**
+     * Returns a random double between zero and one (both inclusive). 
+     * @return 
+     */
     public double nextDouble() {
         return (System.nanoTime() % 100) / (double) 100;       
     }

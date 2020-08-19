@@ -1,16 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mapgenerator.math;
 
 /**
- *
- * @author heisonja
+ * Class is used to make simple calculations needed in the program.
  */
 public class Calculator {
 
+    /**
+     * Returns smaller of the two values.
+     *
+     * @param val1
+     * @param val2
+     * @return
+     */
     public int min(int val1, int val2) {
         if (val1 < val2) {
             return val1;
@@ -18,6 +19,13 @@ public class Calculator {
         return val2;
     }
 
+    /**
+     * Returns smaller of the two values.
+     *
+     * @param val1
+     * @param val2
+     * @return
+     */
     public double min(double val1, double val2) {
         if (val1 < val2) {
             return val1;
@@ -25,6 +33,13 @@ public class Calculator {
         return val2;
     }
 
+    /**
+     * Returns bigger of the two values.
+     *
+     * @param val1
+     * @param val2
+     * @return
+     */
     public int max(int val1, int val2) {
         if (val1 > val2) {
             return val1;
@@ -32,6 +47,13 @@ public class Calculator {
         return val2;
     }
 
+    /**
+     * Returns bigger of the two values.
+     *
+     * @param val1
+     * @param val2
+     * @return
+     */
     public double max(double val1, double val2) {
         if (val1 > val2) {
             return val1;
@@ -39,6 +61,13 @@ public class Calculator {
         return val2;
     }
 
+    /**
+     * Raises the given value to the power of given exponent
+     *
+     * @param value
+     * @param exponent
+     * @return
+     */
     public int pow(int value, int exponent) {
         int result = value;
         if (exponent > 0) {
@@ -56,6 +85,13 @@ public class Calculator {
         return result;
     }
 
+    /**
+     * Raises the given value to the power of given exponent
+     *
+     * @param value
+     * @param exponent
+     * @return
+     */
     public double pow(double value, double exponent) {
         double result = value;
         if (exponent > 0) {
