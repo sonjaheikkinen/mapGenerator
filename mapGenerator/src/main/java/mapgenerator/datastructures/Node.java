@@ -13,13 +13,12 @@ public class Node implements Comparable<Node> {
     
     private int x;
     private int y;
-    private Node parent;
     private double weight;
    
-    public Node(int x, int y, double distance) {
+    public Node(int x, int y, double weight) {
         this.x = x;
         this.y = y;
-        this.weight = distance;
+        this.weight = weight;
     }
     
     public int getX() {
@@ -30,20 +29,8 @@ public class Node implements Comparable<Node> {
         return y;
     }
     
-    public void setParent(Node parent) {
-        this.parent = parent;
-    }
-    
-    public Node getParent() {
-        return parent;
-    }
-    
     public double getWeight() {
         return weight;
-    }
-    
-    public String toString() {
-        return "(x=" + x + ", y=" + y + ")";
     }
     
     @Override
