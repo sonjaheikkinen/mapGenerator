@@ -1,15 +1,8 @@
 package mapgenerator;
 
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.Random;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import mapgenerator.datastructures.BinaryHeap;
-import mapgenerator.datastructures.Node;
 import mapgenerator.logic.ProgramHandler;
-import mapgenerator.logic.WaterGenerator;
-import mapgenerator.math.RandomNumberGenerator;
 
 /**
  * Class creates a program handler and launches the program.
