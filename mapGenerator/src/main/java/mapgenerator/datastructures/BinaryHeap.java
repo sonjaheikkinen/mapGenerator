@@ -99,10 +99,7 @@ public class BinaryHeap {
      */
     public int moveNodeInHeap(int nodeIndex) {
         Node child1 = heap[nodeIndex * 2];
-        Node child2 = null;
-        if (nodeIndex * 2 + 1 <= nodesInHeap) {
-            child2 = heap[nodeIndex * 2 + 1];
-        }
+        Node child2 = getChild2IfExists(nodeIndex);
         if (child2 != null) {
             if (child1.compareTo(child2) == 1 && heap[nodeIndex].compareTo(child2) == 1) {
                 switchPlaces(nodeIndex, nodeIndex * 2 + 1);
@@ -119,6 +116,14 @@ public class BinaryHeap {
         } else {
             return 0;
         }
+    }
+
+    public Node getChild2IfExists(int nodeIndex) {
+        Node child2 = null;
+        if (nodeIndex * 2 + 1 <= nodesInHeap) {
+            child2 = heap[nodeIndex * 2 + 1];
+        }
+        return child2;
     }
 
     /**

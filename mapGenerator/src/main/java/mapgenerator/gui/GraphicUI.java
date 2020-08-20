@@ -105,7 +105,7 @@ public class GraphicUI {
     //TODO improve this, calculates shadow
     public double calculateShadow(int x, int canvasSize, int y, double[][] heightMap, int[][] biomes) {
         double shadow = 1;
-        if (x > 0 && x < canvasSize -1 && y > 0 && y < canvasSize - 1) {
+        if (x > 0 && x < canvasSize - 1 && y > 0 && y < canvasSize - 1) {
             if (heightMap[x - 1][y - 1] < heightMap[x][y] && biomes[x][y] != 0) {
                 shadow = 0.8;
             } else if (heightMap[x - 1][y] < heightMap[x][y]
@@ -134,6 +134,14 @@ public class GraphicUI {
         //biomes: "0-water;1-sand;2-drygrass;3-grasss;4-leaf;5-taiga;6-tundra;7-bare;8-snow";
         //TODO: make color array a hashmap and get color by biome name instead of number?
         Color color;
+        Color[] colors = fillColorArray(blueShade);
+        color = colors[biome];
+        //color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, 0.95 + random.nextDouble() * 0.05, 1);
+        color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, shadow, 1);
+        return color;
+    }
+
+    public Color[] fillColorArray(double blueShade) {
         Color[] colors = new Color[9];
         colors[0] = Color.rgb(0, 0, (int) Math.round(blueShade));
         colors[1] = Color.rgb(231, 232, 207);
@@ -144,10 +152,7 @@ public class GraphicUI {
         colors[6] = Color.rgb(140, 171, 145);
         colors[7] = Color.rgb(208, 216, 217);
         colors[8] = Color.rgb(230, 240, 239);
-        color = colors[biome];
-        //color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, 0.95 + random.nextDouble() * 0.05, 1);
-        color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, shadow, 1);
-        return color;
+        return colors;
     }
 
 }
