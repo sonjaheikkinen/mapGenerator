@@ -52,10 +52,8 @@ public class WaterGenerator {
                 int randomValue = random.nextInt(1000000);
                 int riverX = x;
                 int riverY = y;
-                int earlierX = x;
-                int earlierY = y;
                 if (randomValue < heightmap[x][y] * 4 || randomValue < moisture[x][y] * 4) {
-                    createRiver(riverX, riverY, heightmap, earlierX, earlierY);
+                    createRiver(riverX, riverY, heightmap);
                 }
             }
         }
@@ -64,23 +62,23 @@ public class WaterGenerator {
     /**
      * Method generates river starting from a point given as parameter and stopping at the edge of the map or 
      * when ending up in water. The river always goes to the direction of smallest height where there is still no water.
-     * If such neighbor cannot be found, the river continues approximately to the direction it was going until it hits water.
+     * If such neighbor cannot be found, the river continues to random direction. 
      * @param riverX Current x coordinate of the river generation
      * @param riverY Current y coordinate of the river generation
      * @param heightmap Height values of the map as doubles
-     * @param earlierX X coordinate from which the river was coming
-     * @param earlierY Y coordinate from which the river was coming
      */
-    public void createRiver(int riverX, int riverY, double[][] heightmap, int earlierX, int earlierY) {
+    public void createRiver(int riverX, int riverY, double[][] heightmap) {
         while (!water[riverX][riverY]) {
             water[riverX][riverY] = true;
-            if (riverX == 0 || riverX == mapSize - 1 || riverY == 0 || riverY == mapSize - 1) {
+            if (riverX <= 0 || riverX >= mapSize - 1 || riverY <= 0 || riverY >= mapSize - 1) {
                 break;
             }
             BinaryHeap neighbors = getNeighbors(riverX, riverY, heightmap);
             if (neighbors.isEmpty()) {
-                riverX = setNewCoordinates(earlierX, riverX);
-                riverY = setNewCoordinates(earlierY, riverY);               
+                riverX = random.nextInt(3) - 1;
+                riverX = moveInsideMap(riverX);
+                riverY = random.nextInt(3) - 1;      
+                riverY = moveInsideMap(riverY);
             } else {
                 Node next = neighbors.poll();
                 riverX = next.getX();
@@ -89,22 +87,15 @@ public class WaterGenerator {
         }
     }
     
-    /**
-     * Calculates new direction for the river based on the direction it was coming. If the earlier coordinate was smaller, 
-     * the coordinate is increased or kept the same and if it was larger, then the coordinate is decreased or kept the same. 
-     * @param earlierCoord Direction where the river is coming
-     * @param currentCoord Current coordinate of the river
-     * @return New coordinate
-     */
-    public int setNewCoordinates(int earlierCoord, int currentCoord) {
-        if (earlierCoord < currentCoord) {
-            earlierCoord = currentCoord;
-            currentCoord = currentCoord + random.nextInt(2);
-        } else {
-            earlierCoord = currentCoord;
-            currentCoord = currentCoord - random.nextInt(2);
+    public int moveInsideMap(int coordinate) {
+        if (coordinate < 0) {
+            return 0;
         }
-        return currentCoord;
+        if (coordinate > mapSize - 1) {
+            return mapSize - 1;
+        }
+        return coordinate;
+        
     }
 
     /**
