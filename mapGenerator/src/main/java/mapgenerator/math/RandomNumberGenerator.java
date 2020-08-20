@@ -17,7 +17,10 @@ public class RandomNumberGenerator {
      * @return 
      */
     public int nextInt(int bound) {
-        return (int) System.nanoTime() % bound;
+        Long nanotime = System.nanoTime();
+        Long remainder = nanotime % bound;
+        int number = remainder.intValue();
+        return number;
     } 
     
     /**
@@ -25,7 +28,10 @@ public class RandomNumberGenerator {
      * @return 
      */
     public double nextDouble() {
-        return (System.nanoTime() % 100) / (double) 100;       
+        Long nanotime = System.nanoTime();
+        Long remainder = nanotime % 100;
+        double number = remainder / 100;
+        return number;       
     }
     
 }
