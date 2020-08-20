@@ -23,7 +23,7 @@ public class ProgramHandler {
         Map map = new Map();
         Biomes biomes = new Biomes();
         BiomeSelector selector = new BiomeSelector(biomes);
-        int mapSizeExponent = 9;
+        int mapSizeExponent = 10;
         int multiplier = 1;
         int canvasSize = multiplier * (int) (Math.pow(2, mapSizeExponent) + 1);
         int mapSeed = 100;

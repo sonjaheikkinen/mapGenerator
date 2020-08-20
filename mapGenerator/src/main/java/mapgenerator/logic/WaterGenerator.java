@@ -49,7 +49,7 @@ public class WaterGenerator {
     public void addRivers(double[][] heightmap, double[][] moisture) {
         for (int x = 0; x < heightmap.length; x++) {
             for (int y = 0; y < heightmap.length; y++) {
-                int randomValue = random.nextInt(1000000);
+                int randomValue = random.nextInt(10000000);
                 int riverX = x;
                 int riverY = y;
                 if (randomValue < heightmap[x][y] * 4 || randomValue < moisture[x][y] * 4) {

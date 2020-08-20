@@ -125,12 +125,8 @@ public class GraphicUI {
      */
     public Color pickColor(double shade, double shadow, int biome) {
         double blueShade = shade * 255;
-        if (blueShade > 255) {
-            blueShade = 255;
-        }
-        if (blueShade < 0) {
-            blueShade = 0;
-        }
+        blueShade = Math.min(170, blueShade);
+        blueShade = Math.max(100, blueShade);
         //biomes: "0-water;1-sand;2-drygrass;3-grasss;4-leaf;5-taiga;6-tundra;7-bare;8-snow";
         //TODO: make color array a hashmap and get color by biome name instead of number?
         Color color;
@@ -143,7 +139,7 @@ public class GraphicUI {
 
     public Color[] fillColorArray(double blueShade) {
         Color[] colors = new Color[9];
-        colors[0] = Color.rgb(0, 0, (int) Math.round(blueShade));
+        colors[0] = Color.rgb(0, (int) Math.round(0.75 * blueShade), (int) Math.round(blueShade));
         colors[1] = Color.rgb(231, 232, 207);
         colors[2] = Color.rgb(199, 209, 157);
         colors[3] = Color.rgb(122, 232, 100);
