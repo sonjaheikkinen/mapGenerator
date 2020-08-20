@@ -2,6 +2,8 @@
 
 A procedural map generator made as a data stuctures and algorithms course project (summer 2020). 
 
+Currently the generator might be slow when using big map sizes. If you encounter this problem, go to class ProgramHandler and change the mapSizeExponent variable in initialize method to something smaller (9 usually works fine). In future I am planning to add a button to UI for map size changes, but for now it can only be changed manually. 
+
 ## Documentation
 
 [Project Definition](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/projectDefinition.md)
