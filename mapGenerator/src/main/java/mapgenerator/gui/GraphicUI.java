@@ -105,6 +105,7 @@ public class GraphicUI {
     }
      */
     public void drawMap(GraphicsContext brush, Map map, int canvasSize, int multiplier) {
+        Long drawingStarts = System.nanoTime();
         double maxHeight = map.getMaxHeight();
         for (int x = 0; x < canvasSize / multiplier; x++) {
             for (int y = 0; y < canvasSize / multiplier; y++) {
@@ -118,6 +119,9 @@ public class GraphicUI {
                 brush.fillRect(multiplier * x, multiplier * y, multiplier, multiplier);
             }
         }
+        Long drawingEnds = System.nanoTime();
+        Long drawingTime = drawingEnds - drawingStarts;
+        System.out.println("Map drawn in " + drawingTime + " nanoseconds (" + (drawingTime / 1000000) + " milliseconds)");
     }
 
     //TODO improve this, calculates shadow

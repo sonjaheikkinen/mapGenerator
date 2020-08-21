@@ -1,4 +1,3 @@
-
 package mapgenerator.logic;
 
 import java.util.Random;
@@ -11,12 +10,15 @@ import mapgenerator.gui.GraphicUI;
  * Class controls the execution of the program
  */
 public class ProgramHandler {
-    
+
     private MapConstructor constructor;
 
     /**
-     * Method initializes variables and creates a map constructor and graphic user interface of the program
-     * @param stage The graphic user interface and generated maps are shown on stage
+     * Method initializes variables and creates a map constructor and graphic
+     * user interface of the program
+     *
+     * @param stage The graphic user interface and generated maps are shown on
+     * stage
      */
     public void initialize(Stage stage) {
         Random random = new Random();
@@ -33,16 +35,21 @@ public class ProgramHandler {
         this.newMap();
         GraphicUI gui = new GraphicUI(stage, map, canvasSize, this, random, multiplier);
     }
-    
+
     /**
      * Method calls for map constructor to create a new map
      */
     public void newMap() {
+        Long creatingStarts = System.nanoTime();
         constructor.constructMap();
+        Long creatingEnds = System.nanoTime();
+        Long creatingTime = creatingEnds - creatingStarts;
+        System.out.println("Map created in " + creatingTime + " nanoseconds (" + (creatingTime / 1000000) + " milliseconds)");
     }
 
     /**
      * Method returns the map constructor
+     *
      * @return MapConstructor
      */
     public MapConstructor getMapConstructor() {
