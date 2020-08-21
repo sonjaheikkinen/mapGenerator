@@ -8,7 +8,6 @@ import mapgenerator.datastructures.MapCell;
  */
 public class NoiseMapGenerator {
 
-    private MapCell[][] map;
     //private String attribute;
     private Random random;
     private int seed;
@@ -68,25 +67,23 @@ public class NoiseMapGenerator {
      * @return An array containing height values as doubles
      */
     public MapCell[][] createNoise(MapCell[][] map) {
-
-        this.map = map;
         //this.attribute = attribute;
 
-        assignCornerValues("height");
-        assignCornerValues("moisture");
+        map = assignCornerValues("height", map);
+        map = assignCornerValues("moisture", map);
 
         for (int squareSize = mapSize - 1; squareSize >= 2; squareSize /= 2, this.randomizerRange /= 2.0) {
             int squareHalf = squareSize / 2;
             for (int x = 0; x < mapSize - 1; x += squareSize) {
                 for (int y = 0; y < mapSize - 1; y += squareSize) {
-                    diamondStep(x, y, squareSize, squareHalf, "height");
-                    diamondStep(x, y, squareSize, squareHalf, "moisture");
+                    map = diamondStep(x, y, squareSize, squareHalf, "height", map);
+                    map = diamondStep(x, y, squareSize, squareHalf, "moisture", map);
                 }
             }
             for (int x = 0; x < mapSize; x += squareHalf) {
                 for (int y = (x + squareHalf) % squareSize; y < mapSize; y += squareSize) {
-                    squareStep(x, y, squareHalf, "height");
-                    squareStep(x, y, squareHalf, "moisture");
+                    map = squareStep(x, y, squareHalf, "height", map);
+                    map = squareStep(x, y, squareHalf, "moisture", map);
                 }
             }
         }
@@ -114,7 +111,7 @@ public class NoiseMapGenerator {
         map[mapSize - 1][mapSize - 1].setNoiseValue(attribute, value4);
     }
      */
-    public void assignCornerValues(String attribute) {
+    public MapCell[][] assignCornerValues(String attribute, MapCell[][] map) {
         double value1 = seed + random.nextInt(20) - 10;
         double value2 = seed + random.nextInt(20) - 10;
         double value3 = seed + random.nextInt(20) - 10;
@@ -127,6 +124,7 @@ public class NoiseMapGenerator {
         map[0][mapSize - 1].setNoiseValue(attribute, value2);
         map[mapSize - 1][0].setNoiseValue(attribute, value3);
         map[mapSize - 1][mapSize - 1].setNoiseValue(attribute, value4);
+        return map;
     }
 
     /**
@@ -140,7 +138,6 @@ public class NoiseMapGenerator {
      * @param squareSize The length of the side of the square
      * @param squareHalf The length of half the side of the square
      */
-    
     /*
     public void diamondStep(int x, int y, int squareSize, int squareHalf) {
         double cornerAverage = (map[x][y].getNoiseValue(attribute)
@@ -152,8 +149,8 @@ public class NoiseMapGenerator {
         checkMaxValue(newValue);
         map[x + squareHalf][y + squareHalf].setNoiseValue(attribute, newValue);
     }
-    */
-        public void diamondStep(int x, int y, int squareSize, int squareHalf, String attribute) {
+     */
+    public MapCell[][] diamondStep(int x, int y, int squareSize, int squareHalf, String attribute, MapCell[][] map) {
         double cornerAverage = (map[x][y].getNoiseValue(attribute)
                 + map[x + squareSize][y].getNoiseValue(attribute)
                 + map[x][y + squareSize].getNoiseValue(attribute)
@@ -162,6 +159,7 @@ public class NoiseMapGenerator {
                 + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
         checkMaxValue(attribute, newValue);
         map[x + squareHalf][y + squareHalf].setNoiseValue(attribute, newValue);
+        return map;
     }
 
     /**
@@ -174,12 +172,12 @@ public class NoiseMapGenerator {
      * @param y The y coordinate of the centre of the diamond
      * @param distanceToCorner Distance from centre to corner
      */
-    public void squareStep(int x, int y, int distanceToCorner, String attribute) {
-        double cornerAverage = countCornerAverage(x, y, distanceToCorner, attribute);
+    public MapCell[][] squareStep(int x, int y, int distanceToCorner, String attribute, MapCell[][] map) {
+        double cornerAverage = countCornerAverage(x, y, distanceToCorner, attribute, map);
         double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
         checkMaxValue(attribute, newValue);
         map[x][y].setNoiseValue(attribute, newValue);
-
+        return map;
     }
 
     /**
@@ -192,7 +190,7 @@ public class NoiseMapGenerator {
      * @param distanceToCorner Distance from centre to corner
      * @return average value of the corners
      */
-    public double countCornerAverage(int x, int y, int distanceToCorner, String attribute) {
+    public double countCornerAverage(int x, int y, int distanceToCorner, String attribute, MapCell[][] map) {
         double cornerSum = 0;
         double cornerCount = 0;
         if (x - distanceToCorner >= 0) {
@@ -228,7 +226,7 @@ public class NoiseMapGenerator {
      */
     public void checkMaxValue(String attribute, double value) {
         if (attribute.equals("height") && value > maxHeight) {
-                maxHeight = value;
+            maxHeight = value;
         } else if (attribute.equals("moisture") && value > maxMoisture) {
             maxMoisture = value;
         }
@@ -243,7 +241,7 @@ public class NoiseMapGenerator {
     public double getMaxValue() {
         return maxValue;
     }
-    */
+     */
     public double getMaxValue(String attribute) {
         if (attribute.equals("height")) {
             return maxHeight;

@@ -5,6 +5,7 @@
  */
 package mapgenerator.logic;
 
+import mapgenerator.datastructures.MapCell;
 import mapgenerator.domain.Biomes;
 import org.junit.After;
 import org.junit.Before;
@@ -18,9 +19,7 @@ import static org.junit.Assert.*;
 public class BiomeSelectorTest {
     
     private BiomeSelector selector;
-    private double[][] testHeights;  
-    private double[][] testMoisture;
-    private boolean[][] testWater;
+    private MapCell[][] map;
 
     public BiomeSelectorTest() {
     }
@@ -29,13 +28,12 @@ public class BiomeSelectorTest {
     public void setUp() {
         Biomes biomes = new Biomes();
         this.selector = new BiomeSelector(biomes);
-        this.testHeights = createTestMap();
-        this.testMoisture = createTestMap();
-        this.testWater = createWater(testHeights);
+        this.map = createTestMap();
+        createWater();
         double maxHeight = 9;
         double maxMoisture = 9;
         double waterLevel = 0.5;
-        selector.createBiomes(testHeights, maxHeight, waterLevel, testWater, testMoisture, maxMoisture);       
+        this.map = selector.createBiomes(map, maxHeight, waterLevel, maxMoisture);       
     }
 
     @After
@@ -47,8 +45,8 @@ public class BiomeSelectorTest {
         boolean biomesCorrect = true;
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
-                if ((testWater[x][y] && selector.getBiomes()[x][y] != 0)
-                        || (!testWater[x][y] && selector.getBiomes()[x][y] == 0)) {
+                if ((map[x][y].isWater() && map[x][y].getBiome() != 0)
+                        || (!map[x][y].isWater() && map[x][y].getBiome() == 0)) {
                     biomesCorrect = false;
                 }
             }
@@ -56,26 +54,26 @@ public class BiomeSelectorTest {
         assertTrue(biomesCorrect);
     }
 
-    public double[][] createTestMap() {
-        double[][] map = new double[10][10];
+    public MapCell[][] createTestMap() {
+        MapCell[][] map = new MapCell[10][10];
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
-                map[x][y] = x;
+                map[x][y] = new MapCell();
+                map[x][y].setHeight(x);
+                map[x][y].setMoisture(x);
             }
         }
         return map;
     }
 
-    public boolean[][] createWater(double[][] heights) {
-        boolean[][] water = new boolean[10][10];
+    public void createWater() {
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
-                if (heights[x][y] < 5) {
-                    water[x][y] = true;
+                if (map[x][y].getHeight() < 5) {
+                    map[x][y].setWater(true);
                 }
             }
         }
-        return water;
     }
 
 }

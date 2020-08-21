@@ -1,6 +1,7 @@
 package mapgenerator.logic;
 
 import java.util.Random;
+import mapgenerator.datastructures.MapCell;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +17,8 @@ public class NoiseMapGeneratorTest {
     int seed;
     int range;
     int mapSize;
-    NoiseMapGenerator hmg;
+    NoiseMapGenerator noiseGen;
+    private MapCell[][] map;
 
     public NoiseMapGeneratorTest() {
     }
@@ -28,7 +30,13 @@ public class NoiseMapGeneratorTest {
         this.seed = 50;
         this.range = 50;
         this.mapSize = (int) Math.pow(2, this.exponent) + 1;
-        this.hmg = new NoiseMapGenerator(this.random, this.exponent, this.seed, this.range);
+        this.noiseGen = new NoiseMapGenerator(this.random, this.mapSize, this.seed, this.range);
+        this.map = new MapCell[this.mapSize][this.mapSize];
+        for (int x = 0; x < this.mapSize; x++) {
+            for (int y = 0; y < this.mapSize; y++) {
+                this.map[x][y] = new MapCell();
+            }
+        }
     }
 
     @After
@@ -43,59 +51,57 @@ public class NoiseMapGeneratorTest {
 
     @Test
     public void cornerValuesAreAssignedCorrectly() {
-        this.hmg.assignCornerValues(this.mapSize, this.seed);
-        double[][] map = this.hmg.getNoiseMap();
-        assertTrue(map[0][0] >= seed - 10 && map[0][0] <= seed + 10);
-        assertTrue(map[0][this.mapSize - 1] >= seed - 10 && map[0][this.mapSize - 1] <= seed + 10);
-        assertTrue(map[this.mapSize - 1][0] >= seed - 10 && map[this.mapSize - 1][0] <= seed + 10);
-        assertTrue(map[this.mapSize - 1][this.mapSize - 1] >= seed - 10
-                && map[this.mapSize - 1][this.mapSize - 1] <= seed + 10);
+        map = this.noiseGen.assignCornerValues("height", map);
+        assertTrue(map[0][0].getHeight() >= seed - 10 && map[0][0].getHeight() <= seed + 10);
+        assertTrue(map[0][this.mapSize - 1].getHeight() >= seed - 10 && map[0][this.mapSize - 1].getHeight() <= seed + 10);
+        assertTrue(map[this.mapSize - 1][0].getHeight() >= seed - 10 && map[this.mapSize - 1][0].getHeight() <= seed + 10);
+        assertTrue(map[this.mapSize - 1][this.mapSize - 1].getHeight() >= seed - 10
+                && map[this.mapSize - 1][this.mapSize - 1].getHeight() <= seed + 10);
     }
 
     @Test
     public void afterCornerStepThereAreRightAmountOfZerosRemaining() {
-        this.hmg.assignCornerValues(this.mapSize, this.seed);
+        map = this.noiseGen.assignCornerValues("height", map);
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 4);
     }
 
     @Test
     public void afterOneDiamondStepThereAreRightAmountOfZerosRemaining() {
-        this.hmg.assignCornerValues(this.mapSize, this.seed);
-        this.hmg.diamondStep(0, 0, mapSize - 1, (mapSize - 1) / 2, range);
+        map = this.noiseGen.assignCornerValues("height", map);
+        map = this.noiseGen.diamondStep(0, 0, mapSize - 1, (mapSize - 1) / 2, "height", map);
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 5);
     }
 
     @Test
     public void afterOneSquareStepThereAreRightAmountOfZerosRemaining() {
-        this.hmg.assignCornerValues(this.mapSize, this.seed);
-        this.hmg.diamondStep(0, 0, mapSize - 1, (mapSize - 1) / 2, range);
-        this.hmg.squareStep(0, 32, (mapSize - 1) / 2, mapSize, range);
+        map = this.noiseGen.assignCornerValues("height", map);
+        map = this.noiseGen.diamondStep(0, 0, mapSize - 1, (mapSize - 1) / 2, "height", map);
+        map = this.noiseGen.squareStep(0, 32, (mapSize - 1) / 2, "height", map);
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 6);
     }
 
     @Test
     public void noZeroValuesLeftAfterCreatingNoise() {
-        this.hmg.createNoise();
+        map = this.noiseGen.createNoise(map);
         int valuesOtherThanZero = notZeroValueCount();
         assertTrue(valuesOtherThanZero == 65 * 65);
     }
     
     @Test
     public void maxValueHasRightValueAfterCreatingNoise() {
-        this.hmg.createNoise();
-        double maxValue = checkMaxValue(this.hmg.getNoiseMap());
-        assertTrue(maxValue == this.hmg.getMaxValue());
+        map = this.noiseGen.createNoise(map);
+        double maxValue = checkMaxValue(map);
+        assertTrue(maxValue == this.noiseGen.getMaxValue("height"));
     }
 
     public int notZeroValueCount() {
         int valuesOtherThanZero = 0;
         for (int x = 0; x < this.mapSize; x++) {
             for (int y = 0; y < this.mapSize; y++) {
-                double[][] map = this.hmg.getNoiseMap();
-                if (map[x][y] != 0) {
+                if (map[x][y].getHeight() != 0) {
                     valuesOtherThanZero++;
                 }
             }
@@ -103,12 +109,12 @@ public class NoiseMapGeneratorTest {
         return valuesOtherThanZero;
     }
 
-    public double checkMaxValue(double[][] map) {
+    public double checkMaxValue(MapCell[][] map) {
         double maxValue = 0;
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map.length; y++) {
-                if (map[x][y] > maxValue) {
-                    maxValue = map[x][y];
+                if (map[x][y].getHeight() > maxValue) {
+                    maxValue = map[x][y].getHeight();
                 }
             }
         }
