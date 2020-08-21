@@ -2,8 +2,6 @@
 
 ## JUnit testing
 
-Testing by package:
-
 ### mapgenerator
 
 Only Main class is here, which does nothing else than create and launch a program handler. No reason to test it. 
@@ -30,7 +28,7 @@ Graphic UI does not need to be tested in this course.
 
 ## Performance
 
-The map creation and drawing times are tested with four mostly used map sizes. A map size of k means that there are (2^k + 1)^2 cells in the map array, so the n is therefore a lot bigger than the map size. There is a weird problem with the performance where creating and drawing the map (but especially drawing) take a lot more time when the map is first created in comparison to the average time in subsequent creations. The cause of the problem is still unknown. All creating and drawing times are shown in milliseconds in the table below. 
+The map creation and drawing times were tested with four mostly used map sizes. A map size of k means that there are (2^k + 1)^2 cells in the map array, so the n is therefore a lot bigger than the map size. There is a weird problem with the performance where creating and drawing the map (but especially drawing) takes a lot more time when the map is first created in comparison to the average time in subsequent creations. The cause of the problem is still unknown. All creating and drawing times are shown in milliseconds in the table below. 
 
 Map Size | n | Creating time (first) | Drawing time (first) | Creating time (subsequent) | Drawing time (subsequent) |
 ---------|---|-----------------------|----------------------|----------------------------|---------------------------|
