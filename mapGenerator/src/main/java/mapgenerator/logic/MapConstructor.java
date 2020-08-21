@@ -51,9 +51,8 @@ public final class MapConstructor {
             }
         }
         WaterGenerator waterGen = new WaterGenerator(mapSize);
-        NoiseMapGenerator heightGen = new NoiseMapGenerator(random, mapSize, seed, range);
-        NoiseMapGenerator moistureGen = new NoiseMapGenerator(random, mapSize, seed, range);
-        generateMapObjects(waterGen, heightGen, moistureGen);
+        NoiseMapGenerator noiseGen = new NoiseMapGenerator(random, mapSize, seed, range);
+        generateMapObjects(waterGen, noiseGen);
         setMapToStorage();
     }
 
@@ -70,17 +69,15 @@ public final class MapConstructor {
      * for roughen method to add jitter to heightmap.
      *
      * @param waterGen A WaterGenerator
-     * @param heightGen A NoiseMapGenerator for generating height map
-     * @param moistureGen A NoiseMapGenerator for generating moisture map
+     * @param noiseGen A NoiseMapGenerator 
      */
-    public void generateMapObjects(WaterGenerator waterGen, NoiseMapGenerator heightGen, NoiseMapGenerator moistureGen) {
-        map = heightGen.createNoise(map, "height");
-        this.maxHeight = heightGen.getMaxValue();
+    public void generateMapObjects(WaterGenerator waterGen, NoiseMapGenerator noiseGen) {
+        map = noiseGen.createNoise(map);
+        this.maxHeight = noiseGen.getMaxValue("height");
         double waterLevel = 0.5;
         map = waterGen.addWaterByHeight(waterLevel * maxHeight, map);
-        map = moistureGen.createNoise(map, "moisture");
         map = waterGen.addRivers(map);
-        double maxMoisture = moistureGen.getMaxValue();
+        double maxMoisture = noiseGen.getMaxValue("moisture");
         //roughen(heightGen, moistureGen);
         map = bioS.createBiomes(map, maxHeight, waterLevel, maxMoisture);
     }
