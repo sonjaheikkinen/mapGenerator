@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import mapgenerator.logic.ProgramHandler;
 
+
 /**
  * Class creates a program handler and launches the program.
  */

@@ -17,8 +17,8 @@ public class WaterGeneratorTest {
 
     @Before
     public void setUp() {
-        wg = new WaterGenerator(2);
         mapSize = (int) Math.pow(2, 2) + 1;
+        wg = new WaterGenerator(mapSize);
         map = new MapCell[mapSize][mapSize];
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
@@ -35,7 +35,7 @@ public class WaterGeneratorTest {
     @Test
     public void addWaterByHeightAssignsWaterCorrectly() {
         wg.addWaterByHeight(2, map);
-        int waterCount = countWater();
+        int waterCount = countWater(map);
         assertTrue(waterCount == 10);
     }
 
@@ -45,32 +45,32 @@ public class WaterGeneratorTest {
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
                 if (y == 2) {
-                    map[x][y] = new MapCell();
+                    mapWithOneRiverPath[x][y] = new MapCell();
                     mapWithOneRiverPath[x][y].setHeight(x);
                 } else {
-                    map[x][y] = new MapCell();
+                    mapWithOneRiverPath[x][y] = new MapCell();
                     mapWithOneRiverPath[x][y].setHeight(4);
                 }
             }
         }
-        wg.createRiver(3, 2, mapWithOneRiverPath);
-        assertTrue(countWater() == 4);
+        mapWithOneRiverPath = wg.createRiver(3, 2, mapWithOneRiverPath);
+        assertTrue(countWater(mapWithOneRiverPath) == 4);
     }
     
     
     @Test
     public void riverAlwaysFlowsDownIfPossible() {
-        wg.createRiver(3, 2, map);
-        int waterCount = countWater();
+        map = wg.createRiver(3, 2, map);
+        int waterCount = countWater(map);
         assertTrue(waterCount >= 3 && waterCount <= 4);
     }
     
 
-    public int countWater() {
+    public int countWater(MapCell[][] countMap) {
         int waterCount = 0;
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map.length; y++) {
-                if (map[x][y].isWater()) {
+        for (int x = 0; x < countMap.length; x++) {
+            for (int y = 0; y < countMap.length; y++) {
+                if (countMap[x][y].isWater()) {
                     waterCount++;
                 }
             }
