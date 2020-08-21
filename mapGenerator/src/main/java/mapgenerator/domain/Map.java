@@ -1,16 +1,30 @@
 package mapgenerator.domain;
 
+import mapgenerator.datastructures.MapCell;
+
 /**
  * Class contains all information regarding the created map.
  */
 public class Map {
 
+    
     private double[][] heightMap;
     private boolean[][] water;
     private double[][] moisture;
     private int[][] biomes;
     private double maxHeight;
+    
+    private MapCell[][] map;
 
+    
+    public void setMap(MapCell[][] map) {
+        this.map = map;
+    }
+    
+    public MapCell[][] getMap() {
+        return this.map;
+    }
+    
     /**
      * Sets a height map.
      *

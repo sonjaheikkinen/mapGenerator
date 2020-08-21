@@ -23,12 +23,13 @@ public class ProgramHandler {
         Map map = new Map();
         Biomes biomes = new Biomes();
         BiomeSelector selector = new BiomeSelector(biomes);
-        int mapSizeExponent = 10;
+        int mapSizeExponent = 9;
         int multiplier = 1;
         int canvasSize = multiplier * (int) (Math.pow(2, mapSizeExponent) + 1);
         int mapSeed = 100;
         int mapRandomizerRange = 200;
-        this.constructor = new MapConstructor(random, mapSizeExponent, mapSeed, mapRandomizerRange, map, selector);
+        int mapSize = (int) Math.pow(2, mapSizeExponent) + 1;
+        this.constructor = new MapConstructor(random, mapSize, mapSeed, mapRandomizerRange, map, selector);
         this.newMap();
         GraphicUI gui = new GraphicUI(stage, map, canvasSize, this, random, multiplier);
     }

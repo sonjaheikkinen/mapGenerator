@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import mapgenerator.datastructures.MapCell;
 import mapgenerator.domain.Map;
 import mapgenerator.logic.ProgramHandler;
 
@@ -84,6 +85,7 @@ public class GraphicUI {
      * @param canvasSize Size of the canvas
      * @param multiplier Canvas and drawing size can be increased via multiplier
      */
+    /*
     public void drawMap(GraphicsContext brush, Map map, int canvasSize, int multiplier) {
         double[][] heightMap = map.getHeightMap();
         double maxHeight = map.getMaxHeight();
@@ -101,8 +103,25 @@ public class GraphicUI {
             }
         }
     }
+     */
+    public void drawMap(GraphicsContext brush, Map map, int canvasSize, int multiplier) {
+        double maxHeight = map.getMaxHeight();
+        for (int x = 0; x < canvasSize / multiplier; x++) {
+            for (int y = 0; y < canvasSize / multiplier; y++) {
+                double height = map.getMap()[x][y].getHeight();
+                double shadow = calculateShadow(x, canvasSize, y, map.getMap());
+                double shade = height / maxHeight;
+                int biome = map.getMap()[x][y].getBiome();
+                shade = Math.min(255, shade);
+                Color color = pickColor(shade, shadow, biome);
+                brush.setFill(color);
+                brush.fillRect(multiplier * x, multiplier * y, multiplier, multiplier);
+            }
+        }
+    }
 
     //TODO improve this, calculates shadow
+    /*
     public double calculateShadow(int x, int canvasSize, int y, double[][] heightMap, int[][] biomes) {
         double shadow = 1;
         if (x > 0 && x < canvasSize - 1 && y > 0 && y < canvasSize - 1) {
@@ -115,9 +134,23 @@ public class GraphicUI {
         }
         return shadow;
     }
+     */
+    public double calculateShadow(int x, int canvasSize, int y, MapCell[][] map) {
+        double shadow = 1;
+        if (x > 0 && x < canvasSize - 1 && y > 0 && y < canvasSize - 1) {
+            if (map[x - 1][y - 1].getHeight() < map[x][y].getHeight() && map[x][y].getBiome() != 0) {
+                shadow = 0.8;
+            } else if (map[x - 1][y].getHeight() < map[x][y].getHeight()
+                    || map[x][y].getHeight() - 1 < map[x][y].getHeight()) {
+                shadow = 0.9;
+            }
+        }
+        return shadow;
+    }
 
     /**
      * Picks correct brush color based on biome.
+     *
      * @param shade A height map based integer which can be used to affect color
      * @param biome An integer telling which biome to base color on
      * @param shadow Has an effect of color brightness

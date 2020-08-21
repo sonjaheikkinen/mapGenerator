@@ -5,6 +5,7 @@
  */
 package mapgenerator.logic;
 
+import mapgenerator.datastructures.MapCell;
 import mapgenerator.domain.Biomes;
 
 /**
@@ -32,30 +33,27 @@ public class BiomeSelector {
      * on the moisture / maximum moisture -ratio of the moisture map. Biome is
      * selected from biome selection table using the height and moisture levels.
      *
-     * @param heightMap An array containing height values as doubles
+     * @param map
      * @param maxHeight Maximum height
      * @param waterLevel A value between zero and one. The absolute water level
-     * is waterlevel * maxHeight
-     * @param water A boolean array where true means water
-     * @param moisture An array containing moisture values as doubles
+     * is water level * maxHeight
      * @param maxMoisture Maximum moisture
      */
-    public void createBiomes(double[][] heightMap, double maxHeight, double waterLevel, boolean[][] water,
-            double[][] moisture, double maxMoisture) {
-        this.biomes = new int[heightMap.length][heightMap.length];
+    public MapCell[][] createBiomes(MapCell[][] map, double maxHeight, double waterLevel, double maxMoisture) {
         double waterHeight = waterLevel * maxHeight;
         double landHeightRange = maxHeight - waterHeight;
-        for (int x = 0; x < heightMap.length; x++) {
-            for (int y = 0; y < heightMap.length; y++) {
-                if (!water[x][y]) {
-                    int heightlevel = defineHeightLevel(heightMap, x, y, waterHeight, landHeightRange);
-                    int moisturelevel = defineMoistureLevel(moisture, x, y, maxMoisture);
-                    biomes[x][y] = biomeSelection[heightlevel][moisturelevel];
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map.length; y++) {
+                if (!map[x][y].isWater()) {
+                    int heightlevel = defineHeightLevel(map, x, y, waterHeight, landHeightRange);
+                    int moisturelevel = defineMoistureLevel(map, x, y, maxMoisture);
+                    map[x][y].setBiome(biomeSelection[heightlevel][moisturelevel]);
                 } else {
-                    biomes[x][y] = 0;
+                    map[x][y].setBiome(0);
                 }
             }
         }
+        return map;
     }
 
     /**
@@ -64,16 +62,16 @@ public class BiomeSelector {
      * actual height. Height level is based on land height / land height range
      * -ratio.
      *
-     * @param heightMap An array containing height values as doubles
+     * @param map
      * @param x X coordinate
      * @param y Y coordinate
      * @param waterHeight Absolute water level
      * @param landHeightRange Maximum height - waterlevel
      * @return Selected height level as integer
      */
-    public int defineHeightLevel(double[][] heightMap, int x, int y, double waterHeight, double landHeightRange) {
+    public int defineHeightLevel(MapCell[][] map, int x, int y, double waterHeight, double landHeightRange) {
         int heightlevel;
-        double landHeight = heightMap[x][y] - waterHeight;
+        double landHeight = map[x][y].getHeight() - waterHeight;
         if (landHeight >= 0 && landHeight < 0.15 * landHeightRange) {
             heightlevel = 0;
         } else if (landHeight >= 0.15 * landHeightRange && landHeight < 0.2 * landHeightRange) {
@@ -93,31 +91,22 @@ public class BiomeSelector {
     /**
      * Selects moisture level based on maximum moisture and actual moisture.
      *
-     * @param moisture An array containing moisture values as doubles
+     * @param map
      * @param x X coordinate
      * @param y Y coordinate
      * @param maxMoisture Maximum moisture of the moisture map
      * @return Selected moisture level as integer
      */
-    public int defineMoistureLevel(double[][] moisture, int x, int y, double maxMoisture) {
+    public int defineMoistureLevel(MapCell[][] map, int x, int y, double maxMoisture) {
         int moisturelevel;
-        if (moisture[x][y] < 0.4 * maxMoisture) {
+        if (map[x][y].getMoisture() < 0.4 * maxMoisture) {
             moisturelevel = 0;
-        } else if (moisture[x][y] < 0.6 * maxMoisture) {
+        } else if (map[x][y].getMoisture() < 0.6 * maxMoisture) {
             moisturelevel = 1;
         } else {
             moisturelevel = 2;
         }
         return moisturelevel;
-    }
-
-    /**
-     * Returns biome array.
-     *
-     * @return An array containing biome numbers as integers
-     */
-    public int[][] getBiomes() {
-        return biomes;
     }
 
 }

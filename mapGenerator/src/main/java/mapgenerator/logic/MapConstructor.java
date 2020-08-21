@@ -1,6 +1,7 @@
 package mapgenerator.logic;
 
 import java.util.Random;
+import mapgenerator.datastructures.MapCell;
 import mapgenerator.domain.Map;
 
 /*
@@ -8,15 +9,12 @@ import mapgenerator.domain.Map;
  */
 public final class MapConstructor {
 
-    private Map map;
+    private Map mapStorage;
+    private MapCell[][] map;
     private Random random;
-    private int exponent;
+    private int mapSize;
     private int seed;
     private int range;
-    private double[][] heightMap;
-    private boolean[][] water;
-    private double[][] moisture;
-    private int[][] biomes;
     private BiomeSelector bioS;
     private double maxHeight;
 
@@ -24,8 +22,7 @@ public final class MapConstructor {
      * Constructor for this class, initializes class variables.
      *
      * @param random A random number generator
-     * @param mapSizeExponent The created map will have a side length of
-     * (2^mapSizeExponent) + 1
+     * @param mapSize
      * @param mapSeed The corners of the height map will be assigned a random
      * value of mapSeed +/- 10
      * @param mapRandomizerRange The height values calculated for the height map
@@ -33,10 +30,10 @@ public final class MapConstructor {
      * @param map A map object in which the generated map is saved
      * @param bioS A biome selector objects for adding biomes to map
      */
-    public MapConstructor(Random random, int mapSizeExponent, int mapSeed, int mapRandomizerRange, Map map, BiomeSelector bioS) {
-        this.map = map;
+    public MapConstructor(Random random, int mapSize, int mapSeed, int mapRandomizerRange, Map map, BiomeSelector bioS) {
+        this.mapStorage = map;
         this.random = random;
-        this.exponent = mapSizeExponent;
+        this.mapSize = mapSize;
         this.seed = mapSeed;
         this.range = mapRandomizerRange;
         this.bioS = bioS;
@@ -47,22 +44,25 @@ public final class MapConstructor {
      * generate map objects, which are then given to a map.
      */
     public void constructMap() {
-        WaterGenerator waterGen = new WaterGenerator(exponent);
-        NoiseMapGenerator heightGen = new NoiseMapGenerator(random, exponent, seed, range);
-        NoiseMapGenerator moistureGen = new NoiseMapGenerator(random, exponent, seed, range);
+        this.map = new MapCell[mapSize][mapSize];
+        for (int x = 0; x < mapSize; x++) {
+            for (int y = 0; y < mapSize; y++) {
+                this.map[x][y] = new MapCell();
+            }
+        }
+        WaterGenerator waterGen = new WaterGenerator(mapSize);
+        NoiseMapGenerator heightGen = new NoiseMapGenerator(random, mapSize, seed, range);
+        NoiseMapGenerator moistureGen = new NoiseMapGenerator(random, mapSize, seed, range);
         generateMapObjects(waterGen, heightGen, moistureGen);
-        setObjectsToMap();
+        setMapToStorage();
     }
 
     /**
      * Gives all generated map objects to map.
      */
-    public void setObjectsToMap() {
-        map.setHeightMap(this.heightMap);
-        map.setMaxHeight(maxHeight);
-        map.setWater(water);
-        map.setMoisture(moisture);
-        map.setBiomes(biomes);
+    public void setMapToStorage() {
+        mapStorage.setMaxHeight(maxHeight);
+        mapStorage.setMap(this.map);
     }
 
     /**
@@ -74,119 +74,54 @@ public final class MapConstructor {
      * @param moistureGen A NoiseMapGenerator for generating moisture map
      */
     public void generateMapObjects(WaterGenerator waterGen, NoiseMapGenerator heightGen, NoiseMapGenerator moistureGen) {
-        generateHeightMap(heightGen);
-        double maxHeight = heightGen.getMaxValue();
-        double waterLevel = 0.5;
-        generateWater(waterGen, waterLevel, maxHeight);
-        generateMoisture(moistureGen);
-        waterGen.addRivers(heightMap, moisture);
-        heightMap = roughen(heightMap, heightGen);
-        double maxMoisture = moistureGen.getMaxValue();
-        generateBiomes(maxHeight, waterLevel, maxMoisture);
-    }
-
-    /**
-     * Calls for BiomeSelector to add biomes to map
-     *
-     * @param maxHeight Maximum value of the height map
-     * @param waterLevel A number between 0 and 1 where waterlevel * maxheight
-     * is the actual water level
-     * @param maxMoisture Maximum value of the moisture map
-     */
-    public void generateBiomes(double maxHeight, double waterLevel, double maxMoisture) {
-        bioS.createBiomes(heightMap, maxHeight, waterLevel, water, moisture, maxMoisture);
-        biomes = bioS.getBiomes();
-    }
-
-    /**
-     * Calls for NoiseMapGenerator to generate height map
-     *
-     * @param heightGen A NoiseMapGenerator for generating height map
-     */
-    public void generateHeightMap(NoiseMapGenerator heightGen) {
-        heightMap = heightGen.createNoise();
+        map = heightGen.createNoise(map, "height");
         this.maxHeight = heightGen.getMaxValue();
-    }
-
-    /**
-     * Calls for NoiseMapGenerator to generate moisture map, and calls for
-     * roughen method to add jitter to moisture map.
-     *
-     * @param moistureGen A NoiseMapGenerator for generating moisture map
-     */
-    public void generateMoisture(NoiseMapGenerator moistureGen) {
-        moisture = moistureGen.createNoise();
-        moisture = roughen(moisture, moistureGen);
-    }
-
-    /**
-     * Calls for WaterGenerator to add water based on waterlevel
-     *
-     * @param waterGen A WaterGenerator
-     * @param waterLevel A number between 0 and 1 where waterlevel * maxHeight
-     * is the actual water level
-     * @param maxHeight The maximum value of the height map
-     */
-    public void generateWater(WaterGenerator waterGen, double waterLevel, double maxHeight) {
-        waterGen.addWaterByHeight(waterLevel * maxHeight, heightMap);
-        water = waterGen.getWater();
+        double waterLevel = 0.5;
+        map = waterGen.addWaterByHeight(waterLevel * maxHeight, map);
+        map = moistureGen.createNoise(map, "moisture");
+        map = waterGen.addRivers(map);
+        double maxMoisture = moistureGen.getMaxValue();
+        //roughen(heightGen, moistureGen);
+        map = bioS.createBiomes(map, maxHeight, waterLevel, maxMoisture);
     }
 
     /**
      * Adds jitter to given map
      *
-     * @param map An array containing doubles (a noise map)
+     * @param noiseMap An array containing doubles (a noise map)
      * @param generator A NoiseMapGenerator which has generated the given map
      * @return Given map with more noise
      */
-    public double[][] roughen(double[][] map, NoiseMapGenerator generator) {
+    //TODO: this version of the method does not look good with current map algorithm, and is therefore not in use. Method is 
+    //supposed to make the terrain and moisture maps more rough, and make the biome borders less "clean". 
+    public void roughen(NoiseMapGenerator heightGen, NoiseMapGenerator moistureGen) {
         for (int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map.length - 1; y++) {
-                if (!water[x][y]) {
-                    if (heightMap[x][y] > heightMap[x - 1][y - 1]
-                            || heightMap[x][y] > heightMap[x - 1][y]
-                            || heightMap[x][y] > heightMap[x][y - 1]) {
-                        double average = (map[x - 1][y - 1] + map[x - 1][y] + map[x][y - 1]) / 3 + 5;
+                if (!map[x][y].isWater()) {
+                    if (map[x][y].getHeight() > map[x - 1][y - 1].getHeight()
+                            || map[x][y].getHeight() > map[x - 1][y].getHeight()
+                            || map[x][y].getHeight() > map[x][y - 1].getHeight()) {
+                        double heightAverage = (map[x - 1][y - 1].getHeight()
+                                + map[x - 1][y].getHeight() + map[x][y - 1].getHeight()) / 3 + 5;
+                        map[x][y].setHeight(Math.max(1, heightAverage));
+                        double moistureAverage = (map[x - 1][y - 1].getMoisture()
+                                + map[x - 1][y].getMoisture() + map[x][y - 1].getMoisture()) / 3 + 5;
+                        map[x][y].setMoisture(Math.max(1, moistureAverage));
                         //generator.checkMaxValue(average);
-                        map[x][y] = Math.max(1, average);
-                    } else if (heightMap[x][y] > heightMap[x + 1][y + 1]
-                            || heightMap[x][y] > heightMap[x + 1][y]
-                            || heightMap[x][y] > heightMap[x + 1][y - 1]) {
-                        double average = (map[x + 1][y + 1] + map[x + 1][y] + map[x + 1][y - 1]) / 3 + 5;
+                    } else if (map[x][y].getHeight() > map[x + 1][y + 1].getHeight()
+                            || map[x][y].getHeight() > map[x + 1][y].getHeight()
+                            || map[x][y].getHeight() > map[x + 1][y - 1].getHeight()) {
+                        double heightAverage = (map[x + 1][y + 1].getHeight()
+                                + map[x + 1][y].getHeight() + map[x + 1][y - 1].getHeight()) / 3 + 5;
+                        map[x][y].setHeight(Math.max(1, heightAverage));
+                        double moistureAverage = (map[x + 1][y + 1].getMoisture()
+                                + map[x + 1][y].getMoisture() + map[x + 1][y - 1].getMoisture()) / 3 + 5;
+                        map[x][y].setMoisture(Math.max(1, moistureAverage));
                         //generator.checkMaxValue(average);
-                        map[x][y] = Math.max(1, average);
                     }
                 }
             }
         }
-        return map;
-    }
-
-    /**
-     * Returns height map
-     *
-     * @return An array containing height values as doubles
-     */
-    public double[][] getHeightMap() {
-        return this.heightMap;
-    }
-
-    /**
-     * Returns water map
-     *
-     * @return A boolean array where true means water
-     */
-    public boolean[][] getWater() {
-        return water;
-    }
-
-    /**
-     * Returns moisture map
-     *
-     * @return An array containing moisture values as doubles
-     */
-    public double[][] getMoisture() {
-        return moisture;
     }
 
 }
