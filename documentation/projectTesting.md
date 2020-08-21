@@ -28,6 +28,17 @@ Graphic UI does not need to be tested in this course.
 
 **ProgramHandler**: This is mainly an intermediate communication class between mapConstructor, domain classes and graphic UI. Quite hard to test automatically, and no reason to, since if this does not work, it will show itself clearly in manual testing when starting up the program. 
 
+## Performance
+
+The map creation and drawing times are tested with four mostly used map sizes. A map size of k means that there are (2^k + 1)^2 cells in the map array, so the n is therefore a lot bigger than the map size. There is a weird problem with the performance where creating and drawing the map (but especially drawing) take a lot more time when the map is first created in comparison to the average time in subsequent creations. The cause of the problem is still unknown. All creating and drawing times are shown in milliseconds in the table below. 
+
+Map Size | n | Creating time (first) | Drawing time (first) | Creating time (subsequent) | Drawing time (subsequent) |
+---------|---|-----------------------|----------------------|----------------------------|---------------------------|
+7 | 16 641 | 20 | 40 | 20 | 15
+8 | 66 049 | 40 | 150 | 25 | 25
+9 | 263 169 | 95 | 4500 | 50 | 50
+10 | 1 050 625 | 200 | 106000 | 130 | 250
+
 ## Manual tests
 
 So far this has just been looking at the maps and checking if they look like what they should. 

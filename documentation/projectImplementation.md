@@ -40,17 +40,6 @@ River generation in this generator is quite simple:
 3. The next river cell will be the root of the binary heap.
 4. If there are no neighbors that meet the requirements, the river just flows in random direction. 
 
-## Performance
-
-The map creation and drawing times are tested with four mostly used map sizes. A map size of k means that there are (2^k + 1)^2 cells in the map array, so the n is therefore a lot bigger than the map size. There is a weird problem with the performance where creating and drawing the map (but especially drawing) take a lot more time when the map is first created in comparison to the average time in subsequent creations. The cause of the problem is still unknown. All creating and drawing times are shown in milliseconds in the table below. 
-
-Map Size | n | Creating time (first) | Drawing time (first) | Creating time (subsequent) | Drawing time (subsequent) |
----------|---|-----------------------|----------------------|----------------------------|---------------------------|
-7 | 16 641 | 20 | 40 | 20 | 15
-8 | 66 049 | 40 | 150 | 25 | 25
-9 | 263 169 | 95 | 4500 | 50 | 50
-10 | 1 050 625 | 200 | 106000 | 130 | 250
-
 
 ## Possible improvements
 
