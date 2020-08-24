@@ -110,7 +110,8 @@ public class GraphicUI {
         for (int x = 0; x < canvasSize / multiplier; x++) {
             for (int y = 0; y < canvasSize / multiplier; y++) {
                 double height = map.getMap()[x][y].getHeight();
-                double shadow = calculateShadow(x, canvasSize, y, map.getMap());
+                //double shadow = calculateShadow(x, canvasSize, y, map.getMap());
+                double shadow = 1;
                 double shade = height / maxHeight;
                 int biome = map.getMap()[x][y].getBiome();
                 shade = Math.min(255, shade);

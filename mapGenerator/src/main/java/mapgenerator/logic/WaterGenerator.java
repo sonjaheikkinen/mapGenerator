@@ -52,10 +52,10 @@ public class WaterGenerator {
     public MapCell[][] addRivers(MapCell[][] map) {
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map.length; y++) {
-                int randomValue = random.nextInt(10000000);
+                int randomValue = random.nextInt(1000000);
                 int riverX = x;
                 int riverY = y;
-                if (randomValue < map[x][y].getHeight() * 4 || randomValue < map[x][y].getMoisture() * 4) {
+                if (randomValue < map[x][y].getHeight() || randomValue < map[x][y].getMoisture()) {
                     map = createRiver(riverX, riverY, map);
                 }
             }
@@ -88,7 +88,16 @@ public class WaterGenerator {
                 riverY = random.nextInt(3) - 1;
                 riverY = moveInsideMap(riverY);
             } else {
+                double height = map[riverX][riverY].getHeight();
                 Node next = neighbours.poll();
+                while(!neighbours.isEmpty() && neighbours.peek().getCost() < height) {
+                    int randomValue = random.nextInt(3);
+                    if (randomValue == 0) {
+                        next = neighbours.poll();
+                    } else {
+                        break;
+                    }
+                }
                 riverX = next.getX();
                 riverY = next.getY();
             }
