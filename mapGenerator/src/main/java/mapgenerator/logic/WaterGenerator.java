@@ -55,7 +55,7 @@ public class WaterGenerator {
                 int randomValue = random.nextInt(1000000);
                 int riverX = x;
                 int riverY = y;
-                if (randomValue < map[x][y].getHeight() || randomValue < map[x][y].getMoisture()) {
+                if (randomValue < map[x][y].getMoisture() * 5) {
                     map = createRiver(riverX, riverY, map);
                 }
             }
@@ -91,7 +91,7 @@ public class WaterGenerator {
                 double height = map[riverX][riverY].getHeight();
                 Node next = neighbours.poll();
                 while(!neighbours.isEmpty() && neighbours.peek().getCost() < height) {
-                    int randomValue = random.nextInt(3);
+                    int randomValue = random.nextInt(4);
                     if (randomValue == 0) {
                         next = neighbours.poll();
                     } else {
