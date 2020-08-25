@@ -28,6 +28,7 @@ public class GraphicUI {
     private Map mapStorage;
     private int multiplier;
     private String biomeDrawType;
+    private String drawType;
 
     /**
      * Method creates a window and calls for method drawMap to draw the
@@ -40,6 +41,7 @@ public class GraphicUI {
         this.random = random;
         this.waterlevel = waterlevel;
         this.biomeDrawType = "simple";
+        this.drawType = "biome";
     }
 
     public void start(Stage stage, Map map, int canvasSize, ProgramHandler handler, int multiplier, int exponent) {
@@ -77,6 +79,15 @@ public class GraphicUI {
     public VBox createOptionBar(Button newMapButton) {
         VBox options = new VBox();
         Label drawtype = new Label("Select biome drawing type:");
+        HBox drawtypeButtons = createDrawTypeButtons();
+        Label showButtons = new Label("Show selected noise map:");
+        VBox noisemapButtons = createNoiseMapButtons();
+        options.getChildren().addAll(newMapButton, drawtype, drawtypeButtons, showButtons, noisemapButtons);
+        return options;
+    }
+
+    public HBox createDrawTypeButtons() {
+        HBox drawtypeButtons = new HBox();
         Button simple = new Button("Simple");
         simple.setOnAction(actionEvent -> {
             this.biomeDrawType = "simple";
@@ -87,10 +98,29 @@ public class GraphicUI {
             this.biomeDrawType = "smooth";
             drawMap();
         });
-        HBox drawtypeButtons = new HBox();
         drawtypeButtons.getChildren().addAll(simple, smooth);
-        options.getChildren().addAll(newMapButton, drawtype, drawtypeButtons);
-        return options;
+        return drawtypeButtons;
+    }
+
+    public VBox createNoiseMapButtons() {
+        VBox noiseMapButtons = new VBox();
+        Button height = new Button("Show heightmap");
+        height.setOnAction(actionEvent -> {
+            this.drawType = "height";
+            drawMap();
+        });
+        Button moisture = new Button("Show moisture");
+        moisture.setOnAction(actionEvent -> {
+            this.drawType = "moisture";
+            drawMap();
+        });
+        Button none = new Button("None");
+        none.setOnAction(actionEvent -> {
+            this.drawType = "biome";
+            drawMap();
+        });
+        noiseMapButtons.getChildren().addAll(height, moisture, none);
+        return noiseMapButtons;
     }
 
     /**
@@ -124,11 +154,12 @@ public class GraphicUI {
     public void drawMap() {
         Long drawingStarts = System.nanoTime();
         double maxHeight = mapStorage.getMaxHeight();
+        double maxMoisture = mapStorage.getMaxMoisture();
         Color[] colors = new Color[20];
         colors = fillColorArray(colors);
         for (int x = 0; x < canvasSize / multiplier; x++) {
             for (int y = 0; y < canvasSize / multiplier; y++) {
-                drawMapCell(x, y, maxHeight, colors);
+                drawMapCell(x, y, maxHeight, maxMoisture, colors);
             }
         }
         Long drawingEnds = System.nanoTime();
@@ -136,20 +167,31 @@ public class GraphicUI {
         System.out.println("Map drawn in " + drawingTime + " nanoseconds (" + (drawingTime / 1000000) + " milliseconds)");
     }
 
-    public void drawMapCell(int x, int y, double maxHeight, Color[] colors) {
+    public void drawMapCell(int x, int y, double maxHeight, double maxMoisture, Color[] colors) {
         double height = mapStorage.getMap()[x][y].getHeight();
+        double moisture = mapStorage.getMap()[x][y].getMoisture();
         double landHeightRange = maxHeight - (waterlevel * maxHeight);
         double landHeight = height - (waterlevel * maxHeight);
-        double shade;
+        double heightShade = height / maxHeight;
+        double moistureShade = moisture / maxMoisture;
+        double biomeShade = heightShade;
         if (!mapStorage.getMap()[x][y].isWater()) {
-            shade = landHeight / landHeightRange;
-        } else {
-            shade = height / maxHeight;
+            biomeShade = landHeight / landHeightRange;
         }
         int biome = mapStorage.getMap()[x][y].getBiome();
-        shade = Math.min(1, shade);
-        colors = calculateWaterColor(colors, shade);
-        Color color = pickColor(colors, shade, biome);
+        biomeShade = Math.min(1, biomeShade);
+        colors = calculateWaterColor(colors, biomeShade);
+        Color color;
+        //System.out.println("drawtype is " + drawType);
+        if (drawType.equals("height")) {
+            int drawShade = (int) Math.round(heightShade * 255);
+            color = Color.grayRgb(drawShade);
+        } else if (drawType.equals("moisture")) {
+            int drawShade = (int) Math.round(moistureShade * 255);
+            color = Color.grayRgb(drawShade);
+        } else {
+            color = pickColor(colors, biomeShade, biome);
+        }
         brush.setFill(color);
         brush.fillRect(multiplier * x, multiplier * y, multiplier, multiplier);
     }

@@ -7,24 +7,23 @@ import mapgenerator.datastructures.MapCell;
  */
 public class Map {
 
-    
     private double[][] heightMap;
     private boolean[][] water;
     private double[][] moisture;
     private int[][] biomes;
     private double maxHeight;
-    
+    private double maxMoisture;
+
     private MapCell[][] map;
 
-    
     public void setMap(MapCell[][] map) {
         this.map = map;
     }
-    
+
     public MapCell[][] getMap() {
         return this.map;
     }
-    
+
     /**
      * Sets a height map.
      *
@@ -46,6 +45,7 @@ public class Map {
 
     /**
      * Sets max height
+     *
      * @param maxHeight Maximum value of the height map
      */
     public void setMaxHeight(double maxHeight) {
@@ -54,10 +54,29 @@ public class Map {
 
     /**
      * Returns max height.
+     *
      * @return max height
      */
     public double getMaxHeight() {
         return maxHeight;
+    }
+
+    /**
+     * Sets max height
+     *
+     * @param maxHeight Maximum value of the height map
+     */
+    public void setMaxMoisture(double maxMoisture) {
+        this.maxMoisture = maxMoisture;
+    }
+
+    /**
+     * Returns max height.
+     *
+     * @return max height
+     */
+    public double getMaxMoisture() {
+        return maxMoisture;
     }
 
     /**

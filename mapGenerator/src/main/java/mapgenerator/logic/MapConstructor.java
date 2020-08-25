@@ -17,6 +17,7 @@ public final class MapConstructor {
     private int range;
     private BiomeSelector bioS;
     private double maxHeight;
+    private double maxMoisture;
 
     /**
      * Constructor for this class, initializes class variables.
@@ -61,6 +62,7 @@ public final class MapConstructor {
      */
     public void setMapToStorage() {
         mapStorage.setMaxHeight(maxHeight);
+        mapStorage.setMaxMoisture(maxMoisture);
         mapStorage.setMap(this.map);
     }
 
@@ -73,10 +75,10 @@ public final class MapConstructor {
      */
     public void generateMapObjects(WaterGenerator waterGen, NoiseMapGenerator noiseGen, double waterlevel) {
         map = noiseGen.createNoise(map);
-        this.maxHeight = noiseGen.getMaxValue("height");
+        maxHeight = noiseGen.getMaxValue("height");
         map = waterGen.addWaterByHeight(waterlevel * maxHeight, map);
         map = waterGen.addRivers(map);
-        double maxMoisture = noiseGen.getMaxValue("moisture");
+        maxMoisture = noiseGen.getMaxValue("moisture");
         //roughen(noiseGen);
         map = bioS.createBiomes(map, maxHeight, waterlevel, maxMoisture);
     }
