@@ -43,7 +43,7 @@ public final class MapConstructor {
      * Creates the producers of map parts and calls for another method to
      * generate map objects, which are then given to a map.
      */
-    public void constructMap() {
+    public void constructMap(double waterlevel) {
         this.map = new MapCell[mapSize][mapSize];
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
@@ -52,7 +52,7 @@ public final class MapConstructor {
         }
         WaterGenerator waterGen = new WaterGenerator(mapSize);
         NoiseMapGenerator noiseGen = new NoiseMapGenerator(random, mapSize, seed, range);
-        generateMapObjects(waterGen, noiseGen);
+        generateMapObjects(waterGen, noiseGen, waterlevel);
         setMapToStorage();
     }
 
@@ -69,17 +69,16 @@ public final class MapConstructor {
      * for roughen method to add jitter to heightmap.
      *
      * @param waterGen A WaterGenerator
-     * @param noiseGen A NoiseMapGenerator 
+     * @param noiseGen A NoiseMapGenerator
      */
-    public void generateMapObjects(WaterGenerator waterGen, NoiseMapGenerator noiseGen) {
+    public void generateMapObjects(WaterGenerator waterGen, NoiseMapGenerator noiseGen, double waterlevel) {
         map = noiseGen.createNoise(map);
         this.maxHeight = noiseGen.getMaxValue("height");
-        double waterLevel = 0.5;
-        map = waterGen.addWaterByHeight(waterLevel * maxHeight, map);
+        map = waterGen.addWaterByHeight(waterlevel * maxHeight, map);
         map = waterGen.addRivers(map);
         double maxMoisture = noiseGen.getMaxValue("moisture");
-        //roughen(heightGen, moistureGen);
-        map = bioS.createBiomes(map, maxHeight, waterLevel, maxMoisture);
+        //roughen(noiseGen);
+        map = bioS.createBiomes(map, maxHeight, waterlevel, maxMoisture);
     }
 
     /**
@@ -91,6 +90,7 @@ public final class MapConstructor {
      */
     //TODO: this version of the method does not look good with current map algorithm, and is therefore not in use. Method is 
     //supposed to make the terrain and moisture maps more rough, and make the biome borders less "clean". 
+    /*
     public void roughen(NoiseMapGenerator heightGen, NoiseMapGenerator moistureGen) {
         for (int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map.length - 1; y++) {
@@ -116,6 +116,54 @@ public final class MapConstructor {
                         map[x][y].setMoisture(Math.max(1, moistureAverage));
                         //generator.checkMaxValue(average);
                     }
+                }
+            }
+        }
+    }
+     */
+    
+    public void roughen(NoiseMapGenerator noiseGen) {
+        for (int x = 1; x < map.length - 1; x++) {
+            for (int y = 1; y < map.length - 1; y++) {
+                if (!map[x][y].isWater()) {
+
+                    double moisture = map[x][y].getMoisture();
+                    double height = map[x][y].getHeight();
+                    double roughener = map[x][y].getRoughener();
+
+                    if (map[x - 1][y].getHeight() < height
+                            || map[x - 1][y - 1].getHeight() < height
+                            || map[x][y - 1].getHeight() < height) {
+                        map[x][y].setMoisture(moisture + 20);
+                    }
+                    if (map[x - 1][y].getHeight() >= height
+                            || map[x - 1][y - 1].getHeight() >= height
+                            || map[x][y - 1].getHeight() >= height) {
+                        map[x][y].setMoisture(moisture - 20);
+                    }
+
+                    /*
+                    if (map[x + 1][y].getRoughener() < roughener
+                            || map[x + 1][y - 1].getRoughener() < roughener
+                            || map[x][y - 1].getRoughener() < roughener) {
+                        double averageRoughener = (map[x - 1][y].getRoughener() + map[x - 1][y - 1].getRoughener() + map[x][y - 1].getRoughener()) / 3;
+                        double differenceToAverage = roughener - averageRoughener;
+                        //map[x][y].setHeight(height + 2 * differenceToAverage);
+                        map[x][y].setHeight(height + 10);
+                        //map[x][y].setMoisture(map[x][y].getMoisture() + 5);
+                    }
+                    if (map[x + 1][y].getRoughener() >= roughener
+                            || map[x + 1][y - 1].getRoughener() >= roughener
+                            || map[x][y - 1].getRoughener() >= roughener) {
+                        double averageRoughener = (map[x - 1][y].getRoughener() + map[x - 1][y - 1].getRoughener() + map[x][y - 1].getRoughener()) / 3;
+                        double differenceToAverage = roughener - averageRoughener;
+                        //map[x][y].setHeight(height + 2 * differenceToAverage);
+                        map[x][y].setHeight(height - 10);
+                        //map[x][y].setMoisture(map[x][y].getMoisture() - 5);
+                    }
+                    */
+                    noiseGen.checkMaxValue("moisture", map[x][y].getMoisture());
+                    noiseGen.checkMaxValue("height", map[x][y].getHeight());
                 }
             }
         }

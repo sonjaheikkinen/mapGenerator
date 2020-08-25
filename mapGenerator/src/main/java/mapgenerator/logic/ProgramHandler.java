@@ -12,6 +12,7 @@ import mapgenerator.gui.GraphicUI;
 public class ProgramHandler {
 
     private MapConstructor constructor;
+    private double waterLevel;
 
     /**
      * Method initializes variables and creates a map constructor and graphic
@@ -28,12 +29,13 @@ public class ProgramHandler {
         int mapSizeExponent = 9;
         int multiplier = 1;
         int canvasSize = multiplier * (int) (Math.pow(2, mapSizeExponent) + 1);
-        int mapSeed = 100;
-        int mapRandomizerRange = 200;
+        int mapSeed = 200;
+        int mapRandomizerRange = 400;
         int mapSize = (int) Math.pow(2, mapSizeExponent) + 1;
+        this.waterLevel = 0.5;
         this.constructor = new MapConstructor(random, mapSize, mapSeed, mapRandomizerRange, map, selector);
         this.newMap();
-        GraphicUI gui = new GraphicUI(stage, map, canvasSize, this, random, multiplier);
+        GraphicUI gui = new GraphicUI(stage, map, canvasSize, this, random, multiplier, waterLevel);
     }
 
     /**
@@ -41,7 +43,7 @@ public class ProgramHandler {
      */
     public void newMap() {
         Long creatingStarts = System.nanoTime();
-        constructor.constructMap();
+        constructor.constructMap(waterLevel);
         Long creatingEnds = System.nanoTime();
         Long creatingTime = creatingEnds - creatingStarts;
         System.out.println("Map created in " + creatingTime + " nanoseconds (" + (creatingTime / 1000000) + " milliseconds)");

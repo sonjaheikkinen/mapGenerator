@@ -5,6 +5,7 @@
  */
 package mapgenerator.logic;
 
+import java.util.Random;
 import mapgenerator.datastructures.MapCell;
 import mapgenerator.domain.Biomes;
 
@@ -15,6 +16,7 @@ public class BiomeSelector {
 
     private int[][] biomes;
     private int[][] biomeSelection;
+    private Random random;
 
     /**
      * Constructor gets biome options from biomes class.
@@ -22,6 +24,7 @@ public class BiomeSelector {
      * @param biomes A biomes object which holds a biome selection table
      */
     public BiomeSelector(Biomes biomes) {
+        this.random = new Random();
         this.biomeSelection = biomes.getBiomeSelection();
     }
 
@@ -72,18 +75,20 @@ public class BiomeSelector {
     public int defineHeightLevel(MapCell[][] map, int x, int y, double waterHeight, double landHeightRange) {
         int heightlevel;
         double landHeight = map[x][y].getHeight() - waterHeight;
-        if (landHeight >= 0 && landHeight < 0.15 * landHeightRange) {
+        if (landHeight < 0.05 * landHeightRange) {
             heightlevel = 0;
-        } else if (landHeight >= 0.15 * landHeightRange && landHeight < 0.2 * landHeightRange) {
+        } else if (landHeight < 0.1 * landHeightRange) {
             heightlevel = 1;
-        } else if (landHeight >= 0.2 * landHeightRange && landHeight < 0.4 * landHeightRange) {
+        } else if (landHeight < 0.2 * landHeightRange) {
             heightlevel = 2;
-        } else if (landHeight >= 0.4 * landHeightRange && landHeight < 0.6 * landHeightRange) {
+        } else if (landHeight < 0.5 * landHeightRange) {
             heightlevel = 3;
-        } else if (landHeight >= 0.6 * landHeightRange && landHeight < 0.8 * landHeightRange) {
+        } else if (landHeight < 0.6 * landHeightRange) {
             heightlevel = 4;
-        } else {
+        } else if (landHeight < 0.8 * landHeightRange) {
             heightlevel = 5;
+        } else {
+            heightlevel = 6;
         }
         return heightlevel;
     }
@@ -99,9 +104,9 @@ public class BiomeSelector {
      */
     public int defineMoistureLevel(MapCell[][] map, int x, int y, double maxMoisture) {
         int moisturelevel;
-        if (map[x][y].getMoisture() < 0.4 * maxMoisture) {
+        if (map[x][y].getMoisture() < 0.1 * maxMoisture) {
             moisturelevel = 0;
-        } else if (map[x][y].getMoisture() < 0.6 * maxMoisture) {
+        } else if (map[x][y].getMoisture() < 0.4 * maxMoisture) {
             moisturelevel = 1;
         } else {
             moisturelevel = 2;

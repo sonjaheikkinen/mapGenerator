@@ -71,6 +71,7 @@ public class NoiseMapGenerator {
 
         map = assignCornerValues("height", map);
         map = assignCornerValues("moisture", map);
+        map = assignCornerValues("roughener", map);
 
         for (int squareSize = mapSize - 1; squareSize >= 2; squareSize /= 2, this.randomizerRange /= 2.0) {
             int squareHalf = squareSize / 2;
@@ -78,12 +79,14 @@ public class NoiseMapGenerator {
                 for (int y = 0; y < mapSize - 1; y += squareSize) {
                     map = diamondStep(x, y, squareSize, squareHalf, "height", map);
                     map = diamondStep(x, y, squareSize, squareHalf, "moisture", map);
+                    map = diamondStep(x, y, squareSize, squareHalf, "roughener", map);
                 }
             }
             for (int x = 0; x < mapSize; x += squareHalf) {
                 for (int y = (x + squareHalf) % squareSize; y < mapSize; y += squareSize) {
                     map = squareStep(x, y, squareHalf, "height", map);
                     map = squareStep(x, y, squareHalf, "moisture", map);
+                    map = squareStep(x, y, squareHalf, "roughener", map);
                 }
             }
         }
@@ -95,22 +98,7 @@ public class NoiseMapGenerator {
     /**
      * Puts the seed value +/- 10 on the corners of the map.
      */
-    /*
-    public void assignCornerValues() {
-        double value1 = seed + random.nextInt(20) - 10;
-        double value2 = seed + random.nextInt(20) - 10;
-        double value3 = seed + random.nextInt(20) - 10;
-        double value4 = seed + random.nextInt(20) - 10;
-        checkMaxValue(value1);
-        checkMaxValue(value2);
-        checkMaxValue(value3);
-        checkMaxValue(value4);
-        map[0][0].setNoiseValue(attribute, value1);
-        map[0][mapSize - 1].setNoiseValue(attribute, value2);
-        map[mapSize - 1][0].setNoiseValue(attribute, value3);
-        map[mapSize - 1][mapSize - 1].setNoiseValue(attribute, value4);
-    }
-     */
+
     public MapCell[][] assignCornerValues(String attribute, MapCell[][] map) {
         double value1 = seed + random.nextInt(20) - 10;
         double value2 = seed + random.nextInt(20) - 10;

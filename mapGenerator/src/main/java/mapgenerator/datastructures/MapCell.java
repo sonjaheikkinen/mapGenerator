@@ -15,6 +15,7 @@ public class MapCell {
     private int y;
     private double height;
     private double moisture;
+    private double roughener;
     private boolean water;
     private int biome;
 
@@ -23,6 +24,8 @@ public class MapCell {
             return height;
         } else if (attribute.equals("moisture")) {
             return moisture;
+        } else if (attribute.equals("roughener")) {
+            return roughener;
         }
         return 0;
     }
@@ -32,6 +35,8 @@ public class MapCell {
             this.height = value;
         } else if (attribute.equals("moisture")) {
             this.moisture = value;
+        } else if (attribute.equals("roughener")) {
+            this.roughener = value;
         }
     }
 
@@ -65,6 +70,15 @@ public class MapCell {
 
     public void setMoisture(double moisture) {
         this.moisture = moisture;
+    }
+    
+    
+    public double getRoughener() {
+        return roughener;
+    }
+
+    public void setRoughener(double roughener) {
+        this.roughener = roughener;
     }
 
     public boolean isWater() {
