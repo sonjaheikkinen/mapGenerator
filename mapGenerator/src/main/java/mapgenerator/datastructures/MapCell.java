@@ -17,7 +17,8 @@ public class MapCell {
     private double moisture;
     private double roughener;
     private boolean water;
-    private int biome;
+    //private int biome;
+    private String biome;
 
     public double getNoiseValue(String attribute) {
         if (attribute.equals("height")) {
@@ -71,8 +72,7 @@ public class MapCell {
     public void setMoisture(double moisture) {
         this.moisture = moisture;
     }
-    
-    
+
     public double getRoughener() {
         return roughener;
     }
@@ -89,11 +89,20 @@ public class MapCell {
         this.water = water;
     }
 
+    /*
     public int getBiome() {
         return biome;
     }
 
     public void setBiome(int biome) {
+        this.biome = biome;
+    }
+     */
+    public String getBiome() {
+        return biome;
+    }
+
+    public void setBiome(String biome) {
         this.biome = biome;
     }
 

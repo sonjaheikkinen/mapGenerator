@@ -6,6 +6,7 @@
 package mapgenerator.domain;
 
 import java.util.HashMap;
+import javafx.scene.paint.Color;
 
 /**
  * Class is responsible for storing biome names and their order in relation to
@@ -13,16 +14,21 @@ import java.util.HashMap;
  */
 public class Biomes {
 
-    int[][] biomeSelection;
+    //int[][] biomeSelection;
+    private String[][] biomeSelection;
+    private BiomeColor[] biomeColors;
     HashMap<String, Integer> biomeNumbers;
 
     /**
      * Constructor creates biome selection array and fills it with biomes.
      */
     public Biomes() {
-        this.biomeSelection = new int[7][3];
-        fillBiomeNumbers();
+        //this.biomeSelection = new int[7][3];
+        this.biomeSelection = new String[7][3];
+        this.biomeColors = new BiomeColor[21];
+        //fillBiomeNumbers();
         fillBiomes();
+
     }
 
     /**
@@ -46,19 +52,25 @@ public class Biomes {
                            + "bare;tundra;tundra;"
                            + "bare;snow;snow";
          */
-        String biomeString = "sand;beachGrass;beachForest;"
-                           + "dryGrass;grass;sparseLeaf;"
-                           + "dryGrassWithTrees;leaf;mixedForest;"
-                           + "dryLeaf;taigaPine;taigaSpruce;"
-                           + "dryMountainForest;mountainForest;tundra;"
-                           + "bare;bare;bareTundra;"
-                           + "volcano;snow;snow";
+        String biomeString = "Sand;Grassy beach;Forested beach;"
+                + "Dry grass;Grass;Grass and leaf trees;"
+                + "Dry grass with trees;Deciduous forest;Mixed forest;"
+                + "Dry deciduous forest;Pine forest;Taiga;"
+                + "Dry mountain forest; Mountain forest;Tundra;"
+                + "Bare mountain;Bare mountain;Bare tundra;"
+                + "Volcano;Snowy mountain;Snowy mountain";
         String[] biomeList = biomeString.split(";");
         int index = 0;
         for (int height = 0; height < 7; height++) {
             for (int moisture = 0; moisture < 3; moisture++) {
-                int biome = biomeNumbers.get(biomeList[index]);
-                biomeSelection[height][moisture] = biome;
+                //int biome = biomeNumbers.get(biomeList[index]);
+                //biomeSelection[height][moisture] = biome;
+                biomeSelection[height][moisture] = biomeList[index];
+                if (index == 0) {
+                    biomeColors[index] = new BiomeColor("water", null);
+                } else {
+                    biomeColors[index] = new BiomeColor(biomeList[index], null);
+                }
                 index++;
             }
         }
@@ -87,7 +99,7 @@ public class Biomes {
         biomeNumbers.put("tundra", 15);
         biomeNumbers.put("bare", 16);
         biomeNumbers.put("bareTundra", 17);
-        biomeNumbers.put("volcano", 18);   
+        biomeNumbers.put("volcano", 18);
         biomeNumbers.put("snow", 19);
     }
 
@@ -96,8 +108,28 @@ public class Biomes {
      *
      * @return An array containing biome numbers.
      */
+    /*
     public int[][] getBiomeSelection() {
         return biomeSelection;
     }
+     */
+    public String[][] getBiomeSelection() {
+        return biomeSelection;
+    }
+    
+    public BiomeColor[] getBiomeColors() {
+        return biomeColors;
+    }
+    
+    public Color getBiomeColor(String biome) {
+        for (int i = 0; i < biomeColors.length; i++) {
+            if (biomeColors[i].getBiome().equals(biome)) {
+                return biomeColors[i].getColor();
+            }
+        }
+        return biomeColors[0].getColor();
+    }
+    
+   
 
 }
