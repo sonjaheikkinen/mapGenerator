@@ -89,39 +89,7 @@ public final class MapConstructor {
      * @return Given map with more noise
      */
     //TODO: this version of the method does not look good with current map algorithm, and is therefore not in use. Method is 
-    //supposed to make the terrain and moisture maps more rough, and make the biome borders less "clean". 
-    /*
-    public void roughen(NoiseMapGenerator heightGen, NoiseMapGenerator moistureGen) {
-        for (int x = 1; x < map.length - 1; x++) {
-            for (int y = 1; y < map.length - 1; y++) {
-                if (!map[x][y].isWater()) {
-                    if (map[x][y].getHeight() > map[x - 1][y - 1].getHeight()
-                            || map[x][y].getHeight() > map[x - 1][y].getHeight()
-                            || map[x][y].getHeight() > map[x][y - 1].getHeight()) {
-                        double heightAverage = (map[x - 1][y - 1].getHeight()
-                                + map[x - 1][y].getHeight() + map[x][y - 1].getHeight()) / 3 + 5;
-                        map[x][y].setHeight(Math.max(1, heightAverage));
-                        double moistureAverage = (map[x - 1][y - 1].getMoisture()
-                                + map[x - 1][y].getMoisture() + map[x][y - 1].getMoisture()) / 3 + 5;
-                        map[x][y].setMoisture(Math.max(1, moistureAverage));
-                        //generator.checkMaxValue(average);
-                    } else if (map[x][y].getHeight() > map[x + 1][y + 1].getHeight()
-                            || map[x][y].getHeight() > map[x + 1][y].getHeight()
-                            || map[x][y].getHeight() > map[x + 1][y - 1].getHeight()) {
-                        double heightAverage = (map[x + 1][y + 1].getHeight()
-                                + map[x + 1][y].getHeight() + map[x + 1][y - 1].getHeight()) / 3 + 5;
-                        map[x][y].setHeight(Math.max(1, heightAverage));
-                        double moistureAverage = (map[x + 1][y + 1].getMoisture()
-                                + map[x + 1][y].getMoisture() + map[x + 1][y - 1].getMoisture()) / 3 + 5;
-                        map[x][y].setMoisture(Math.max(1, moistureAverage));
-                        //generator.checkMaxValue(average);
-                    }
-                }
-            }
-        }
-    }
-     */
-    
+    //supposed to make the terrain and moisture maps more rough, and make the biome borders less "clean".     
     public void roughen(NoiseMapGenerator noiseGen) {
         for (int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map.length - 1; y++) {
@@ -142,7 +110,7 @@ public final class MapConstructor {
                         map[x][y].setMoisture(moisture - 20);
                     }
 
-                    /*
+                    
                     if (map[x + 1][y].getRoughener() < roughener
                             || map[x + 1][y - 1].getRoughener() < roughener
                             || map[x][y - 1].getRoughener() < roughener) {
@@ -161,7 +129,7 @@ public final class MapConstructor {
                         map[x][y].setHeight(height - 10);
                         //map[x][y].setMoisture(map[x][y].getMoisture() - 5);
                     }
-                    */
+                   
                     noiseGen.checkMaxValue("moisture", map[x][y].getMoisture());
                     noiseGen.checkMaxValue("height", map[x][y].getHeight());
                 }

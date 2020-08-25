@@ -5,7 +5,10 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import mapgenerator.datastructures.MapCell;
@@ -19,6 +22,12 @@ public class GraphicUI {
 
     private Random random;
     private double waterlevel;
+    private Canvas canvas;
+    private int canvasSize;
+    private GraphicsContext brush;
+    private Map mapStorage;
+    private int multiplier;
+    private String biomeDrawType;
 
     /**
      * Method creates a window and calls for method drawMap to draw the
@@ -27,22 +36,27 @@ public class GraphicUI {
      * @param stage A window which shows things on screen.
      * @param map Contains all information of the generated map.
      */
-    public GraphicUI(Stage stage, Map map, int canvasSize, ProgramHandler handler, Random random, int multiplier, double waterlevel) {
-
+    public GraphicUI(Random random, double waterlevel) {
         this.random = random;
         this.waterlevel = waterlevel;
+        this.biomeDrawType = "simple";
+    }
 
-        Canvas canvas = new Canvas(canvasSize, canvasSize);
-        GraphicsContext brush = canvas.getGraphicsContext2D();
-        Button newMapButton = createNewMapButton(handler, brush, map, canvasSize, multiplier);
-
-        drawMap(brush, map, canvasSize, multiplier);
+    public void start(Stage stage, Map map, int canvasSize, ProgramHandler handler, int multiplier, int exponent) {
+        this.canvas = new Canvas(canvasSize, canvasSize);
+        this.brush = canvas.getGraphicsContext2D();
+        this.mapStorage = map;
+        this.canvasSize = canvasSize;
+        this.multiplier = multiplier;
+        Button newMapButton = createNewMapButton(handler, exponent);
 
         BorderPane layout = createLayout(newMapButton, canvas);
+
+        drawMap();
+
         Scene scene = new Scene(layout);
         stage.setScene(scene);
         stage.show();
-
     }
 
     /**
@@ -53,10 +67,30 @@ public class GraphicUI {
      * @return Produced layout
      */
     public BorderPane createLayout(Button newMapButton, Canvas canvas) {
+        VBox options = createOptionBar(newMapButton);
         BorderPane layout = new BorderPane();
-        layout.setRight(newMapButton);
+        layout.setRight(options);
         layout.setCenter(canvas);
         return layout;
+    }
+
+    public VBox createOptionBar(Button newMapButton) {
+        VBox options = new VBox();
+        Label drawtype = new Label("Select biome drawing type:");
+        Button simple = new Button("Simple");
+        simple.setOnAction(actionEvent -> {
+            this.biomeDrawType = "simple";
+            drawMap();
+        });
+        Button smooth = new Button("Smooth");
+        smooth.setOnAction(actionEvent -> {
+            this.biomeDrawType = "smooth";
+            drawMap();
+        });
+        HBox drawtypeButtons = new HBox();
+        drawtypeButtons.getChildren().addAll(simple, smooth);
+        options.getChildren().addAll(newMapButton, drawtype, drawtypeButtons);
+        return options;
     }
 
     /**
@@ -70,11 +104,11 @@ public class GraphicUI {
      * @param multiplier Canvas and drawing size can be increased via multiplier
      * @return A button element which creates and draws a new map when pressed
      */
-    public Button createNewMapButton(ProgramHandler handler, GraphicsContext brush, Map map, int canvasSize, int multiplier) {
+    public Button createNewMapButton(ProgramHandler handler, int exponent) {
         Button newMapButton = new Button("New map");
         newMapButton.setOnAction(actionEvent -> {
-            handler.newMap();
-            drawMap(brush, map, canvasSize, multiplier);
+            handler.newMap(exponent);
+            drawMap();
         });
         return newMapButton;
     }
@@ -87,46 +121,14 @@ public class GraphicUI {
      * @param canvasSize Size of the canvas
      * @param multiplier Canvas and drawing size can be increased via multiplier
      */
-    /*
-    public void drawMap(GraphicsContext brush, Map map, int canvasSize, int multiplier) {
-        double[][] heightMap = map.getHeightMap();
-        double maxHeight = map.getMaxHeight();
-        int[][] biomes = map.getBiomes();
-        for (int x = 0; x < canvasSize / multiplier; x++) {
-            for (int y = 0; y < canvasSize / multiplier; y++) {
-                double height = heightMap[x][y];
-                double shadow = calculateShadow(x, canvasSize, y, heightMap, biomes);
-                double shade = height / maxHeight;
-                int biome = biomes[x][y];
-                shade = Math.min(255, shade);
-                Color color = pickColor(shade, shadow, biome);
-                brush.setFill(color);
-                brush.fillRect(multiplier * x, multiplier * y, multiplier, multiplier);
-            }
-        }
-    }
-     */
-    public void drawMap(GraphicsContext brush, Map map, int canvasSize, int multiplier) {
+    public void drawMap() {
         Long drawingStarts = System.nanoTime();
-        double maxHeight = map.getMaxHeight();
+        double maxHeight = mapStorage.getMaxHeight();
+        Color[] colors = new Color[20];
+        colors = fillColorArray(colors);
         for (int x = 0; x < canvasSize / multiplier; x++) {
             for (int y = 0; y < canvasSize / multiplier; y++) {
-                double height = map.getMap()[x][y].getHeight();
-                //double shadow = calculateShadow(x, canvasSize, y, map.getMap());
-                double shadow = 1;
-                double landHeightRange = maxHeight - (waterlevel * maxHeight);
-                double landHeight = height - (waterlevel * maxHeight);
-                double shade;
-                if (!map.getMap()[x][y].isWater()) {
-                    shade = landHeight / landHeightRange;
-                } else {
-                    shade = height / maxHeight;
-                }
-                int biome = map.getMap()[x][y].getBiome();
-                shade = Math.min(1, shade);
-                Color color = pickColor(shade, shadow, biome);
-                brush.setFill(color);
-                brush.fillRect(multiplier * x, multiplier * y, multiplier, multiplier);
+                drawMapCell(x, y, maxHeight, colors);
             }
         }
         Long drawingEnds = System.nanoTime();
@@ -134,32 +136,22 @@ public class GraphicUI {
         System.out.println("Map drawn in " + drawingTime + " nanoseconds (" + (drawingTime / 1000000) + " milliseconds)");
     }
 
-    //TODO improve this, calculates shadow
-    /*
-    public double calculateShadow(int x, int canvasSize, int y, double[][] heightMap, int[][] biomes) {
-        double shadow = 1;
-        if (x > 0 && x < canvasSize - 1 && y > 0 && y < canvasSize - 1) {
-            if (heightMap[x - 1][y - 1] < heightMap[x][y] && biomes[x][y] != 0) {
-                shadow = 0.8;
-            } else if (heightMap[x - 1][y] < heightMap[x][y]
-                    || heightMap[x][y] - 1 < heightMap[x][y]) {
-                shadow = 0.9;
-            }
+    public void drawMapCell(int x, int y, double maxHeight, Color[] colors) {
+        double height = mapStorage.getMap()[x][y].getHeight();
+        double landHeightRange = maxHeight - (waterlevel * maxHeight);
+        double landHeight = height - (waterlevel * maxHeight);
+        double shade;
+        if (!mapStorage.getMap()[x][y].isWater()) {
+            shade = landHeight / landHeightRange;
+        } else {
+            shade = height / maxHeight;
         }
-        return shadow;
-    }
-     */
-    public double calculateShadow(int x, int canvasSize, int y, MapCell[][] map) {
-        double shadow = 1;
-        if (x > 0 && x < canvasSize - 1 && y > 0 && y < canvasSize - 1) {
-            if (map[x - 1][y - 1].getHeight() < map[x][y].getHeight() && map[x][y].getBiome() != 0) {
-                shadow = 0.8;
-            } else if (map[x - 1][y].getHeight() < map[x][y].getHeight()
-                    || map[x][y].getHeight() - 1 < map[x][y].getHeight()) {
-                shadow = 0.9;
-            }
-        }
-        return shadow;
+        int biome = mapStorage.getMap()[x][y].getBiome();
+        shade = Math.min(1, shade);
+        colors = calculateWaterColor(colors, shade);
+        Color color = pickColor(colors, shade, biome);
+        brush.setFill(color);
+        brush.fillRect(multiplier * x, multiplier * y, multiplier, multiplier);
     }
 
     /**
@@ -170,31 +162,19 @@ public class GraphicUI {
      * @param shadow Has an effect of color brightness
      * @return brush color
      */
-    public Color pickColor(double shade, double shadow, int biome) {
-        double blueShade = shade * 255;
-        blueShade = Math.min(140, blueShade);
-        blueShade = Math.max(100, blueShade);
+    public Color pickColor(Color[] colors, double shade, int biome) {
         //biomes: "0-water;1-sand;2-drygrass;3-grasss;4-leaf;5-taiga;6-tundra;7-bare;8-snow";
         //TODO: make color array a hashmap and get color by biome name instead of number?
         Color color;
-        int waterBlue = (int) Math.round(blueShade);
-        int waterGreen = (int) Math.round(0.75 * blueShade);
-        Color[] colors = fillColorArray(waterBlue, waterGreen, (int) Math.round(shade * 255));
+        if (biomeDrawType.equals("smooth")) {
+            colors = fillColorArrayUsingShades(colors, (int) Math.round(shade * 255));
+        }
         color = colors[biome];
         color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, 0.95 + random.nextDouble() * 0.05, 1);
-        //color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, shadow, 1);
         return color;
     }
 
-    public Color[] fillColorArray(int waterBlue, int waterGreen, int shade) {
-        int lightshade = Math.max(0, 255 - shade);
-        lightshade = Math.min(255, lightshade);
-        shade = Math.min(255, shade);
-        shade = Math.max(0, shade);
-        Color[] colors = new Color[20];
-        colors[0] = Color.rgb(0, waterGreen, waterBlue);
-
-        
+    public Color[] fillColorArray(Color[] colors) {
         colors[1] = Color.rgb(212, 209, 197); //sand
         colors[2] = Color.rgb(168, 181, 141); //beachGrass
         colors[3] = Color.rgb(159, 194, 132); //beachForest
@@ -214,9 +194,14 @@ public class GraphicUI {
         colors[17] = Color.rgb(140, 170, 168); //bareTundra
         colors[18] = Color.rgb(110, 142, 145); //volcano   
         colors[19] = Color.rgb(222, 234, 233); //snow
-         
-        
-        /*
+        return colors;
+    }
+
+    public Color[] fillColorArrayUsingShades(Color[] colors, int shade) {
+        int lightshade = Math.max(0, 255 - shade);
+        lightshade = Math.min(255, lightshade);
+        shade = Math.min(255, shade);
+        shade = Math.max(0, shade);
         colors[1] = Color.rgb(Math.min(255, lightshade + 5), Math.max(0, lightshade - 10), Math.max(0, lightshade - 10)); //sand
         colors[2] = Color.rgb(Math.min(255, lightshade + 5), Math.max(0, lightshade - 15), Math.max(0, lightshade - 15)); //beachGrass
         colors[3] = Color.rgb(lightshade, Math.max(0, lightshade - 20), Math.max(0, lightshade - 20)); //beachForest
@@ -236,7 +221,16 @@ public class GraphicUI {
         colors[17] = Color.rgb(Math.max(0, shade - 50), Math.max(0, shade - 40), Math.max(0, shade - 40)); //bareTundra
         colors[18] = Color.rgb(Math.max(0, shade - 50), Math.max(0, shade - 50), Math.max(0, shade - 60)); //volcano
         colors[19] = Color.rgb(Math.min(255, shade + 10), Math.min(255, shade + 10), Math.min(255, shade + 20)); //snow
-        */
+        return colors;
+    }
+
+    public Color[] calculateWaterColor(Color[] colors, double shade) {
+        double blueShade = shade * 255;
+        blueShade = Math.min(140, blueShade);
+        blueShade = Math.max(100, blueShade);
+        int waterBlue = (int) Math.round(blueShade);
+        int waterGreen = (int) Math.round(0.75 * blueShade);
+        colors[0] = Color.rgb(0, waterGreen, waterBlue);
         return colors;
     }
 

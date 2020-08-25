@@ -11,8 +11,19 @@ import mapgenerator.gui.GraphicUI;
  */
 public class ProgramHandler {
 
+    private Random random;
+    private Map mapStorage;
+    private Biomes biomes;
+    private BiomeSelector selector;
     private MapConstructor constructor;
     private double waterLevel;
+
+    public ProgramHandler() {
+        this.random = new Random();
+        this.mapStorage = new Map();
+        this.biomes = new Biomes();
+        this.selector = new BiomeSelector(biomes);
+    }
 
     /**
      * Method initializes variables and creates a map constructor and graphic
@@ -22,26 +33,23 @@ public class ProgramHandler {
      * stage
      */
     public void initialize(Stage stage) {
-        Random random = new Random();
-        Map map = new Map();
-        Biomes biomes = new Biomes();
-        BiomeSelector selector = new BiomeSelector(biomes);
         int mapSizeExponent = 9;
         int multiplier = 1;
         int canvasSize = multiplier * (int) (Math.pow(2, mapSizeExponent) + 1);
-        int mapSeed = 200;
-        int mapRandomizerRange = 400;
-        int mapSize = (int) Math.pow(2, mapSizeExponent) + 1;
-        this.waterLevel = 0.5;
-        this.constructor = new MapConstructor(random, mapSize, mapSeed, mapRandomizerRange, map, selector);
-        this.newMap();
-        GraphicUI gui = new GraphicUI(stage, map, canvasSize, this, random, multiplier, waterLevel);
+        this.newMap(mapSizeExponent);
+        GraphicUI gui = new GraphicUI(random, waterLevel);
+        gui.start(stage, mapStorage, canvasSize, this, multiplier, mapSizeExponent);
     }
 
     /**
      * Method calls for map constructor to create a new map
      */
-    public void newMap() {
+    public void newMap(int mapSizeExponent) {
+        int mapSeed = 200;
+        int mapRandomizerRange = 400;
+        int mapSize = (int) Math.pow(2, mapSizeExponent) + 1;
+        this.waterLevel = 0.5;
+        this.constructor = new MapConstructor(random, mapSize, mapSeed, mapRandomizerRange, mapStorage, selector);
         Long creatingStarts = System.nanoTime();
         constructor.constructMap(waterLevel);
         Long creatingEnds = System.nanoTime();
