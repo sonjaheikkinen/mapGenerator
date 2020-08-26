@@ -2,6 +2,7 @@ package mapgenerator.logic;
 
 import java.util.Random;
 import mapgenerator.datastructures.MapCell;
+import mapgenerator.math.Calculator;
 
 /**
  * Generates height values to be used on a map
@@ -14,6 +15,7 @@ public class NoiseMapGenerator {
     private int mapSize;
     private double maxHeight;
     private double maxMoisture;
+    private Calculator calc;
 
     /**
      * Constructor for NoiseMapGenerator, initializes class variables.
@@ -25,13 +27,14 @@ public class NoiseMapGenerator {
      * @param range A random value of +/- range will be added to values
      * calculated by algorithm
      */
-    public NoiseMapGenerator(Random random, int mapSize, int seed, int range) {
+    public NoiseMapGenerator(Random random, int mapSize, int seed, int range, Calculator calc) {
         this.random = random;
         this.seed = seed;
         this.randomizerRange = range;
         this.mapSize = mapSize;
         this.maxHeight = 0;
         this.maxMoisture = 0;
+        this.calc = calc;
     }
 
     /**
@@ -125,7 +128,7 @@ public class NoiseMapGenerator {
                 + map[x + squareSize][y].getNoiseValue(attribute)
                 + map[x][y + squareSize].getNoiseValue(attribute)
                 + map[x + squareSize][y + squareSize].getNoiseValue(attribute)) / 4;
-        double newValue = Math.max(1, cornerAverage
+        double newValue = calc.max(1, cornerAverage
                 + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
         checkMaxValue(attribute, newValue);
         map[x + squareHalf][y + squareHalf].setNoiseValue(attribute, newValue);
@@ -147,7 +150,7 @@ public class NoiseMapGenerator {
      */
     public MapCell[][] squareStep(int x, int y, int distanceToCorner, String attribute, MapCell[][] map) {
         double cornerAverage = countCornerAverage(x, y, distanceToCorner, attribute, map);
-        double newValue = Math.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
+        double newValue = calc.max(1, cornerAverage + (random.nextDouble() * 2 * randomizerRange) - randomizerRange);
         checkMaxValue(attribute, newValue);
         map[x][y].setNoiseValue(attribute, newValue);
         return map;
@@ -173,7 +176,7 @@ public class NoiseMapGenerator {
             cornerCount++;
         }
         if (x + distanceToCorner < mapSize) {
-            cornerSum = cornerSum + map[Math.min(x + distanceToCorner, mapSize - 1)][y].getNoiseValue(attribute);
+            cornerSum = cornerSum + map[x + distanceToCorner][y].getNoiseValue(attribute);
             cornerCount++;
         }
         if (y + distanceToCorner < mapSize) {

@@ -1,5 +1,6 @@
 package mapgenerator.logic;
 
+import java.util.Random;
 import mapgenerator.datastructures.MapCell;
 import org.junit.After;
 import org.junit.Before;
@@ -18,7 +19,7 @@ public class WaterGeneratorTest {
     @Before
     public void setUp() {
         mapSize = (int) Math.pow(2, 2) + 1;
-        wg = new WaterGenerator(mapSize);
+        wg = new WaterGenerator(new Random(), mapSize);
         map = new MapCell[mapSize][mapSize];
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {

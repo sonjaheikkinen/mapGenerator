@@ -32,11 +32,11 @@ public class GraphicUI {
      * @param stage A window which shows things on screen.
      * @param map Contains all information of the generated map.
      */
-    public GraphicUI(Random random, double waterlevel, Biomes biomes, Map map, int canvasSize) {
+    public GraphicUI(double waterlevel, Biomes biomes, Map map, int canvasSize) {
         this.biomes = biomes;
         this.canvas = new Canvas(canvasSize, canvasSize);
         this.brush = canvas.getGraphicsContext2D();
-        this.painter = new Painter(map, biomes, canvasSize, waterlevel, brush, random);
+        this.painter = new Painter(map, biomes, canvasSize, waterlevel, brush, new Random());
     }
 
     /**

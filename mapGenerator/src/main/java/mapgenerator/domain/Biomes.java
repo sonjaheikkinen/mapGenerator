@@ -1,7 +1,5 @@
 package mapgenerator.domain;
 
-import javafx.scene.paint.Color;
-
 /**
  * Class is responsible for storing biome names and their order in relation to
  * height and moisture, and for storing the colors paired with biomes.
@@ -64,20 +62,6 @@ public class Biomes {
 
     public BiomeColor[] getBiomeColors() {
         return biomeColors;
-    }
-
-    /**
-     * Returns the color currently paired with given biome. 
-     * @param biome
-     * @return 
-     */
-    public Color getBiomeColor(String biome) {
-        for (int i = 0; i < biomeColors.length; i++) {
-            if (biomeColors[i].getBiome().equals(biome)) {
-                return biomeColors[i].getColor();
-            }
-        }
-        return biomeColors[0].getColor();
     }
 
 }

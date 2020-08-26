@@ -18,9 +18,9 @@ public class WaterGenerator {
      *
      * @param mapSize
      */
-    public WaterGenerator(int mapSize) {
+    public WaterGenerator(Random random, int mapSize) {
         this.mapSize = mapSize;
-        this.random = new Random();
+        this.random = random;
     }
 
     /**

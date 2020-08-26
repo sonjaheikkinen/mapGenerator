@@ -3,6 +3,7 @@ package mapgenerator.logic;
 import java.util.Random;
 import mapgenerator.datastructures.MapCell;
 import mapgenerator.domain.Map;
+import mapgenerator.math.Calculator;
 
 /*
  * Calls for other classes to generate different parts of the map and puts all the parts together.
@@ -18,6 +19,7 @@ public final class MapConstructor {
     private BiomeSelector bioS;
     private double maxHeight;
     private double maxMoisture;
+    private Calculator calc;
 
     /**
      * Constructor for this class, initializes class variables.
@@ -31,13 +33,14 @@ public final class MapConstructor {
      * @param map A map object in which the generated map is saved
      * @param bioS A biome selector objects for adding biomes to map
      */
-    public MapConstructor(Random random, int mapSize, int mapSeed, int mapRandomizerRange, Map map, BiomeSelector bioS) {
+    public MapConstructor(Random random, int mapSize, int mapSeed, int mapRandomizerRange, Map map, BiomeSelector bioS, Calculator calc) {
         this.mapStorage = map;
         this.random = random;
         this.mapSize = mapSize;
         this.seed = mapSeed;
         this.range = mapRandomizerRange;
         this.bioS = bioS;
+        this.calc = calc;
     }
 
     /**
@@ -51,8 +54,8 @@ public final class MapConstructor {
                 this.map[x][y] = new MapCell();
             }
         }
-        WaterGenerator waterGen = new WaterGenerator(mapSize);
-        NoiseMapGenerator noiseGen = new NoiseMapGenerator(random, mapSize, seed, range);
+        WaterGenerator waterGen = new WaterGenerator(random, mapSize);
+        NoiseMapGenerator noiseGen = new NoiseMapGenerator(random, mapSize, seed, range, calc);
         generateMapObjects(waterGen, noiseGen, waterlevel);
         setMapToStorage();
     }

@@ -4,6 +4,7 @@ import java.util.Random;
 import mapgenerator.datastructures.MapCell;
 import mapgenerator.domain.Biomes;
 import mapgenerator.domain.Map;
+import mapgenerator.math.Calculator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class MapConstructorTest {
         this.biomes = new Biomes();
         this.bioS = new BiomeSelector(biomes);
         int mapSize = (int) Math.pow(2, 6) + 1;
-        this.mc = new MapConstructor(new Random(), mapSize, 50, 50, this.mapStorage, this.bioS);
+        this.mc = new MapConstructor(new Random(), mapSize, 50, 50, this.mapStorage, this.bioS, new Calculator());
     }
 
     @Test

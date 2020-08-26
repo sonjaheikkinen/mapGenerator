@@ -3,6 +3,7 @@ package mapgenerator.gui;
 import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import mapgenerator.domain.BiomeColor;
 import mapgenerator.domain.Biomes;
 import mapgenerator.domain.Map;
 
@@ -120,7 +121,8 @@ public class Painter {
     }
 
     /**
-     * Picks correct brush color based on biome. If biomeDrawType is smooth, the new biome colors are calculated based on shade. 
+     * Picks correct brush color based on biome. If biomeDrawType is smooth, the
+     * new biome colors are calculated based on shade.
      *
      * @param shade A height map based integer which can be used to affect color
      * @param biome An integer telling which biome to base color on
@@ -131,7 +133,7 @@ public class Painter {
         if (biomeDrawType.equals("smooth")) {
             fillColorArrayUsingShades((int) Math.round(shade * 255));
         }
-        color = biomes.getBiomeColor(biome);
+        color = getBiomeColor(biome);
         color = color.deriveColor(random.nextInt(1), 0.7 + random.nextDouble() * 0.3, 0.95 + random.nextDouble() * 0.05, 1);
         return color;
     }
@@ -162,8 +164,10 @@ public class Painter {
     }
 
     /**
-     * Sets a color to every biome that is calculated using a shade which varies based on the height of the location.
-     * @param shade 
+     * Sets a color to every biome that is calculated using a shade which varies
+     * based on the height of the location.
+     *
+     * @param shade
      */
     public void fillColorArrayUsingShades(int shade) {
         int lightshade = betweenZeroAnd255(255 - shade);
@@ -190,8 +194,10 @@ public class Painter {
     }
 
     /**
-     * Calculates the color of water using a shade which varies based on the height of the location.
-     * @param shade 
+     * Calculates the color of water using a shade which varies based on the
+     * height of the location.
+     *
+     * @param shade
      */
     public void calculateWaterColor(double shade) {
         double blueShade = shade * 255;
@@ -232,6 +238,22 @@ public class Painter {
 
     public void setShowBiome(String showBiome) {
         this.showBiome = showBiome;
+    }
+
+    /**
+     * Returns the color currently paired with given biome.
+     *
+     * @param biome
+     * @return
+     */
+    public Color getBiomeColor(String biome) {
+        BiomeColor[] biomeColors = biomes.getBiomeColors();
+        for (int i = 0; i < biomeColors.length; i++) {
+            if (biomeColors[i].getBiome().equals(biome)) {
+                return biomeColors[i].getColor();
+            }
+        }
+        return biomeColors[0].getColor();
     }
 
 }

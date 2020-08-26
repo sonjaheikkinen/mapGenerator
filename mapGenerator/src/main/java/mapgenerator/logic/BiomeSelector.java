@@ -10,7 +10,6 @@ import mapgenerator.domain.Biomes;
 public class BiomeSelector {
 
     private String[][] biomeSelection;
-    private Random random;
 
     /**
      * Constructor gets biome options from biomes class.
@@ -18,7 +17,6 @@ public class BiomeSelector {
      * @param biomes A biomes object which holds a biome selection table
      */
     public BiomeSelector(Biomes biomes) {
-        this.random = new Random();
         this.biomeSelection = biomes.getBiomeSelection();
     }
 

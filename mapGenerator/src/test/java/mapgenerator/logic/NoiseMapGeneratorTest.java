@@ -2,6 +2,7 @@ package mapgenerator.logic;
 
 import java.util.Random;
 import mapgenerator.datastructures.MapCell;
+import mapgenerator.math.Calculator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class NoiseMapGeneratorTest {
         this.seed = 50;
         this.range = 50;
         this.mapSize = (int) Math.pow(2, this.exponent) + 1;
-        this.noiseGen = new NoiseMapGenerator(this.random, this.mapSize, this.seed, this.range);
+        this.noiseGen = new NoiseMapGenerator(this.random, this.mapSize, this.seed, this.range, new Calculator());
         this.map = new MapCell[this.mapSize][this.mapSize];
         for (int x = 0; x < this.mapSize; x++) {
             for (int y = 0; y < this.mapSize; y++) {

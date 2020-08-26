@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import mapgenerator.domain.Biomes;
 import mapgenerator.domain.Map;
 import mapgenerator.gui.GraphicUI;
+import mapgenerator.math.Calculator;
 
 /**
  * Class controls the execution of the program
@@ -17,6 +18,7 @@ public class ProgramHandler {
     private BiomeSelector selector;
     private MapConstructor constructor;
     private double waterLevel;
+    private Calculator calc;
 
     /**
      * Constructor initializes all needed class variables.
@@ -26,6 +28,7 @@ public class ProgramHandler {
         this.mapStorage = new Map();
         this.biomes = new Biomes();
         this.selector = new BiomeSelector(biomes);
+        this.calc = new Calculator();
     }
 
     /**
@@ -37,9 +40,9 @@ public class ProgramHandler {
      */
     public void initialize(Stage stage) {
         int mapSizeExponent = 9;
-        int canvasSize = (int) (Math.pow(2, mapSizeExponent) + 1);
+        int canvasSize = calc.pow(2, mapSizeExponent) + 1;
         this.newMap(mapSizeExponent);
-        GraphicUI gui = new GraphicUI(random, waterLevel, biomes, mapStorage, canvasSize);
+        GraphicUI gui = new GraphicUI(waterLevel, biomes, mapStorage, canvasSize);
         gui.start(stage, this, mapSizeExponent);
     }
 
@@ -50,9 +53,9 @@ public class ProgramHandler {
     public void newMap(int mapSizeExponent) {
         int mapSeed = 200;
         int mapRandomizerRange = 400;
-        int mapSize = (int) Math.pow(2, mapSizeExponent) + 1;
+        int mapSize = calc.pow(2, mapSizeExponent) + 1;
         this.waterLevel = 0.5;
-        this.constructor = new MapConstructor(random, mapSize, mapSeed, mapRandomizerRange, mapStorage, selector);
+        this.constructor = new MapConstructor(random, mapSize, mapSeed, mapRandomizerRange, mapStorage, selector, calc);
         Long creatingStarts = System.nanoTime();
         constructor.constructMap(waterLevel);
         Long creatingEnds = System.nanoTime();
