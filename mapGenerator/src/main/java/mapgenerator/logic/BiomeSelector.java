@@ -14,8 +14,6 @@ import mapgenerator.domain.Biomes;
  */
 public class BiomeSelector {
 
-    //private int[][] biomes;
-    //private int[][] biomeSelection;
     private String[][] biomeSelection;
     private Random random;
 
@@ -53,7 +51,6 @@ public class BiomeSelector {
                     int moisturelevel = defineMoistureLevel(map, x, y, maxMoisture);
                     map[x][y].setBiome(biomeSelection[heightlevel][moisturelevel]);
                 } else {
-                    // map[x][y].setBiome(0);
                     map[x][y].setBiome("water");
                 }
             }

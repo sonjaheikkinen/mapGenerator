@@ -33,12 +33,11 @@ public class ProgramHandler {
      * stage
      */
     public void initialize(Stage stage) {
-        int mapSizeExponent = 10;
-        int multiplier = 1;
-        int canvasSize = multiplier * (int) (Math.pow(2, mapSizeExponent) + 1);
+        int mapSizeExponent = 9;
+        int canvasSize = (int) (Math.pow(2, mapSizeExponent) + 1);
         this.newMap(mapSizeExponent);
         GraphicUI gui = new GraphicUI(random, waterLevel, biomes);
-        gui.start(stage, mapStorage, canvasSize, this, multiplier, mapSizeExponent);
+        gui.start(stage, mapStorage, canvasSize, this, mapSizeExponent);
     }
 
     /**

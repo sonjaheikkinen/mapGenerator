@@ -11,13 +11,9 @@ package mapgenerator.datastructures;
  */
 public class MapCell {
 
-    private int x;
-    private int y;
     private double height;
     private double moisture;
-    private double roughener;
     private boolean water;
-    //private int biome;
     private String biome;
 
     public double getNoiseValue(String attribute) {
@@ -25,8 +21,6 @@ public class MapCell {
             return height;
         } else if (attribute.equals("moisture")) {
             return moisture;
-        } else if (attribute.equals("roughener")) {
-            return roughener;
         }
         return 0;
     }
@@ -36,25 +30,7 @@ public class MapCell {
             this.height = value;
         } else if (attribute.equals("moisture")) {
             this.moisture = value;
-        } else if (attribute.equals("roughener")) {
-            this.roughener = value;
-        }
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+        } 
     }
 
     public double getHeight() {
@@ -73,14 +49,6 @@ public class MapCell {
         this.moisture = moisture;
     }
 
-    public double getRoughener() {
-        return roughener;
-    }
-
-    public void setRoughener(double roughener) {
-        this.roughener = roughener;
-    }
-
     public boolean isWater() {
         return water;
     }
@@ -89,15 +57,6 @@ public class MapCell {
         this.water = water;
     }
 
-    /*
-    public int getBiome() {
-        return biome;
-    }
-
-    public void setBiome(int biome) {
-        this.biome = biome;
-    }
-     */
     public String getBiome() {
         return biome;
     }

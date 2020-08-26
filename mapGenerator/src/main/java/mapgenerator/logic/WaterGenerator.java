@@ -83,28 +83,28 @@ public class WaterGenerator {
             }
             BinaryHeap neighbours = getNeighbours(riverX, riverY, map);
             if (neighbours.isEmpty()) {
-                riverX = random.nextInt(3) - 1;
-                riverX = moveInsideMap(riverX);
-                riverY = random.nextInt(3) - 1;
-                riverY = moveInsideMap(riverY);
+                riverX = moveInsideMap(random.nextInt(3) - 1);
+                riverY = moveInsideMap(random.nextInt(3) - 1);
             } else {
-                double height = map[riverX][riverY].getHeight();
-                Node next = neighbours.poll();
-                
-                while(!neighbours.isEmpty() && neighbours.peek().getCost() < height) {
-                    int randomValue = random.nextInt(10);
-                    if (randomValue == 0) {
-                        next = neighbours.poll();
-                    } else {
-                        break;
-                    }
-                }
-                
+                Node next = chooseNextNode(neighbours, map, riverX, riverY);
                 riverX = next.getX();
                 riverY = next.getY();
             }
         }
         return map;
+    }
+
+    public Node chooseNextNode(BinaryHeap neighbours, MapCell[][] map, int riverX, int riverY) {
+        Node next = neighbours.poll();
+        while (!neighbours.isEmpty() && neighbours.peek().getCost() < map[riverX][riverY].getHeight()) {
+            int randomValue = random.nextInt(10);
+            if (randomValue == 0) {
+                next = neighbours.poll();
+            } else {
+                break;
+            }
+        }
+        return next;
     }
 
     /**
