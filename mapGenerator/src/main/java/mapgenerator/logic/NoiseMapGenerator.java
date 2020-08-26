@@ -16,7 +16,7 @@ public class NoiseMapGenerator {
     private double maxMoisture;
 
     /**
-     * Constructor for HeightmapGenerator, initializes class variables.
+     * Constructor for NoiseMapGenerator, initializes class variables.
      *
      * @param random Random number generator
      * @param mapSize
@@ -59,8 +59,6 @@ public class NoiseMapGenerator {
      * is checked.
      *
      * @param map
-     * @param attribute Attribute is height when creating height map and
-     * moisture when creating moisture map
      * @return An array containing height values as doubles
      */
     public MapCell[][] createNoise(MapCell[][] map) {
@@ -86,8 +84,11 @@ public class NoiseMapGenerator {
 
     /**
      * Puts the seed value +/- 10 on the corners of the map.
+     *
+     * @param attribute Attribute is used to select if we are updating heights
+     * or moistures.
+     * @param map
      */
-
     public MapCell[][] assignCornerValues(String attribute, MapCell[][] map) {
         double value1 = seed + random.nextInt(20) - 10;
         double value2 = seed + random.nextInt(20) - 10;
@@ -114,6 +115,10 @@ public class NoiseMapGenerator {
      * @param y The y coordinate of the square's upper left corner
      * @param squareSize The length of the side of the square
      * @param squareHalf The length of half the side of the square
+     * @param attribute Attribute is used to select if we are updating heights
+     * or moistures.
+     * @param map
+     *
      */
     public MapCell[][] diamondStep(int x, int y, int squareSize, int squareHalf, String attribute, MapCell[][] map) {
         double cornerAverage = (map[x][y].getNoiseValue(attribute)
@@ -136,6 +141,9 @@ public class NoiseMapGenerator {
      * @param x The x coordinate of the centre of the diamond
      * @param y The y coordinate of the centre of the diamond
      * @param distanceToCorner Distance from centre to corner
+     * @param attribute Attribute is used to select if we are updating heights
+     * or moistures.
+     * @param map
      */
     public MapCell[][] squareStep(int x, int y, int distanceToCorner, String attribute, MapCell[][] map) {
         double cornerAverage = countCornerAverage(x, y, distanceToCorner, attribute, map);
@@ -153,6 +161,8 @@ public class NoiseMapGenerator {
      * @param x X coordinate of the centre of the diamond
      * @param y Y coordinate of the centre of the diamond
      * @param distanceToCorner Distance from centre to corner
+     * @param attribute Attribute is used to select if we are updating heights or moistures.
+     * @param map
      * @return average value of the corners
      */
     public double countCornerAverage(int x, int y, int distanceToCorner, String attribute, MapCell[][] map) {
@@ -179,7 +189,7 @@ public class NoiseMapGenerator {
 
     /**
      * Checks if given value is greater than current max value
-     *
+     * @param attribute Attribute is used to select if we are updating heights or moistures. 
      * @param value A value to be checked
      */
     public void checkMaxValue(String attribute, double value) {
@@ -192,7 +202,7 @@ public class NoiseMapGenerator {
 
     /**
      * Returns the maximum value of the height map
-     *
+     * @param attribute Attribute is used to select if we are updating heights or moistures.
      * @return The maximum value as double
      */
     public double getMaxValue(String attribute) {

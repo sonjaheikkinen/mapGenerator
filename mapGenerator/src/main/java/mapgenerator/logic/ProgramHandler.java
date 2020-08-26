@@ -18,6 +18,9 @@ public class ProgramHandler {
     private MapConstructor constructor;
     private double waterLevel;
 
+    /**
+     * Constructor initializes all needed class variables.
+     */
     public ProgramHandler() {
         this.random = new Random();
         this.mapStorage = new Map();
@@ -26,7 +29,7 @@ public class ProgramHandler {
     }
 
     /**
-     * Method initializes variables and creates a map constructor and graphic
+     * Method creates a map constructor and graphic
      * user interface of the program
      *
      * @param stage The graphic user interface and generated maps are shown on
@@ -41,7 +44,8 @@ public class ProgramHandler {
     }
 
     /**
-     * Method calls for map constructor to create a new map
+     * Method creates a new map constructor that then creates a new map
+     * @param mapSizeExponent The constructed map will be of size (2 ^ exponent)+ 1
      */
     public void newMap(int mapSizeExponent) {
         int mapSeed = 200;
@@ -56,11 +60,6 @@ public class ProgramHandler {
         System.out.println("Map created in " + creatingTime + " nanoseconds (" + (creatingTime / 1000000) + " milliseconds)");
     }
 
-    /**
-     * Method returns the map constructor
-     *
-     * @return MapConstructor
-     */
     public MapConstructor getMapConstructor() {
         return constructor;
     }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mapgenerator.gui;
 
 import java.util.Random;
@@ -12,8 +7,7 @@ import mapgenerator.domain.Biomes;
 import mapgenerator.domain.Map;
 
 /**
- *
- * @author heisonja
+ * Class is responsible for drawing maps on canvas.
  */
 public class Painter {
 
@@ -27,6 +21,16 @@ public class Painter {
     private String showBiome;
     private Random random;
 
+    /**
+     * Constructor initializes all necessary variables.
+     *
+     * @param map
+     * @param biomes
+     * @param canvasSize
+     * @param waterlevel
+     * @param brush
+     * @param random
+     */
     public Painter(Map map, Biomes biomes, int canvasSize, double waterlevel, GraphicsContext brush, Random random) {
         this.mapStorage = map;
         this.biomes = biomes;
@@ -37,12 +41,10 @@ public class Painter {
     }
 
     /**
-     * Draws a map on screen based on a map object
-     *
-     * @param brush Draws map on canvas defined in parent method
-     * @param map Contains all information of the generated map
-     * @param canvasSize Size of the canvas
-     * @param multiplier Canvas and drawing size can be increased via multiplier
+     * Draws a map on screen. Gets the maximum values of height and moisture,
+     * then goes trough every cell in the map and draws a rectangle the color of
+     * which is based on the information stored in the mapCell of the location
+     * and the maximum height and moisture values of the map.
      */
     public void drawMap() {
         Long drawingStarts = System.nanoTime();
@@ -60,6 +62,18 @@ public class Painter {
         System.out.println("Map drawn in " + drawingTime + " nanoseconds (" + (drawingTime / 1000000) + " milliseconds)");
     }
 
+    /**
+     * Draws a rectangle on screen based on a mapCell object. The placement of
+     * the rectange is based on the coordinates of the mapCell- The color of the
+     * rectangle is based on information contained in mapCell and the maximum
+     * values of height and moisture.
+     *
+     * @param x
+     * @param y
+     * @param maxHeight
+     * @param maxMoisture
+     * @param colors
+     */
     public void drawMapCell(int x, int y, double maxHeight, double maxMoisture, Color[] colors) {
         double height = mapStorage.getMap()[x][y].getHeight();
         double moisture = mapStorage.getMap()[x][y].getMoisture();
@@ -75,6 +89,20 @@ public class Painter {
         brush.fillRect(x, y, 1, 1);
     }
 
+    /**
+     * Chooses the color of the rectangle based on given information. If
+     * drawtype is height, then the color is a shade of grey based on
+     * heightShade. If drawtype is moisture, then the color is a shade of grey
+     * based on moistureShade. If drawtype is biome the method calls for another
+     * method to choose the color of the biome. After that if the biome in this
+     * location is biome that is selected for showing, the color is set to red.
+     *
+     * @param heightShade
+     * @param moistureShade
+     * @param biomeShade
+     * @param biome
+     * @return
+     */
     public Color chooseColor(double heightShade, double moistureShade, double biomeShade, String biome) {
         if (drawType.equals("height")) {
             int drawShade = (int) Math.round(heightShade * 255);
@@ -90,13 +118,12 @@ public class Painter {
             return color;
         }
     }
-    
-        /**
-     * Picks correct brush color based on biome.
+
+    /**
+     * Picks correct brush color based on biome. If biomeDrawType is smooth, the new biome colors are calculated based on shade. 
      *
      * @param shade A height map based integer which can be used to affect color
      * @param biome An integer telling which biome to base color on
-     * @param shadow Has an effect of color brightness
      * @return brush color
      */
     public Color pickBiomeColor(double shade, String biome) {
@@ -109,7 +136,9 @@ public class Painter {
         return color;
     }
 
-
+    /**
+     * Sets a different color to every biome.
+     */
     public void fillColorArray() {
         biomes.getBiomeColors()[1].setColor(Color.rgb(212, 209, 197)); //sand
         biomes.getBiomeColors()[2].setColor(Color.rgb(168, 181, 141)); //beachGrass
@@ -132,6 +161,10 @@ public class Painter {
         biomes.getBiomeColors()[19].setColor(Color.rgb(222, 234, 233)); //snow
     }
 
+    /**
+     * Sets a color to every biome that is calculated using a shade which varies based on the height of the location.
+     * @param shade 
+     */
     public void fillColorArrayUsingShades(int shade) {
         int lightshade = betweenZeroAnd255(255 - shade);
         shade = betweenZeroAnd255(shade);
@@ -156,6 +189,10 @@ public class Painter {
         biomes.getBiomeColors()[19].setColor(Color.rgb(Math.min(255, shade + 10), Math.min(255, shade + 10), Math.min(255, shade + 20))); //snow
     }
 
+    /**
+     * Calculates the color of water using a shade which varies based on the height of the location.
+     * @param shade 
+     */
     public void calculateWaterColor(double shade) {
         double blueShade = shade * 255;
         blueShade = Math.min(140, blueShade);

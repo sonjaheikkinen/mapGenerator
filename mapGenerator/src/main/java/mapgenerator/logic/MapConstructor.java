@@ -67,8 +67,7 @@ public final class MapConstructor {
     }
 
     /**
-     * Calls for other methods to generate different parts of the map and calls
-     * for roughen method to add jitter to heightmap.
+     * Calls for other methods to generate different parts of the map.
      *
      * @param waterGen A WaterGenerator
      * @param noiseGen A NoiseMapGenerator

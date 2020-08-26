@@ -26,9 +26,9 @@ public class WaterGenerator {
     /**
      * Marks all parts of the map with a height below water level as water
      *
-     * @param waterlevel All heights under this are water
-     * @param map All height values of the map
-     * @return map
+     * @param waterlevel 
+     * @param map 
+     * @return 
      */
     public MapCell[][] addWaterByHeight(double waterlevel, MapCell[][] map) {
         for (int x = 0; x < map.length; x++) {
@@ -94,6 +94,16 @@ public class WaterGenerator {
         return map;
     }
 
+    /**
+     * Chooses the next direction of the river. A node with smallest cost is first chosen, but after that
+     * if there are other nodes that have smaller height than the current node, they might randomly replace the node 
+     * with smallest cost.
+     * @param neighbours
+     * @param map
+     * @param riverX
+     * @param riverY
+     * @return 
+     */
     public Node chooseNextNode(BinaryHeap neighbours, MapCell[][] map, int riverX, int riverY) {
         Node next = neighbours.poll();
         while (!neighbours.isEmpty() && neighbours.peek().getCost() < map[riverX][riverY].getHeight()) {
