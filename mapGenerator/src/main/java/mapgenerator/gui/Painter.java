@@ -82,7 +82,8 @@ public class Painter {
         double landHeight = height - (waterlevel * maxHeight);
         double heightShade = betweenZeroAndOne(height / maxHeight);
         double moistureShade = betweenZeroAndOne(moisture / maxMoisture);
-        double biomeShade = betweenZeroAndOne(landHeight / landHeightRange);
+        //double biomeShade = betweenZeroAndOne(landHeight / landHeightRange);
+        double biomeShade = heightShade;
         String biome = mapStorage.getMap()[x][y].getBiome();
         calculateWaterColor(heightShade);
         Color color = chooseColor(heightShade, moistureShade, biomeShade, biome);
@@ -130,7 +131,7 @@ public class Painter {
      */
     public Color pickBiomeColor(double shade, String biome) {
         Color color;
-        if (biomeDrawType.equals("smooth")) {
+        if (biomeDrawType.equals("shaded")) {
             fillColorArrayUsingShades((int) Math.round(shade * 255));
         }
         color = getBiomeColor(biome);
@@ -142,11 +143,11 @@ public class Painter {
      * Sets a different color to every biome.
      */
     public void fillColorArray() {
-        biomes.getBiomeColors()[1].setColor(Color.rgb(212, 209, 197)); //sand
-        biomes.getBiomeColors()[2].setColor(Color.rgb(168, 181, 141)); //beachGrass
-        biomes.getBiomeColors()[3].setColor(Color.rgb(159, 194, 132)); //beachForest
+        biomes.getBiomeColors()[1].setColor(Color.rgb(212, 230, 200)); //sand
+        biomes.getBiomeColors()[2].setColor(Color.rgb(180, 230, 141)); //beachGrass
+        biomes.getBiomeColors()[3].setColor(Color.rgb(140, 194, 132)); //beachForest
         biomes.getBiomeColors()[4].setColor(Color.rgb(154, 181, 138)); //dryGrass
-        biomes.getBiomeColors()[5].setColor(Color.rgb(91, 181, 85)); //grass
+        biomes.getBiomeColors()[5].setColor(Color.rgb(120, 200, 140)); //grass
         biomes.getBiomeColors()[6].setColor(Color.rgb(152, 222, 138)); //sparseLeaf
         biomes.getBiomeColors()[7].setColor(Color.rgb(120, 173, 95)); //dryGrassWithTrees
         biomes.getBiomeColors()[8].setColor(Color.rgb(84, 184, 84)); //leaf
@@ -155,12 +156,14 @@ public class Painter {
         biomes.getBiomeColors()[11].setColor(Color.rgb(71, 125, 57)); //taigaPine
         biomes.getBiomeColors()[12].setColor(Color.rgb(56, 128, 88)); //taigaSpruce
         biomes.getBiomeColors()[13].setColor(Color.rgb(120, 153, 112)); //dryMountainForest
-        biomes.getBiomeColors()[14].setColor(Color.rgb(112, 156, 112)); //mountainForest
-        biomes.getBiomeColors()[15].setColor(Color.rgb(156, 184, 172)); //tundra
+        biomes.getBiomeColors()[14].setColor(Color.rgb(90, 153, 100)); //mountainForest
+        biomes.getBiomeColors()[15].setColor(Color.rgb(100, 180, 130)); //tundra
         biomes.getBiomeColors()[16].setColor(Color.rgb(130, 162, 163)); //bare
-        biomes.getBiomeColors()[17].setColor(Color.rgb(140, 170, 168)); //bareTundra
-        biomes.getBiomeColors()[18].setColor(Color.rgb(110, 142, 145)); //volcano   
-        biomes.getBiomeColors()[19].setColor(Color.rgb(222, 234, 233)); //snow
+        biomes.getBiomeColors()[17].setColor(Color.rgb(130, 162, 163)); //bare
+        biomes.getBiomeColors()[18].setColor(Color.rgb(140, 180, 168)); //bareTundra
+        biomes.getBiomeColors()[19].setColor(Color.rgb(110, 142, 145)); //volcano   
+        biomes.getBiomeColors()[20].setColor(Color.rgb(222, 234, 233)); //snow
+        biomes.getBiomeColors()[21].setColor(Color.rgb(222, 234, 233)); //snow
     }
 
     /**
@@ -170,27 +173,28 @@ public class Painter {
      * @param shade
      */
     public void fillColorArrayUsingShades(int shade) {
-        int lightshade = betweenZeroAnd255(255 - shade);
         shade = betweenZeroAnd255(shade);
-        biomes.getBiomeColors()[1].setColor(Color.rgb(Math.min(255, lightshade + 5), Math.max(0, lightshade - 10), Math.max(0, lightshade - 10))); //sand
-        biomes.getBiomeColors()[2].setColor(Color.rgb(Math.min(255, lightshade + 5), Math.max(0, lightshade - 15), Math.max(0, lightshade - 15))); //beachGrass
-        biomes.getBiomeColors()[3].setColor(Color.rgb(lightshade, Math.max(0, lightshade - 20), Math.max(0, lightshade - 20))); //beachForest
-        biomes.getBiomeColors()[4].setColor(Color.rgb(Math.max(0, lightshade - 50), lightshade, Math.max(0, lightshade - 70))); //dryGrass
-        biomes.getBiomeColors()[5].setColor(Color.rgb(Math.max(0, lightshade - 100), lightshade, Math.max(0, lightshade - 100))); //grass
-        biomes.getBiomeColors()[6].setColor(Color.rgb(Math.max(0, lightshade - 90), lightshade, Math.max(0, lightshade - 120))); //sparseLeaf
-        biomes.getBiomeColors()[7].setColor(Color.rgb(Math.max(0, lightshade - 60), lightshade, Math.max(0, lightshade - 80))); //dryGrassWithTrees
-        biomes.getBiomeColors()[8].setColor(Color.rgb(Math.max(0, lightshade - 100), lightshade, Math.max(0, lightshade - 120))); //leaf
-        biomes.getBiomeColors()[9].setColor(Color.rgb(0, lightshade, Math.max(0, lightshade - 100))); //mixedForest
-        biomes.getBiomeColors()[10].setColor(Color.rgb(Math.max(0, lightshade - 60), lightshade, Math.max(0, lightshade - 80))); //dryLeaf
-        biomes.getBiomeColors()[11].setColor(Color.rgb(Math.max(0, lightshade - 60), lightshade, Math.max(0, lightshade - 80))); //taigaPine
-        biomes.getBiomeColors()[12].setColor(Color.rgb(Math.max(0, lightshade - 100), lightshade, Math.max(0, lightshade - 80))); //taigaSpruce
-        biomes.getBiomeColors()[13].setColor(Color.rgb(Math.max(0, shade - 50), shade, Math.max(0, shade - 100))); //dryMountainForest
-        biomes.getBiomeColors()[14].setColor(Color.rgb(0, shade, 0)); //mountainForest
-        biomes.getBiomeColors()[15].setColor(Color.rgb(Math.max(0, shade - 60), shade, Math.max(0, shade - 40))); //tundra
-        biomes.getBiomeColors()[16].setColor(Color.rgb(Math.max(0, shade - 60), Math.max(0, shade - 50), Math.max(0, shade - 60))); //bare
-        biomes.getBiomeColors()[17].setColor(Color.rgb(Math.max(0, shade - 50), Math.max(0, shade - 40), Math.max(0, shade - 40))); //bareTundra
-        biomes.getBiomeColors()[18].setColor(Color.rgb(Math.max(0, shade - 50), Math.max(0, shade - 50), Math.max(0, shade - 60))); //volcano   
-        biomes.getBiomeColors()[19].setColor(Color.rgb(Math.min(255, shade + 10), Math.min(255, shade + 10), Math.min(255, shade + 20))); //snow
+        biomes.getBiomeColors()[1].setColor(Color.rgb(Math.min(255, shade + 100), Math.min(255, shade + 100), Math.min(255, shade + 70))); //sand
+        biomes.getBiomeColors()[2].setColor(Color.rgb(Math.min(255, shade + 60), Math.min(255, shade + 100), Math.min(255, shade + 20))); //beachGrass
+        biomes.getBiomeColors()[3].setColor(Color.rgb(shade, Math.min(255, shade + 50), Math.max(0, shade - 20))); //beachForest
+        biomes.getBiomeColors()[4].setColor(Color.rgb(Math.max(0, shade - 10), Math.min(255, shade + 30), Math.max(0, shade - 30))); //dryGrass
+        biomes.getBiomeColors()[5].setColor(Color.rgb(Math.max(0, shade - 30), Math.min(255, shade + 50), Math.max(0, shade - 10))); //grass
+        biomes.getBiomeColors()[6].setColor(Color.rgb(Math.min(255, shade), Math.min(255, shade + 100), Math.max(0, shade - 20))); //sparseLeaf
+        biomes.getBiomeColors()[7].setColor(Color.rgb(Math.max(0, shade - 40), Math.min(255, shade + 20), Math.max(0, shade - 60))); //dryGrassWithTrees
+        biomes.getBiomeColors()[8].setColor(Color.rgb(Math.max(0, shade - 60), Math.min(255, shade + 30), Math.max(0, shade - 60))); //leaf
+        biomes.getBiomeColors()[9].setColor(Color.rgb(0, Math.min(255, shade + 20), Math.max(0, shade - 50))); //mixedForest
+        biomes.getBiomeColors()[10].setColor(Color.rgb(Math.max(0, shade - 80), Math.max(0, shade - 40), Math.max(0, shade - 100))); //dryDeciduous
+        biomes.getBiomeColors()[11].setColor(Color.rgb(Math.max(0, shade - 100), Math.max(0, shade - 40), Math.max(0, shade - 120))); //Pine
+        biomes.getBiomeColors()[12].setColor(Color.rgb(Math.max(0, shade - 120), Math.max(0, shade - 50), Math.max(0, shade - 90))); //taigaSpruce
+        biomes.getBiomeColors()[13].setColor(Color.rgb(Math.max(0, shade - 70), Math.max(0, shade - 40), Math.max(0, shade - 90))); //dryMountainForest
+        biomes.getBiomeColors()[14].setColor(Color.rgb(Math.max(0, shade - 90), Math.max(0, shade - 30), Math.max(0, shade - 100))); //mountainForest
+        biomes.getBiomeColors()[15].setColor(Color.rgb(Math.max(0, shade - 60), Math.max(0, shade -5), Math.max(0, shade - 50))); //tundra
+        biomes.getBiomeColors()[16].setColor(Color.rgb(Math.max(0, shade - 80), Math.max(0, shade - 60), Math.max(0, shade - 60))); //bare
+        biomes.getBiomeColors()[17].setColor(Color.rgb(Math.max(0, shade - 80), Math.max(0, shade - 60), Math.max(0, shade - 60))); //bare
+        biomes.getBiomeColors()[18].setColor(Color.rgb(Math.max(0, shade - 60), Math.max(0, shade - 30), Math.max(0, shade - 40))); //bareTundra
+        biomes.getBiomeColors()[19].setColor(Color.rgb(Math.max(0, shade - 90), Math.max(0, shade - 80), Math.max(0, shade - 70))); //volcano   
+        biomes.getBiomeColors()[20].setColor(Color.rgb(Math.min(255, shade + 5), Math.min(255, shade + 5), Math.min(255, shade + 10))); //snow
+        biomes.getBiomeColors()[21].setColor(Color.rgb(Math.min(255, shade + 5), Math.min(255, shade + 5), Math.min(255, shade + 10))); //snow
     }
 
     /**

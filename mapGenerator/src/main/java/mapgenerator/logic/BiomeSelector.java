@@ -96,9 +96,9 @@ public class BiomeSelector {
      */
     public int defineMoistureLevel(MapCell[][] map, int x, int y, double maxMoisture) {
         int moisturelevel;
-        if (map[x][y].getMoisture() < 0.1 * maxMoisture) {
+        if (map[x][y].getMoisture() < 0.3 * maxMoisture) {
             moisturelevel = 0;
-        } else if (map[x][y].getMoisture() < 0.4 * maxMoisture) {
+        } else if (map[x][y].getMoisture() < 0.6 * maxMoisture) {
             moisturelevel = 1;
         } else {
             moisturelevel = 2;

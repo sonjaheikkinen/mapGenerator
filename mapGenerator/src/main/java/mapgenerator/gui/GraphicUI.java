@@ -124,9 +124,9 @@ public class GraphicUI {
             painter.setBiomeDrawType("simple");
             painter.drawMap();
         });
-        Button smooth = new Button("Smooth");
+        Button smooth = new Button("Shaded");
         smooth.setOnAction(actionEvent -> {
-            painter.setBiomeDrawType("smooth");
+            painter.setBiomeDrawType("shaded");
             painter.drawMap();
         });
         drawtypeButtons.getChildren().addAll(simple, smooth);
