@@ -36,8 +36,8 @@ public class ProgramHandler {
         int mapSizeExponent = 9;
         int canvasSize = (int) (Math.pow(2, mapSizeExponent) + 1);
         this.newMap(mapSizeExponent);
-        GraphicUI gui = new GraphicUI(random, waterLevel, biomes);
-        gui.start(stage, mapStorage, canvasSize, this, mapSizeExponent);
+        GraphicUI gui = new GraphicUI(random, waterLevel, biomes, mapStorage, canvasSize);
+        gui.start(stage, this, mapSizeExponent);
     }
 
     /**
