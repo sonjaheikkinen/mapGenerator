@@ -41,12 +41,12 @@ public class BiomeSelectorTest {
     }
     
     @Test
-    public void biomeIsZeroWhereWaterIsTrueAndNotZeroElseWhere() {
+    public void biomeIsWaterWhereWaterIsTrueAndNotWaterElseWhere() {
         boolean biomesCorrect = true;
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
-                if ((map[x][y].isWater() && map[x][y].getBiome() != 0)
-                        || (!map[x][y].isWater() && map[x][y].getBiome() == 0)) {
+                if ((map[x][y].isWater() && !map[x][y].getBiome().equals("water"))
+                        || (!map[x][y].isWater() && map[x][y].getBiome().equals("water"))) {
                     biomesCorrect = false;
                 }
             }

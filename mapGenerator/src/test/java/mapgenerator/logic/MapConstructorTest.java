@@ -30,13 +30,13 @@ public class MapConstructorTest {
 
     @Test
     public void mapHasAHeightMapWithNoZerosAfterRunningConstructMap() {
-        this.mc.constructMap();
+        this.mc.constructMap(0.5);
         assertTrue(countZeros(this.mapStorage.getMap(), "height") == 0);
     }
 
     @Test
     public void mapHasAMoistureMapWithNoZerosAfterRunningConstructMap() {
-        this.mc.constructMap();
+        this.mc.constructMap(0.5);
         assertTrue(countZeros(this.mapStorage.getMap(), "moisture") == 0);
     }
 
