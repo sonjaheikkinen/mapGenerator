@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mapgenerator.domain;
 
-import java.util.HashMap;
 import javafx.scene.paint.Color;
 
 /**
  * Class is responsible for storing biome names and their order in relation to
- * height and moisture.
+ * height and moisture, and for storing the colors paired with biomes.
  */
 public class Biomes {
 
@@ -18,7 +12,7 @@ public class Biomes {
     private BiomeColor[] biomeColors;
 
     /**
-     * Constructor creates biome selection array and fills it with biomes.
+     * Constructor creates biome selection array and fills it with biomes and a BiomeColor array.
      */
     public Biomes() {
         this.biomeSelection = new String[7][3];
@@ -29,7 +23,7 @@ public class Biomes {
 
     /**
      * Creates an array of biomes from which they can be selected based on
-     * height and moisture.
+     * height and moisture and initializes the BiomeColor array with color values set to null.
      */
     public void fillBiomes() {
         String[] biomeList = constructBiomeList();
@@ -47,6 +41,10 @@ public class Biomes {
         }
     }
 
+    /**
+     * Puts biome names in a list in correct order. 
+     * @return 
+     */
     public String[] constructBiomeList() {
         String biomeString = "Sand;Grassy beach;Forested beach;"
                 + "Dry grass;Grass;Grass and leaf trees;"
@@ -59,11 +57,7 @@ public class Biomes {
         return biomeList;
     }
 
-    /**
-     * Returns biome selection table.
-     *
-     * @return An array containing biomes.
-     */
+
     public String[][] getBiomeSelection() {
         return biomeSelection;
     }
@@ -72,6 +66,11 @@ public class Biomes {
         return biomeColors;
     }
 
+    /**
+     * Returns the color currently paired with given biome. 
+     * @param biome
+     * @return 
+     */
     public Color getBiomeColor(String biome) {
         for (int i = 0; i < biomeColors.length; i++) {
             if (biomeColors[i].getBiome().equals(biome)) {

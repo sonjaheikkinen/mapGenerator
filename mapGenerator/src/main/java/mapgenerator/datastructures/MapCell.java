@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package mapgenerator.datastructures;
 
 /**
- *
- * @author heisonja
+ * Class is used to store information about the height, moisture and biome of one cell in map array. 
  */
 public class MapCell {
 
@@ -16,6 +11,11 @@ public class MapCell {
     private boolean water;
     private String biome;
 
+    /**
+     * Returns the value of height or moisture based on given attribute.
+     * @param attribute
+     * @return 
+     */
     public double getNoiseValue(String attribute) {
         if (attribute.equals("height")) {
             return height;
@@ -25,6 +25,11 @@ public class MapCell {
         return 0;
     }
 
+    /**
+     * Sets the value of height or moisture based on given attribute. 
+     * @param attribute
+     * @param value 
+     */
     public void setNoiseValue(String attribute, double value) {
         if (attribute.equals("height")) {
             this.height = value;

@@ -17,7 +17,7 @@ import mapgenerator.domain.Map;
 import mapgenerator.logic.ProgramHandler;
 
 /**
- * Class creates the graphic user interface of the program.
+ * Class creates the graphic user interface of the program
  */
 public class GraphicUI {
 

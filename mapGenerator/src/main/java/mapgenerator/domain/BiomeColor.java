@@ -1,15 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package mapgenerator.domain;
 
 import javafx.scene.paint.Color;
 
 /**
- *
- * @author heisonja
+ * Class is used to store a biome-color-pair so that choosing biome colors when drawing is easier. Every biome is paired with one color, 
+ * but this color may change during the execution of the program. 
  */
 public class BiomeColor {
     

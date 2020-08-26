@@ -118,6 +118,11 @@ public class BinaryHeap {
         }
     }
 
+    /**
+     * Returns the second child of the node if such child exists, otherwise returns null.
+     * @param nodeIndex Index of the node whose child is to be returned.
+     * @return 
+     */
     public Node getChild2IfExists(int nodeIndex) {
         Node child2 = null;
         if (nodeIndex * 2 + 1 <= nodesInHeap) {
@@ -165,14 +170,17 @@ public class BinaryHeap {
     }
 
     /**
-     * Return true if there are no nodes in the heap.
+     * Returns true if there are no nodes in the heap.
      *
-     * @return True or false.
+     * @return 
      */
     public boolean isEmpty() {
         return nodesInHeap == 0;
     }
 
+    /**
+     * Replaces the existing heap with a new empty heap and sets nodesInHeap to zero.
+     */
     public void clear() {
         Node[] newHeap = new Node[9];
         heap = newHeap;

@@ -21,27 +21,15 @@ public class Node implements Comparable<Node> {
         this.y = y;
         this.cost = cost;
     }
-    
-    /**
-     * Returns X.
-     * @return x
-     */
+
     public int getX() {
         return x;
     }
     
-    /**
-     * Returns Y.
-     * @return y
-     */
     public int getY() {
         return y;
     }
     
-    /**
-     * Returns cost.
-     * @return cost
-     */
     public double getCost() {
         return cost;
     }
