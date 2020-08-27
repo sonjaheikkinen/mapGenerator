@@ -4,11 +4,11 @@
 
 ![Project structure](https://github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png)
 
-<p>
+
 ![Project structure][projectStructureImage]
   
 [projectStructureImage]: https://github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png
-</p>
+
 
 ## Complexity and performance
 
