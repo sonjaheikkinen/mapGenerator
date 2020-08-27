@@ -29,7 +29,6 @@ I attempted to make the project as ready as I could this week, since next week I
 
 ## Next week
 
-* Create jar-file and write installation manual.
-* Add option for saving maps?
+* Create jar-file and write installation guide.
 
 
