@@ -12,7 +12,7 @@ Currently the generator might be slow when using big map sizes. If you encounter
 
 [Project Testing](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/projectTesting.md)
 
-[User Manual](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/userManual.md
+[User Manual](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/userManual.md)
 
 ## Weekly Reports
 
