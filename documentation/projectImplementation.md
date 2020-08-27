@@ -1,8 +1,9 @@
 # Project implementation document
 
 ## Project Structure
-
-![Project structure](https://raw.github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png)
+<p>
+![Project structure](https://github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png)
+</p>
 
 ![Project structure][projectStructureImage]
 
