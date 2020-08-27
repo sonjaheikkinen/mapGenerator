@@ -1,14 +1,13 @@
 # Project implementation document
 
 ## Project Structure
-<p>
+
 ![Project structure](https://github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png)
-</p>
 
+<p>
 ![Project structure][projectStructureImage]
-
 [projectStructureImage]: https://github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png
-
+</p>
 
 ## Complexity and performance
 
