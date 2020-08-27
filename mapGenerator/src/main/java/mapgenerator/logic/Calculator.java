@@ -1,4 +1,4 @@
-package mapgenerator.math;
+package mapgenerator.logic;
 
 /**
  * Class is used to make simple calculations needed in the program.

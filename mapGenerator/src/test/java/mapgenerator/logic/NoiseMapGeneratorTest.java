@@ -2,7 +2,6 @@ package mapgenerator.logic;
 
 import java.util.Random;
 import mapgenerator.datastructures.MapCell;
-import mapgenerator.math.Calculator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

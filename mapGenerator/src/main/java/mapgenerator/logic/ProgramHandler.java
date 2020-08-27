@@ -5,7 +5,6 @@ import javafx.stage.Stage;
 import mapgenerator.domain.Biomes;
 import mapgenerator.domain.Map;
 import mapgenerator.gui.GraphicUI;
-import mapgenerator.math.Calculator;
 
 /**
  * Class controls the execution of the program

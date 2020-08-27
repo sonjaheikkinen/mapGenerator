@@ -3,7 +3,6 @@ package mapgenerator.logic;
 import java.util.Random;
 import mapgenerator.datastructures.MapCell;
 import mapgenerator.domain.Map;
-import mapgenerator.math.Calculator;
 
 /*
  * Calls for other classes to generate different parts of the map and puts all the parts together.

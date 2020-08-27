@@ -2,7 +2,6 @@ package mapgenerator.logic;
 
 import java.util.Random;
 import mapgenerator.datastructures.MapCell;
-import mapgenerator.math.Calculator;
 
 /**
  * Generates height values to be used on a map

@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mapgenerator.math;
+package mapgenerator.logic;
 
 import java.util.Random;
+import mapgenerator.math.RandomNumberGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

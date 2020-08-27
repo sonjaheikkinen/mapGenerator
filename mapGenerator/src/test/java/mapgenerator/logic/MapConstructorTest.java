@@ -4,7 +4,6 @@ import java.util.Random;
 import mapgenerator.datastructures.MapCell;
 import mapgenerator.domain.Biomes;
 import mapgenerator.domain.Map;
-import mapgenerator.math.Calculator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
