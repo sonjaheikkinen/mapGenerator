@@ -61,6 +61,7 @@ public class Painter {
         Long drawingEnds = System.nanoTime();
         Long drawingTime = drawingEnds - drawingStarts;
         System.out.println("Map drawn in " + drawingTime + " nanoseconds (" + (drawingTime / 1000000) + " milliseconds)");
+        System.out.println("");
     }
 
     /**
