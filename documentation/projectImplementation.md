@@ -2,7 +2,7 @@
 
 ## Project Structure
 
-![Project structure](https://github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png)
+![Project structure](https://raw.github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png)
 
 
 ## Complexity and performance
