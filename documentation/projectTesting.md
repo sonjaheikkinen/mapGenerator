@@ -2,6 +2,8 @@
 
 ## JUnit testing
 
+Most tests are made with JUnit and are found in the project under test packages.
+
 ### mapgenerator
 
 Only Main class is here, which does nothing else than create and launch a program handler. No reason to test it. 
@@ -44,4 +46,5 @@ Map Size | n | Creating time (first) | Drawing time (first) | Creating time (sub
 ## Manual tests
 
 The Graphic UI was only tested manually by clicking buttons and seeing if they worked as they should. The features of the UI also allowed to check that heightmap, moisture and biome creation always worked correctly. 
+
 
