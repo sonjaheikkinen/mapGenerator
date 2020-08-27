@@ -74,6 +74,9 @@ The algorithm is too slow with big map sizes. There might be ways to optimize th
 
 Algorithm currently only generates the layout of the overworld map. This could be combined with another generator that generates details within map cells. If we were for example to create a game, one map cell could be like 100x100 m^2 or 100x100 m^2, and this detail generator would generate random details and graphics based on the overrall information (height, biome type, city or road information) of the map cell. 
 
+### Structure
+
+Project structure is not perfect. The dividion between datastructure and domain is a bit unclear. BiomeColors should maybe be part of the gui package. Some of the methods in Painter should probably be in logic.
 
 ## Sources
 
