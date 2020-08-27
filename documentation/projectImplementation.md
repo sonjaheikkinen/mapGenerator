@@ -80,7 +80,7 @@ Project structure is not perfect. The dividion between datastructure and domain 
 
 ### Saving maps and reading from file
 
-There should be an option for saving maps. This would be easy to implement for example by looping trough map and writing a new line for every map into the file. For every cell the line should contain x coordinate, y coordinate, water, height, moisture and biome of the cell. A new file for every map would probably be the best solution. Reading a map file into to the program could be implemented the same way but backwars, as in reading every line and generating an array of MapCells based on the file. 
+It would be nice to have an option for saving maps. This would be easy to implement for example by looping trough map and writing a new line for every map into the file. For every cell the line should contain x coordinate, y coordinate, water, height, moisture and biome of the cell. A new file for every map would probably be the best solution. Reading a map file into to the program could be implemented the same way but backwars, as in reading every line and generating an array of MapCells based on the file. 
 
 ## Sources
 
