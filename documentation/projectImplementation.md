@@ -4,6 +4,7 @@
 
 ![Project structure](https://github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png)
 
+
 ## Complexity and performance
 
 The maps produced by this generator are always the size of n*n where n = 2^(given exponent) + 1. 
