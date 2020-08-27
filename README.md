@@ -27,7 +27,3 @@ Currently the generator might be slow when using big map sizes. If you encounter
 [Week 5](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/weeklyReports/week5.md)
 
 [Week 6](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/weeklyReports/week6.md)
-
-## Test coverage
-
-[Jacoco Test Report, week 4](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/testCoverage/week4.png)
