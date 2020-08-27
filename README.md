@@ -12,6 +12,8 @@ Currently the generator might be slow when using big map sizes. If you encounter
 
 [Project Testing](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/projectTesting.md)
 
+[User Manual](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/userManual.md
+
 ## Weekly Reports
 
 [Week 1](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/weeklyReports/week1.md)
@@ -23,6 +25,8 @@ Currently the generator might be slow when using big map sizes. If you encounter
 [Week 4](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/weeklyReports/week4.md)
 
 [Week 5](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/weeklyReports/week5.md)
+
+[Week 6](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/weeklyReports/week6.md)
 
 ## Test coverage
 
