@@ -2,13 +2,13 @@
 
 ## Project Structure
 
+Picture shows the package structure and classes of the program as well as the most important relationships between classes. Program launches from Main class, which then creates a ProgramHandler. ProgramHandler calls for MapConstructor to create a map using the Calculator. The map is created into an array of MapCell objects. MapConstructor calls for NoiseMapGenerator to generate height and moisture maps, WaterGenerator to generate ocean, lakes and rivers and BiomeSelector to select biomes based on height and moisture. 
+
+WaterGenerator uses Node and BinaryHeap in its execution. BiomeSelector needs the Biomes class which provides it with a BiomeSelection table, from where biomes can be picked using height and moisture. It also generates a biomeColor array used in UI.
+
+After everything is created, MapConstructor returns the created map and other thing to ProgramHandler, which stores the map in Map, gives Map to GraphicUI and calls for GraphicUI to start. GraphicUI calls for Painter to draw the map on screen using given Map and BiomeColor array. 
+
 ![Project structure](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/projectStructure.png)
-
-
-![Project structure][projectStructureImage]
-  
-[projectStructureImage]: https://github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png
-
 
 ## Complexity and performance
 
