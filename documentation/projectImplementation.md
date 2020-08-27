@@ -73,7 +73,5 @@ Algorithm currently only generates the layout of the overworld map. This could b
 
 1. https://en.wikipedia.org/wiki/Diamond-square_algorithm
 
-2. Tietorakenteet ja algoritmit -kirja (Antti Laaksonen 11.07.2020)
-
-https://www.cs.helsinki.fi/u/ahslaaks/tirakirja/
+2. Tietorakenteet ja algoritmit -kirja (Antti Laaksonen 11.07.2020) https://www.cs.helsinki.fi/u/ahslaaks/tirakirja/
 
