@@ -2,7 +2,7 @@
 
 ## Project Structure
 
-![Project structure](https://github.com/sonjaheikkinen/mapGenerator/tree/master/documentation/projectStructure.png)
+![Project structure](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/projectStructure.png)
 
 
 ![Project structure][projectStructureImage]
