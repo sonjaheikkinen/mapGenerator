@@ -8,6 +8,14 @@ Most tests are made with JUnit and are found in the project under test packages.
 
 Only Main class is here, which does nothing else than create and launch a program handler. No reason to test it. 
 
+### mapgenerator.datastructures
+
+Node and MapCell only have getters and setters and other simple methods, so they were not tested. There are a lot of tests for BinaryHeap that include
+ * node calculating tests (there is always a correct amount of nodes in the heap, and the heap's own node calculator always has the righ value)
+* tests for adding (adding always works)
+* test for clearing (there should be no nodes in heap after clearing and the node calculator variable should be zero)
+* tests for peek() and poll() methods (they should always return the smallest value, even when polling multiple times)
+
 ### mapgenerator.domain
 
 This package is mainly for storing information, so most of the methods are getters and setters. Biomes class has one method to create a biome selection table, but the table is currently so small, that automated testing is not needed. If it was really big, it may be reasonable to check that all slots are filled with some biome. 
