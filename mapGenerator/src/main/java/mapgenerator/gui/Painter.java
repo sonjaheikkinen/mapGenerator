@@ -189,7 +189,7 @@ public class Painter {
         biomes.getBiomeColors()[12].setColor(Color.rgb(Math.max(0, shade - 120), Math.max(0, shade - 50), Math.max(0, shade - 90))); //taigaSpruce
         biomes.getBiomeColors()[13].setColor(Color.rgb(Math.max(0, shade - 70), Math.max(0, shade - 40), Math.max(0, shade - 90))); //dryMountainForest
         biomes.getBiomeColors()[14].setColor(Color.rgb(Math.max(0, shade - 90), Math.max(0, shade - 30), Math.max(0, shade - 100))); //mountainForest
-        biomes.getBiomeColors()[15].setColor(Color.rgb(Math.max(0, shade - 60), Math.max(0, shade -5), Math.max(0, shade - 50))); //tundra
+        biomes.getBiomeColors()[15].setColor(Color.rgb(Math.max(0, shade - 60), Math.max(0, shade - 5), Math.max(0, shade - 50))); //tundra
         biomes.getBiomeColors()[16].setColor(Color.rgb(Math.max(0, shade - 80), Math.max(0, shade - 60), Math.max(0, shade - 60))); //bare
         biomes.getBiomeColors()[17].setColor(Color.rgb(Math.max(0, shade - 80), Math.max(0, shade - 60), Math.max(0, shade - 60))); //bare
         biomes.getBiomeColors()[18].setColor(Color.rgb(Math.max(0, shade - 60), Math.max(0, shade - 30), Math.max(0, shade - 40))); //bareTundra
