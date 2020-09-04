@@ -2,7 +2,8 @@
 
 ## JUnit testing
 
-Most tests are made with JUnit and are found in the project under test packages.
+Most tests are made with JUnit and are found in the project under test packages. Test coverage:
+![Project structure](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/testCoverage/final.png)
 
 ### mapgenerator
 
