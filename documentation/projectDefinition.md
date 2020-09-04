@@ -21,7 +21,7 @@ Moisture should decrease when moving away from water. Temperature should be calc
 
 #### Cities and roads
 
-Algorithms for road network will be decided if this feature is implemented. City placement should be beased towards water, other cities and hills. Road network should not contain too long roads without cities in between. It is logical for roads to follow rivers where possible. 
+Algorithms for road network will be decided if this feature is implemented. City placement should be biased towards water, other cities and hills. Road network should not contain too long roads without cities in between. It is logical for roads to follow rivers where possible. 
 
 ### Data structures and space complexity
 
