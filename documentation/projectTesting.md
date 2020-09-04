@@ -3,7 +3,10 @@
 ## JUnit testing
 
 Most tests are made with JUnit and are found in the project under test packages. Test coverage:
+
 ![Project structure](https://github.com/sonjaheikkinen/mapGenerator/blob/master/documentation/testCoverage/final.png)
+
+The total coverage seems bad, but that is mainly because gui does not need to be tested in this course. If we exclude gui, the coverage is fine.
 
 ### mapgenerator
 
