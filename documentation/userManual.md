@@ -2,6 +2,13 @@
 
 ## Installation and starting the program
 
+Currently the program can only be installed and started using the command line. You may need to install some other things before the project can work (atleast java and gradle). 
+
+1. Download or clone the project from [Github](https://github.com/sonjaheikkinen/mapGenerator). **Download**: Press "Code" -> "Download ZIP" and then extract the zip file in the folder you want it to go. **Clone**: Press "Code" and copy the ssh address from the field. Then go to the folder you want to put the project in and run command "git clone *address*".
+2. Go into folder "mapGenerator" (should be under another mapGenerator or mapGenerator-master, unless you renamed the folder you cloned this project). You should now be in a folder that contains folders src, build, config etc.
+3. Run command "gradle run". If it does not work, check if you are missing some dependencies, install them and try again. 
+
+
 ## Using the program
 
 * New maps can be created by pressing the button "New map". As default, the graphic UI will show you the simple biome map. 
